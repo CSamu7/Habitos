@@ -1,4 +1,7 @@
-﻿namespace Habits.Models;
+﻿using System;
+using System.Collections.Generic;
+
+namespace Habits.Models;
 
 public partial class Schedule
 {

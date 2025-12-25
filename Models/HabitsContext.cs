@@ -1,11 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace Habits.Models;
+
 public partial class HabitsContext : DbContext
 {
     public HabitsContext()
     {
     }
+
     public HabitsContext(DbContextOptions<HabitsContext> options)
         : base(options)
     {
@@ -22,21 +26,19 @@ public partial class HabitsContext : DbContext
     public virtual DbSet<Task> Tasks { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=DESKTOP-UC7Q14C\\PCSAMU;Initial Catalog=Habits;Integrated Security=True;Trust Server Certificate=True;");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<DailyTask>(entity =>
         {
-            entity.HasKey(e => e.IdDailyTask).HasName("PK__DailyTas__448329FE6FFDA2B7");
+            entity.HasKey(e => e.IdDailyTask).HasName("PK__DailyTas__448329FEDBD0CF95");
 
             entity.Property(e => e.IdDailyTask).HasColumnName("id_daily_task");
             entity.Property(e => e.CompletedAt)
-                .HasPrecision(0)
+                .HasDefaultValueSql("(NULL)")
                 .HasColumnName("completed_at");
+            entity.Property(e => e.Date)
+                .HasDefaultValueSql("(sysdatetime())")
+                .HasColumnName("date");
             entity.Property(e => e.IdTask).HasColumnName("id_task");
             entity.Property(e => e.MinutesCompleted).HasColumnName("minutes_completed");
             entity.Property(e => e.TotalMinutes).HasColumnName("total_minutes");
@@ -49,7 +51,7 @@ public partial class HabitsContext : DbContext
 
         modelBuilder.Entity<Group>(entity =>
         {
-            entity.HasKey(e => e.IdGroup).HasName("PK__Groups__8BE8BA1B5EC415E7");
+            entity.HasKey(e => e.IdGroup).HasName("PK__Groups__8BE8BA1BED37C6F0");
 
             entity.Property(e => e.IdGroup).HasColumnName("id_group");
             entity.Property(e => e.Color)
@@ -68,7 +70,7 @@ public partial class HabitsContext : DbContext
 
         modelBuilder.Entity<Schedule>(entity =>
         {
-            entity.HasKey(e => e.IdSchedule).HasName("PK__Schedule__15FE7E3314ABC34A");
+            entity.HasKey(e => e.IdSchedule).HasName("PK__Schedule__15FE7E33C6663388");
 
             entity.Property(e => e.IdSchedule).HasColumnName("id_schedule");
             entity.Property(e => e.Days)
@@ -90,7 +92,7 @@ public partial class HabitsContext : DbContext
 
         modelBuilder.Entity<SchedulesTask>(entity =>
         {
-            entity.HasKey(e => new { e.IdSchedule, e.IdTask }).HasName("PK__Schedule__79E35252894F07E5");
+            entity.HasKey(e => new { e.IdSchedule, e.IdTask }).HasName("PK__Schedule__79E352522DEB3726");
 
             entity.ToTable("Schedules_Tasks");
 
@@ -109,7 +111,7 @@ public partial class HabitsContext : DbContext
 
         modelBuilder.Entity<Task>(entity =>
         {
-            entity.HasKey(e => e.IdTask).HasName("PK__Tasks__C1D2C6172FBB392B");
+            entity.HasKey(e => e.IdTask).HasName("PK__Tasks__C1D2C6176E6BF301");
 
             entity.Property(e => e.IdTask).HasColumnName("id_task");
             entity.Property(e => e.IdGroup).HasColumnName("id_group");
@@ -144,7 +146,7 @@ public partial class HabitsContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.IdUser).HasName("PK__Users__D2D14637F6950930");
+            entity.HasKey(e => e.IdUser).HasName("PK__Users__D2D14637FBBA8416");
 
             entity.Property(e => e.IdUser).HasColumnName("id_user");
             entity.Property(e => e.Email)

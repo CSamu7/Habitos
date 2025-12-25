@@ -15,5 +15,7 @@ public partial class DailyTask
 
     public int TotalMinutes { get; set; }
 
+    public DateTimeOffset Date { get; set; }
+
     public virtual Task IdTaskNavigation { get; set; } = null!;
 }
