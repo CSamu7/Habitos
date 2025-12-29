@@ -2,10 +2,31 @@
 using Habits.Features.Tasks.Validations;
 using Habits.Models;
 using Microsoft.EntityFrameworkCore;
-public class TaskFilters(DateTimeOffset? start, DateTimeOffset? end)
+public class TaskFilters(DateOnly? start, DateOnly? end, DailyTaskProgress? progress)
 {
-    public DateTimeOffset? DateStart { get; set; } = start;
-    public DateTimeOffset? DateEnd { get; set; } = end;
+    private DateTimeOffset _dateStart;
+    private DateTimeOffset _dateEnd;
+    public DateTimeOffset DateStart
+    {
+        get => _dateStart; 
+        set 
+        {
+            _dateStart = (start is not null
+                ? new DateTimeOffset(start.Value, new TimeOnly(24, 0), new TimeSpan(0))
+                : DateTimeOffset.Now - new TimeSpan(24, 0, 0));
+        }
+    }
+    public DateTimeOffset DateEnd 
+    { 
+        get => _dateEnd;
+        set
+        {
+            _dateEnd = (end is not null
+                ? new DateTimeOffset(end.Value, new TimeOnly(24, 0), new TimeSpan(0))
+                : DateTimeOffset.Now);
+        }
+    }
+    public DailyTaskProgress? Progress { get; set; } = progress;
 }
 
 public enum Status { Ok, InvalidData, NotFound, }
@@ -45,20 +66,35 @@ public class DailyTaskService
     {
         _db = db;
     }
-    public DailyTaskList GetDailyTasks(int idUser, TaskFilters filters)
-    {
-        DateTimeOffset now = DateTimeOffset.UtcNow;
-        TimeSpan limitHours = new TimeSpan(24, 0, 0);
 
-        List<DailyTask> list = _db.DailyTasks
+    public List<DailyTask> GetDailyTask(int user, TaskFilters filters)
+    {
+        var dailyTasks = _db.DailyTasks
             .Include(dailyTask => dailyTask.IdTaskNavigation)
-            .Where(dailyTask =>
-                (now.Subtract(limitHours) < dailyTask.Date) &&
-                dailyTask.IdTaskNavigation.IdUser == idUser
-             )
+            .Where(dailyTask => dailyTask.Date < filters.DateEnd && filters.DateStart > dailyTask.Date)
             .ToList();
 
-        return new DailyTaskList(list);
+        if (filters.Progress is null)
+            return dailyTasks;
+
+        return dailyTasks
+            .Where(d => d.GetProgress() == filters.Progress)
+            .ToList();
+    }
+    //TODO: Si el filtro de progreso es nulo, entonces traer a todos.
+    public List<DailyTask> GetDailyTasks(int idUser, TaskFilters filters)
+    {
+        var dailyTasks = _db.DailyTasks
+            .Include(dailyTask => dailyTask.IdTaskNavigation)
+            .Where(dailyTask => dailyTask.Date < filters.DateEnd && filters.DateStart > dailyTask.Date)
+            .ToList();
+
+        if (filters.Progress is null)
+            return dailyTasks;
+
+        return dailyTasks
+            .Where(d => d.GetProgress() == filters.Progress)
+            .ToList();
     }
     public async Task<Result<DailyTask>> PatchMinutes(int id, PatchDailyTask body, Action<DailyTask, PatchDailyTask> func)
     {

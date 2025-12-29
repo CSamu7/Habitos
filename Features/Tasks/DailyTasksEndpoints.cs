@@ -1,4 +1,5 @@
 ﻿using Habits.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Habits.Features.Tasks
 {
@@ -29,8 +30,9 @@ namespace Habits.Features.Tasks
     {
         public IResult GetTodayDailyTasks(int idUser, DailyTaskService service)
         {
-            DateTimeOffset today = DateTimeOffset.UtcNow;
-            DailyTaskList tasks = service.GetDailyTasks(idUser, new TaskFilters(null, today));
+            DailyTaskList tasks = service.GetDailyTasks
+                (idUser, new TaskFilters(null, null, DailyTaskProgress.NotDone));
+
             DailyTaskList unfinishedTasks = tasks.GetUnfinishedTasks();
 
             return TypedResults.Ok(
@@ -44,14 +46,15 @@ namespace Habits.Features.Tasks
                     tasks.GetTotalPercentage()
             ));
         }
-        public IResult GetDailyTasks(int idUser, DateTimeOffset? start, DateTimeOffset? end, DailyTaskService service)
+        public IResult GetDailyTasks(int idUser, DateOnly? dateStart, DateOnly? dateEnd, DailyTaskProgress? status, DailyTaskService service)
         {
-            var list = service.GetDailyTasks(idUser, new TaskFilters(start, end));
+            TaskFilters filters = new TaskFilters(dateStart, dateEnd, status);
+            var list = service.GetDailyTaskss(idUser, filters);
 
             return TypedResults.Ok(
                 new ResponseBase<GetDailyTaskDTO>(
-                    list.Tasks.Select(task => task.Map()).ToList(),
-                    list.Tasks.Count()));
+                    list.Select(task => task.Map()).ToList(),
+                    list.Count()));
         }
         public async Task<IResult> PatchMinutes(int idDailyTask, PatchDailyTask body, DailyTaskService service)
         {
@@ -66,4 +69,5 @@ namespace Habits.Features.Tasks
 
     }
     public enum PatchOperations { Add, Replace }
+    public enum DailyTaskProgress { NotDone, InProgress, Done, Incomplete, Overdone}
 }
