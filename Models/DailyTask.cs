@@ -25,18 +25,19 @@ public static class DailyTaskExtensions
     {
         DateTimeOffset today = DateTimeOffset.UtcNow;
 
-        if (dailyTask.Date == today && dailyTask.MinutesCompleted == 0)
+        bool isTodayTask = dailyTask.Date > today.Subtract(new TimeSpan(23, 59, 59));
+        bool taskNotCompleted = dailyTask.MinutesCompleted < dailyTask.TotalMinutes;
+        bool taskCompleted = dailyTask.MinutesCompleted == dailyTask.TotalMinutes;
+        bool taskOverDone = dailyTask.MinutesCompleted > dailyTask.TotalMinutes;
+
+        //Tarea que no ha sido iniciada pero todavia se puede hacer
+        if (isTodayTask && taskNotCompleted)
             return DailyTaskProgress.NotDone;
 
-        double percentage = (dailyTask.MinutesCompleted * 100) / dailyTask.TotalMinutes;
-
-        if (dailyTask.Date == today && percentage > 0 && percentage < 100)
-            return DailyTaskProgress.NotDone;
-
-        if (dailyTask.Date == today && percentage == 100)
+        if (taskCompleted)
             return DailyTaskProgress.Done;
 
-        if (percentage > 100)
+        if (taskOverDone)
             return DailyTaskProgress.Overdone;
 
         return DailyTaskProgress.Incomplete;

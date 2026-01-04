@@ -30,28 +30,28 @@ namespace Habits.Features.Tasks
     {
         public IResult GetTodayDailyTasks(int idUser, DailyTaskService service)
         {
-            DailyTaskList tasks = service.GetDailyTasks
-                (idUser, new TaskFilters(null, null, DailyTaskProgress.NotDone));
+            List<DailyTask> tasks = service.GetDailyTasks
+                (idUser, new GetAllDailyTaskFilters(null, null, null));
 
-            DailyTaskList unfinishedTasks = tasks.GetUnfinishedTasks();
-
+            DailyTaskList unfinishedTasks = new DailyTaskList(tasks);
             return TypedResults.Ok(
                 new DailyTasksStats<GetTodayDailyTaskDTO>(
-                    unfinishedTasks.Tasks.Select(
-                        task => task.MapTodayDTO()   
-                    ).ToList(),
-                    tasks.GetTotalMinutes(),
-                    tasks.GetMinutesCompleted(),
-                    tasks.GetTotalMinutes() - tasks.GetMinutesCompleted(),
-                    tasks.GetTotalPercentage()
+                    unfinishedTasks.Tasks
+                    .Where(task => task.GetProgress() == DailyTaskProgress.NotDone)
+                    .Select(task => task.MapTodayDTO())
+                    .ToList(),
+                    unfinishedTasks.GetTotalMinutes(),
+                    unfinishedTasks.GetMinutesCompleted(),
+                    unfinishedTasks.GetTotalMinutes() - unfinishedTasks.GetMinutesCompleted(),
+                    unfinishedTasks.GetTotalPercentage()
             ));
         }
         public IResult GetDailyTasks(int idUser, DateOnly? dateStart, DateOnly? dateEnd, DailyTaskProgress? status, DailyTaskService service)
         {
-            TaskFilters filters = new TaskFilters(dateStart, dateEnd, status);
-            var list = service.GetDailyTaskss(idUser, filters);
+            var filters = new GetAllDailyTaskFilters(dateStart, dateEnd, status);
+            var list = service.GetDailyTasks(idUser, filters);
 
-            return TypedResults.Ok(
+            return Results.Ok(
                 new ResponseBase<GetDailyTaskDTO>(
                     list.Select(task => task.Map()).ToList(),
                     list.Count()));
@@ -64,9 +64,8 @@ namespace Habits.Features.Tasks
                 PatchOperations.Replace => await service.PatchMinutes(idDailyTask, body, service.ReplaceMinutes),
             };
 
-            return result.ToProblem();
+            return Results.Ok();
         }
-
     }
     public enum PatchOperations { Add, Replace }
     public enum DailyTaskProgress { NotDone, InProgress, Done, Incomplete, Overdone}
