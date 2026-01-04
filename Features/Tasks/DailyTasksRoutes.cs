@@ -1,4 +1,6 @@
-﻿namespace Habits.Features.Tasks
+﻿using Habits.Features.Tasks.Validations;
+
+namespace Habits.Features.Tasks
 {
     public static class DailyTasksRoutes
     {
@@ -7,7 +9,8 @@
             DailyTasksEndpoints endpoints = new DailyTasksEndpoints();
 
             router.MapGet("/{idUser}/dailyTasks/today", endpoints.GetTodayDailyTasks);
-            router.MapGet("/{idUser}/dailyTasks", endpoints.GetDailyTasks);
+            router.MapGet("/{idUser}/dailyTasks", endpoints.GetDailyTasks)
+                .AddEndpointFilter<DailyTaskGetValidation>();
         }
         public class DailyTaskFilters() : IEndpointFilter
         {
@@ -15,7 +18,7 @@
             {
                 var body = context.GetArgument<PatchDailyTask>(1);
 
-                DailyTaskFilter validator = new DailyTaskFilter();
+                DailyTaskPatchValidation validator = new DailyTaskPatchValidation();
                 Dictionary<string, string[]> errors = validator.Validate(body);
 
                 if (errors.Count > 0)

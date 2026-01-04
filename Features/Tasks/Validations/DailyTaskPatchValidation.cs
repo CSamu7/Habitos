@@ -1,19 +1,17 @@
-﻿namespace Habits.Features.Tasks
+﻿namespace Habits.Features.Tasks.Validations
 {
-    public class DailyTaskFilter()
+    public class DailyTaskPatchValidation()
     {
-        public List<string> Errors { get; set; } = new List<string>();
+        private Dictionary<string, string[]> _errors = new Dictionary<string, string[]>();
         private const int MaxMinutes = 480; // 8 horas
         public Dictionary<string, string[]> Validate(PatchDailyTask body)
         {
-            Dictionary<string, string[]> errors = new Dictionary<string, string[]>();
-
             var minutesError = ValidateMinutes(body.Minutes);
 
             if (minutesError.Count > 0)
-                errors.TryAdd("Minutes", minutesError.ToArray());
+                _errors.TryAdd("Minutes", minutesError.ToArray());
 
-            return errors;
+            return _errors;
         }
         private List<string> ValidateMinutes(int minutes)
         {
