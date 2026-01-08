@@ -1,4 +1,6 @@
-﻿namespace Habits.Features.Tasks
+﻿using Habits.Features.DailyTasks.Endpoints;
+
+namespace Habits.Features.Tasks
 {
     public class GetAllDailyTaskFilters
     {

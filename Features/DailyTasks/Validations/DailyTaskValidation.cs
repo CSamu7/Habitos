@@ -2,6 +2,7 @@
 
 namespace Habits.Features.Tasks.Validations
 {
+    //Negocios
     public class DailyTaskValidation
     {
         private readonly DailyTask? _dailyTask;
@@ -24,6 +25,7 @@ namespace Habits.Features.Tasks.Validations
         }
     }
 
+    //Sencilla
     public class DailyTaskGetValidation() : IEndpointFilter
     {
         public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
@@ -49,7 +51,7 @@ namespace Habits.Features.Tasks.Validations
                     }
                 );
 
-            return next(context);
+            return await next(context);
         }
     }
 }

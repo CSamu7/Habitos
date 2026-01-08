@@ -58,14 +58,14 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-users.MapGet("/{idUser}/tasks", (int idUser, HabitsContext db) =>
-{
-    var tasks = db.Tasks.Where(task => task.IdUser == idUser);
+//users.MapGet("/{idUser}/tasks", (int idUser, HabitsContext db) =>
+//{
+//    var tasks = db.Tasks.Where(task => task.IdUser == idUser);
 
-    List<TaskGetDTO> tasksDTO = tasks.Select(task => task.Map()).ToList();
+//    List<TaskGetDTO> tasksDTO = tasks.Select(task => task.Map()).ToList();
 
-    return Results.Ok(tasksDTO);
-});
+//    return Results.Ok(tasksDTO);
+//});
 
 app.UseExceptionHandler();
 

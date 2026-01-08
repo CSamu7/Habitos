@@ -1,4 +1,6 @@
-﻿using Habits.Features.Tasks.Validations;
+﻿using Habits.Features.DailyTasks.Endpoints;
+using Habits.Features.Tasks.Models;
+using Habits.Features.Tasks.Validations;
 
 namespace Habits.Features.Tasks
 {
@@ -16,7 +18,7 @@ namespace Habits.Features.Tasks
         {
             public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
             {
-                var body = context.GetArgument<PatchDailyTask>(1);
+                var body = context.GetArgument<DailyTaskPatchRequest>(1);
 
                 DailyTaskPatchValidation validator = new DailyTaskPatchValidation();
                 Dictionary<string, string[]> errors = validator.Validate(body);

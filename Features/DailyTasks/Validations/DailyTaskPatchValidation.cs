@@ -1,10 +1,12 @@
-﻿namespace Habits.Features.Tasks.Validations
+﻿using Habits.Features.Tasks.Models;
+
+namespace Habits.Features.Tasks.Validations
 {
     public class DailyTaskPatchValidation()
     {
         private Dictionary<string, string[]> _errors = new Dictionary<string, string[]>();
         private const int MaxMinutes = 480; // 8 horas
-        public Dictionary<string, string[]> Validate(PatchDailyTask body)
+        public Dictionary<string, string[]> Validate(DailyTaskPatchRequest body)
         {
             var minutesError = ValidateMinutes(body.Minutes);
 

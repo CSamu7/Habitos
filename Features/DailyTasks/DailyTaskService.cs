@@ -1,0 +1,60 @@
+﻿using Habits.Features.DailyTasks;
+using Habits.Features.DailyTasks.Models;
+using Habits.Features.Tasks;
+using Habits.Features.Tasks.Models;
+using Habits.Features.Tasks.Validations;
+using Habits.Models;
+using Microsoft.EntityFrameworkCore;
+public class DailyTaskService
+{
+    private HabitsContext _db;
+    public DailyTaskService(HabitsContext db)
+    {
+        _db = db;
+    }
+    public async Task<DailyTask?> GetDailyTask(int idDailyTask)
+    {
+        var dailyTask = await _db.DailyTasks.FirstOrDefaultAsync(d => d.IdDailyTask == idDailyTask);
+
+        return dailyTask;
+    }
+    //TODO: Si el filtro de progreso es nulo, entonces retornar todas las tareas.
+    public List<DailyTask> GetDailyTasks(int idUser, GetAllDailyTaskFilters filters)
+    {
+        var dailyTasks = _db.DailyTasks
+            .Include(d => d.IdTaskNavigation)
+            .Where(d =>
+                DateTimeOffset.Compare(filters.DateStart, d.Date) <= 0 &&
+                DateTimeOffset.Compare(d.Date, filters.DateEnd) <= 0)
+            .ToList();
+
+        return filters.Progress is null
+            ? dailyTasks
+            : dailyTasks
+                .Where(d => d.GetProgress() == filters.Progress)
+                .ToList();
+    }
+    public async Task<Result<DailyTask>> PatchMinutes(int id, DailyTaskPatchRequest body)
+    {
+        DailyTask? dailyTask = await _db.DailyTasks.FindAsync(id);
+        DailyTaskValidation validation = new DailyTaskValidation(dailyTask);
+
+        Result<DailyTask> result = validation.Validate();
+        if (!result.Status.Equals(Status.Ok)) return result;
+
+        IDailyTaskPatchCommand command = GetPatchCommand(body.Operation);
+
+        command.ChangeMinutes(dailyTask, body);
+        _db.SaveChanges();
+
+        return Result<DailyTask>.Success(result.Value);
+    }
+    private IDailyTaskPatchCommand GetPatchCommand(PatchOperations operation)
+    {
+        return operation switch 
+        { 
+            PatchOperations.Add => new AddMinutes(), 
+            PatchOperations.Replace => new OverwriteMinutes() 
+        };
+    }
+}
