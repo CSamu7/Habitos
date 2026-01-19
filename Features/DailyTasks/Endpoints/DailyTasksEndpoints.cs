@@ -1,4 +1,5 @@
-﻿using Habits.Features.Tasks;
+﻿using Habits.Features.DailyTasks.Models;
+using Habits.Features.Tasks;
 using Habits.Features.Tasks.Models;
 using Habits.Models;
 
@@ -8,17 +9,18 @@ namespace Habits.Features.DailyTasks.Endpoints
     {
         public IResult GetTodayDailyTasks(int idUser, DailyTaskService service)
         {
-            List<DailyTask> tasks = service.GetDailyTasks
-                (idUser, new GetAllDailyTaskFilters(null, null, null));
+            //Estudiar Inversion de Control.
+            Result<List<DailyTask>> result = service.GetDailyTasks
+                (idUser, new GetAllDailyTaskFilters(null, null, null, TimeProvider.System));
 
-            return TypedResults.Ok(new DailyTasksGetAllResponse(tasks));
+            return result.ToHttpResponse();
         }
         public IResult GetDailyTasks(int idUser, DateOnly? dateStart, DateOnly? dateEnd, DailyTaskProgress? status, DailyTaskService service)
         {
-            var filters = new GetAllDailyTaskFilters(dateStart, dateEnd, status);
-            List<DailyTask> list = service.GetDailyTasks(idUser, filters);
+            var filters = new GetAllDailyTaskFilters(dateStart, dateEnd, status, TimeProvider.System);
+            Result<List<DailyTask>> result = service.GetDailyTasks(idUser, filters);
 
-            return Results.Ok(new DailyTasksGetAllResponse(list));
+            return result.ToHttpResponse();
         }
         public async Task<IResult> PatchMinutes(int idDailyTask, DailyTaskPatchRequest body, DailyTaskService service)
         {
@@ -28,7 +30,7 @@ namespace Habits.Features.DailyTasks.Endpoints
                 _ => await service.PatchMinutes(idDailyTask, body),
             };
 
-            return Results.Ok();
+            return result.ToHttpResponse();
         }
     }
     public enum DailyTaskProgress { NotDone, InProgress, Done, Incomplete, Overdone }

@@ -30,12 +30,13 @@ namespace Habits.Features.DailyTasks.Models
         public static DailyTaskGetResponse ToDailyTaskGetResponse(this DailyTask dailyTask)
         {
             double percentage = (double) dailyTask.MinutesCompleted / dailyTask.TotalMinutes * 100;
+            Habits.Models.Task task = dailyTask.IdTaskNavigation;
 
             return new DailyTaskGetResponse(
                 dailyTask.IdDailyTask,
                 new SimpleTaskDTO(
-                    dailyTask.IdTaskNavigation.IdTask,
-                    dailyTask.IdTaskNavigation.Name
+                    task.IdTask,
+                    task.Name
                 ),
                 dailyTask.MinutesCompleted,
                 dailyTask.TotalMinutes,

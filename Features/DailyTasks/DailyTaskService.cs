@@ -19,9 +19,18 @@ public class DailyTaskService
         return dailyTask;
     }
     //TODO: Si el filtro de progreso es nulo, entonces retornar todas las tareas.
-    public List<DailyTask> GetDailyTasks(int idUser, GetAllDailyTaskFilters filters)
+    public Result<List<DailyTask>> GetDailyTasks(int idUser, GetAllDailyTaskFilters filters)
     {
         var dailyTasks = _db.DailyTasks
+            .Where(d => d.IdTaskNavigation.IdUser == idUser);
+
+        /*Esto sera removido porque primero checariamos si el usuario tiene permisos
+         para este endpoint. Por ahora retornaremos NotFound si el usuario no existe.
+         */
+        if (dailyTasks.Count() == 0)
+            return Result<List<DailyTask>>.Failure(Status.NotFound, "This user doesn't have daily tasks");
+
+        var dailyTasksFiltered = dailyTasks
             .Include(d => d.IdTaskNavigation)
             .Where(d =>
                 DateTimeOffset.Compare(filters.DateStart, d.Date) <= 0 &&
@@ -29,14 +38,18 @@ public class DailyTaskService
             .ToList();
 
         return filters.Progress is null
-            ? dailyTasks
-            : dailyTasks
+            ? Result<List<DailyTask>>.Success(dailyTasksFiltered)
+            : Result<List<DailyTask>>.Success(dailyTasksFiltered
                 .Where(d => d.GetProgress() == filters.Progress)
-                .ToList();
+                .ToList()); 
     }
     public async Task<Result<DailyTask>> PatchMinutes(int id, DailyTaskPatchRequest body)
     {
         DailyTask? dailyTask = await _db.DailyTasks.FindAsync(id);
+
+        if (dailyTask is null)
+            return Result<DailyTask>.Failure(Status.NotFound, "Daily dask doesn't exist");
+
         DailyTaskValidation validation = new DailyTaskValidation(dailyTask);
 
         Result<DailyTask> result = validation.Validate();

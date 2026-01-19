@@ -3,6 +3,7 @@ using Habits.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddProblemDetails();
@@ -20,6 +21,7 @@ builder.Services.AddDbContext<HabitsContext>(options =>
 });
 
 builder.Services.AddScoped<DailyTaskService>();
+builder.Services.AddSingleton(TimeProvider.System);
 
 //Quiero entender que hacen especificamente estas lineas.
 
@@ -58,15 +60,8 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-//users.MapGet("/{idUser}/tasks", (int idUser, HabitsContext db) =>
-//{
-//    var tasks = db.Tasks.Where(task => task.IdUser == idUser);
-
-//    List<TaskGetDTO> tasksDTO = tasks.Select(task => task.Map()).ToList();
-
-//    return Results.Ok(tasksDTO);
-//});
 
 app.UseExceptionHandler();
 
 app.Run();
+public partial class Program { }

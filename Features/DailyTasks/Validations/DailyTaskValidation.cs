@@ -3,6 +3,7 @@
 namespace Habits.Features.Tasks.Validations
 {
     //Negocios
+    //TODO: Change name
     public class DailyTaskValidation
     {
         private readonly DailyTask? _dailyTask;
@@ -24,8 +25,6 @@ namespace Habits.Features.Tasks.Validations
             return Result<DailyTask>.Success(_dailyTask);
         }
     }
-
-    //Sencilla
     public class DailyTaskGetValidation() : IEndpointFilter
     {
         public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
