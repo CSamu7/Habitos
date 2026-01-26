@@ -1,9 +1,10 @@
-﻿using Habits.Features.DailyTasks;
+﻿using Habits.API.DailyTasks;
+using Habits.API.DailyTasks.DTO;
+using Habits.API.DailyTasks.Validation;
+using Habits.Common;
 using Habits.Features.DailyTasks.Models;
-using Habits.Features.Tasks;
-using Habits.Features.Tasks.Models;
-using Habits.Features.Tasks.Validations;
 using Habits.Models;
+using Habits.Services.DailyTasks;
 using Microsoft.EntityFrameworkCore;
 public class DailyTaskService
 {
@@ -19,10 +20,24 @@ public class DailyTaskService
         return dailyTask;
     }
     //TODO: Si el filtro de progreso es nulo, entonces retornar todas las tareas.
-    public Result<List<DailyTask>> GetDailyTasks(int idUser, GetAllDailyTaskFilters filters)
+
+    private List<DailyTask> Filter(List<DailyTask> dailyTasks, GetAllFilters filters)
+    {
+        List<DailyTask> byDate = dailyTasks
+            .Where(d =>
+                DateTimeOffset.Compare(filters.DateStart.ToDateTimeOffset(), d.Date) <= 0 &&
+                DateTimeOffset.Compare(d.Date, filters.DateEnd.ToDateTimeOffset()) <= 0)
+            .ToList();
+
+        if (filters.Progress is not null)
+            byDate = byDate.Where(d => d.GetProgress() == filters.Progress).ToList();
+
+        return byDate;
+    }
+    public Result<List<DailyTask>> GetDailyTasks(int idUser, GetAllFilters filters)
     {
         var dailyTasks = _db.DailyTasks
-            .Where(d => d.IdTaskNavigation.IdUser == idUser);
+            .Where(d => d.IdTaskNavigation.IdUser == idUser).ToList();
 
         /*Esto sera removido porque primero checariamos si el usuario tiene permisos
          para este endpoint. Por ahora retornaremos NotFound si el usuario no existe.
@@ -30,18 +45,9 @@ public class DailyTaskService
         if (dailyTasks.Count() == 0)
             return Result<List<DailyTask>>.Failure(Status.NotFound, "This user doesn't have daily tasks");
 
-        var dailyTasksFiltered = dailyTasks
-            .Include(d => d.IdTaskNavigation)
-            .Where(d =>
-                DateTimeOffset.Compare(filters.DateStart, d.Date) <= 0 &&
-                DateTimeOffset.Compare(d.Date, filters.DateEnd) <= 0)
-            .ToList();
+        List<DailyTask> filtered = Filter(dailyTasks, filters);
 
-        return filters.Progress is null
-            ? Result<List<DailyTask>>.Success(dailyTasksFiltered)
-            : Result<List<DailyTask>>.Success(dailyTasksFiltered
-                .Where(d => d.GetProgress() == filters.Progress)
-                .ToList()); 
+        return Result<List<DailyTask>>.Success(filtered);
     }
     public async Task<Result<DailyTask>> PatchMinutes(int id, DailyTaskPatchRequest body)
     {
@@ -50,7 +56,7 @@ public class DailyTaskService
         if (dailyTask is null)
             return Result<DailyTask>.Failure(Status.NotFound, "Daily dask doesn't exist");
 
-        DailyTaskValidation validation = new DailyTaskValidation(dailyTask);
+        PatchValidation validation = new PatchValidation(dailyTask);
 
         Result<DailyTask> result = validation.Validate();
         if (!result.Status.Equals(Status.Ok)) return result;

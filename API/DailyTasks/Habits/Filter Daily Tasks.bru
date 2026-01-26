@@ -1,0 +1,15 @@
+meta {
+  name: Filter Daily Tasks
+  type: http
+  seq: 1
+}
+
+get {
+  url: https://localhost:7074/api/users/{idUser}/dailyTasks
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

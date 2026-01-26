@@ -1,6 +1,4 @@
-﻿using Habits.Features.DailyTasks.Endpoints;
-
-namespace Habits.Models;
+﻿namespace Habits.Models;
 
 public partial class DailyTask
 {

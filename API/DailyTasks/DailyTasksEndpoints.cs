@@ -1,23 +1,27 @@
-﻿using Habits.Features.DailyTasks.Models;
-using Habits.Features.Tasks;
-using Habits.Features.Tasks.Models;
+﻿using Habits.API.DailyTasks.DTO;
 using Habits.Models;
+using Habits.Services.DailyTasks;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Habits.Features.DailyTasks.Endpoints
+namespace Habits.API.DailyTasks
 {
     public class DailyTasksEndpoints()
     {
-        public IResult GetTodayDailyTasks(int idUser, DailyTaskService service)
+        public IResult GetTodayDailyTasks(int idUser, GetAllFilters today, DailyTaskService service)
         {
-            //Estudiar Inversion de Control.
             Result<List<DailyTask>> result = service.GetDailyTasks
-                (idUser, new GetAllDailyTaskFilters(null, null, null, TimeProvider.System));
+                (idUser, today); 
+
+            if (result.Status.Equals(Status.Ok))
+            {
+                GetAllResponse reds = new GetAllResponse(result.Value);
+                return Results.Ok(reds);
+            }
 
             return result.ToHttpResponse();
         }
-        public IResult GetDailyTasks(int idUser, DateOnly? dateStart, DateOnly? dateEnd, DailyTaskProgress? status, DailyTaskService service)
+        public IResult GetDailyTasks(int idUser, GetAllFilters filters, DailyTaskService service)
         {
-            var filters = new GetAllDailyTaskFilters(dateStart, dateEnd, status, TimeProvider.System);
             Result<List<DailyTask>> result = service.GetDailyTasks(idUser, filters);
 
             return result.ToHttpResponse();
@@ -33,5 +37,4 @@ namespace Habits.Features.DailyTasks.Endpoints
             return result.ToHttpResponse();
         }
     }
-    public enum DailyTaskProgress { NotDone, InProgress, Done, Incomplete, Overdone }
 }

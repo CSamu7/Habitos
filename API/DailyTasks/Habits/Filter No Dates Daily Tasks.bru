@@ -1,0 +1,22 @@
+meta {
+  name: Filter No Dates Daily Tasks
+  type: http
+  seq: 2
+}
+
+get {
+  url: https://localhost:7074/api/users/1/dailyTasks?dateStart=2026/01/20&dateEnd=2026/01/12&progress=NotComplete
+  body: none
+  auth: inherit
+}
+
+params:query {
+  dateStart: 2026/01/20
+  dateEnd: 2026/01/12
+  progress: NotComplete
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

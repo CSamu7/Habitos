@@ -1,7 +1,7 @@
-﻿using Habits.Features.Tasks.Models;
+﻿using Habits.API.DailyTasks.DTO;
 using Habits.Models;
 
-namespace Habits.Features.DailyTasks
+namespace Habits.Services.DailyTasks
 {
     public class AddMinutes : IDailyTaskPatchCommand
     {

@@ -1,54 +1,28 @@
-using Habits.Features.Tasks;
+using Habits.API;
+using Habits.API.DailyTasks;
+using Habits.Infraestructure;
 using Habits.Models;
+using Habits.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
-
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddProblemDetails();
 
 if (builder.Environment.IsDevelopment())
 {
     builder.Configuration.AddUserSecrets<Program>();
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
 }
 
-builder.Services.AddDbContext<HabitsContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration["DB_Connection"]);
-});
-
-builder.Services.AddScoped<DailyTaskService>();
-builder.Services.AddSingleton(TimeProvider.System);
-
-//Quiero entender que hacen especificamente estas lineas.
-
-//ConfigureHttpJsonOptions. Configura las opciones para leer y escribir JSON
-builder.Services.ConfigureHttpJsonOptions(options =>
-{
-    //Añade un convertidor, en este caso JsonSringEnumConverter.
-
-    //JsonStringEnumConverter: Convierte valores enum a y de strings.
-    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
-});
-//
-
-builder.Services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
-{
-    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-});
-
+builder.Services
+    .AddSwagger()
+    .AddApiServices()
+    .AddDatabase(builder.Configuration)
+    .AddDailyTasks();
 
 var app = builder.Build();
 
-IEndpointRouteBuilder api = app.MapGroup("/api/");
-IEndpointRouteBuilder users = api.MapGroup("/users/");
-IEndpointRouteBuilder dailyTasks = api.MapGroup("/dailyTasks/");
-
-users.AddUserRoute();
-dailyTasks.AddDailyTaskRoute();
+app.UseStatusCodePages();
+app.UseHabitsEndpoints();
 
 if (app.Environment.IsDevelopment())
 {
@@ -59,9 +33,5 @@ if (app.Environment.IsDevelopment())
         opt.RoutePrefix = String.Empty;
     });
 }
-
-
-app.UseExceptionHandler();
-
 app.Run();
 public partial class Program { }

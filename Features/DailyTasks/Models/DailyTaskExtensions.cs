@@ -1,12 +1,11 @@
-﻿using Habits.Features.DailyTasks.Endpoints;
-using Habits.Features.Tasks.Models;
+﻿using Habits.Common.DailyTasks;
 using Habits.Models;
 
 namespace Habits.Features.DailyTasks.Models
 {
     public static class DailyTaskExtensions
     {
-        public static DailyTaskProgress GetProgress(this DailyTask dailyTask)
+        public static Progress GetProgress(this DailyTask dailyTask)
         {
             DateTimeOffset today = DateTimeOffset.UtcNow;
 
@@ -17,32 +16,15 @@ namespace Habits.Features.DailyTasks.Models
 
             //Tarea que no ha sido iniciada pero todavia se puede hacer
             if (isTodayTask && taskNotCompleted)
-                return DailyTaskProgress.NotDone;
+                return Progress.NotDone;
 
             if (taskCompleted)
-                return DailyTaskProgress.Done;
+                return Progress.Done;
 
             if (taskOverDone)
-                return DailyTaskProgress.Overdone;
+                return Progress.Overdone;
 
-            return DailyTaskProgress.Incomplete;
-        }
-        public static DailyTaskGetResponse ToDailyTaskGetResponse(this DailyTask dailyTask)
-        {
-            double percentage = (double) dailyTask.MinutesCompleted / dailyTask.TotalMinutes * 100;
-            Habits.Models.Task task = dailyTask.IdTaskNavigation;
-
-            return new DailyTaskGetResponse(
-                dailyTask.IdDailyTask,
-                new SimpleTaskDTO(
-                    task.IdTask,
-                    task.Name
-                ),
-                dailyTask.MinutesCompleted,
-                dailyTask.TotalMinutes,
-                percentage,
-                dailyTask.CompletedAt
-            );
+            return Progress.Incomplete;
         }
     }
 }

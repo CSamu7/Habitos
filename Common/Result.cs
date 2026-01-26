@@ -22,9 +22,9 @@ public static class ResultExtensions
     {
         return result.Status switch
         {
-            Status.Ok => TypedResults.Ok(result),
-            Status.InvalidData => TypedResults.Problem(detail: result.ErrorMessage, statusCode: 400),
-            Status.NotFound => TypedResults.Problem(detail: result.ErrorMessage, statusCode: 404),
+            Status.Ok => TypedResults.Ok(result.Value),
+            Status.InvalidData => TypedResults.BadRequest(result.ErrorMessage),
+            Status.NotFound => TypedResults.NotFound(result.ErrorMessage),
             _ => TypedResults.Problem(detail: "something went wrong", statusCode: 500)
         };
     }
