@@ -15,7 +15,6 @@ namespace Habits.API.DailyTasks.Validation
             if (filters.DateStart > filters.DateEnd)
                 dateErrors.Add("Date start must be before date end");
 
-            //TODO: Bug, la fecha no es mayor porque empieza con 0:00 de tiempo.
             if (filters.DateEnd.ToDateTimeOffset() > DateTimeOffset.UtcNow)
                 dateErrors.Add("Date end can't be in the future");
 

@@ -9,8 +9,7 @@ namespace Habits.API.DailyTasks
     {
         public IResult GetTodayDailyTasks(int idUser, GetAllFilters today, DailyTaskService service)
         {
-            Result<List<DailyTask>> result = service.GetDailyTasks
-                (idUser, today); 
+            Result<List<DailyTask>> result = service.GetDailyTasks(idUser, today); 
 
             if (result.Status.Equals(Status.Ok))
             {
@@ -23,6 +22,12 @@ namespace Habits.API.DailyTasks
         public IResult GetDailyTasks(int idUser, GetAllFilters filters, DailyTaskService service)
         {
             Result<List<DailyTask>> result = service.GetDailyTasks(idUser, filters);
+
+            if (result.Status.Equals(Status.Ok))
+            {
+                GetAllResponse reds = new GetAllResponse(result.Value);
+                return Results.Ok(reds);
+            }
 
             return result.ToHttpResponse();
         }

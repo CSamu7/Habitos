@@ -18,11 +18,12 @@ namespace Habits.API.DailyTasks.DTO
             double percentage = (double)dailyTask.MinutesCompleted / dailyTask.TotalMinutes * 100;
             Habits.Models.Task task = dailyTask.IdTaskNavigation;
 
+            //TODO: Arreglar este bug.
             return new DailyTaskGetResponse(
                 dailyTask.IdDailyTask,
                 new BasicTask(
-                    task.IdTask,
-                    task.Name
+                    dailyTask.IdTask,
+                    dailyTask.IdTaskNavigation.Name
                 ),
                 dailyTask.MinutesCompleted,
                 dailyTask.TotalMinutes,
