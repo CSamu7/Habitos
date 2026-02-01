@@ -1,24 +1,22 @@
 ﻿using Habits.API.DailyTasks.Validation;
+using Habits.API.Tasks;
 using Habits.Features.DailyTasks.Filters;
 
 namespace Habits.API.DailyTasks
 {
+    //Change name to HabitsRoutes?
     public static class DailyTasksRoutes
     {
-        public static void UserRoutes(this IEndpointRouteBuilder router)
+        public static IEndpointRouteBuilder MapDailyTasks(this IEndpointRouteBuilder router)
         {
-            DailyTasksEndpoints endpoints = new DailyTasksEndpoints();
+            var dailyTasksRoute = router.MapGroup("/dailyTasks");
 
-            router.MapGet("/{idUser}/dailyTasks/today", endpoints.GetTodayDailyTasks);
-            router.MapGet("/{idUser}/dailyTasks", endpoints.GetDailyTasks)
-            .AddEndpointFilter<GetAllEndpointFilter>();
-        }
-        public static void AddDailyTaskRoute(this IEndpointRouteBuilder router)
-        {
-            DailyTasksEndpoints endpoints = new DailyTasksEndpoints();
+            dailyTasksRoute.MapGet("{idDailyTask}", DailyTasksEndpoints.GetDailyTask);
 
-            router.MapPatch("{idDailyTask}", endpoints.PatchMinutes)
+            dailyTasksRoute.MapPatch("{idDailyTask}", DailyTasksEndpoints.PatchMinutes)
                 .AddEndpointFilter<DailyTaskPatchFilter>();
+
+            return router;
         }
     }
 }

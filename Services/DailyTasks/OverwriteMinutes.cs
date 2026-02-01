@@ -12,7 +12,7 @@ namespace Habits.Services.DailyTasks
                 dailyTask.CompletedAt = null;
             } else
             {
-                dailyTask.CompletedAt = body.Time;
+                dailyTask.CompletedAt = body.FinishedAt;
             }
 
             dailyTask.MinutesCompleted = body.Minutes;

@@ -7,19 +7,12 @@ namespace Habits.API.DailyTasks
 {
     public class DailyTasksEndpoints()
     {
-        public IResult GetTodayDailyTasks(int idUser, GetAllFilters today, DailyTaskService service)
+        public static IResult GetDailyTask(int idDailyTask, DailyTaskService service)
         {
-            Result<List<DailyTask>> result = service.GetDailyTasks(idUser, today); 
-
-            if (result.Status.Equals(Status.Ok))
-            {
-                GetAllResponse reds = new GetAllResponse(result.Value);
-                return Results.Ok(reds);
-            }
-
-            return result.ToHttpResponse();
+            //TODO: Realizar esta función
+            return Results.Ok();
         }
-        public IResult GetDailyTasks(int idUser, GetAllFilters filters, DailyTaskService service)
+        public static IResult GetDailyTasks(int idUser, GetAllFilters filters, DailyTaskService service)
         {
             Result<List<DailyTask>> result = service.GetDailyTasks(idUser, filters);
 
@@ -31,7 +24,7 @@ namespace Habits.API.DailyTasks
 
             return result.ToHttpResponse();
         }
-        public async Task<IResult> PatchMinutes(int idDailyTask, DailyTaskPatchRequest body, DailyTaskService service)
+        public static async Task<IResult> PatchMinutes(int idDailyTask, DailyTaskPatchRequest body, DailyTaskService service)
         {
             Result<DailyTask> result = body.Operation switch
             {

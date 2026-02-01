@@ -6,7 +6,7 @@ namespace Habits.API.DailyTasks.DTO
     public record DailyTaskPatchRequest(
         [Range(1, 480, ErrorMessage = "Los minutos deben ser mayor a 0 y menor a 480")]
         int Minutes,
-        DateTimeOffset Time,
+        DateTimeOffset FinishedAt,
         PatchOperations Operation
     );
 }

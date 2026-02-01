@@ -11,7 +11,7 @@ namespace Habits.Services.DailyTasks
 
             if (dailyTask.MinutesCompleted >= dailyTask.TotalMinutes &&
                 dailyTask.CompletedAt is null)
-                dailyTask.CompletedAt = body.Time;
+                dailyTask.CompletedAt = body.FinishedAt;
         }
     }
 }
