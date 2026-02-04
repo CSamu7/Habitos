@@ -1,10 +1,9 @@
 using Habits.API;
 using Habits.API.DailyTasks;
+using Habits.API.Tasks;
+using Habits.API.Users;
 using Habits.Infraestructure;
-using Habits.Models;
 using Habits.Services;
-using Microsoft.EntityFrameworkCore;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,8 +20,8 @@ builder.Services
 
 var app = builder.Build();
 
+app.UseExceptionHandler();
 app.UseStatusCodePages();
-app.UseHabitsEndpoints();
 
 if (app.Environment.IsDevelopment())
 {
@@ -33,5 +32,12 @@ if (app.Environment.IsDevelopment())
         opt.RoutePrefix = String.Empty;
     });
 }
+
+var baseApi = app.MapGroup("/api/");
+
+baseApi.MapDailyTasks();
+baseApi.MapUsers();
+baseApi.MapTasks();
+
 app.Run();
 public partial class Program { }
