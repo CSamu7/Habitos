@@ -11,9 +11,15 @@ namespace Habits.API.DailyTasks
         {
             var dailyTasksRoute = router.MapGroup("/dailyTasks");
 
-            dailyTasksRoute.MapGet("{idDailyTask}", DailyTasksEndpoints.GetDailyTask);
+            dailyTasksRoute.MapGet("{idDailyTask}", DailyTasksEndpoints.GetDailyTask)
+                .Produces(200)
+                .ProducesProblem(404);
 
             dailyTasksRoute.MapPatch("{idDailyTask}", DailyTasksEndpoints.PatchMinutes)
+                .WithName("patchDailyTask")
+                .Produces(204)
+                .ProducesProblem(401)
+                .ProducesProblem(404)
                 .AddEndpointFilter<DailyTaskPatchFilter>();
 
             return router;

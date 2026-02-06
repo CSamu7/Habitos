@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="MailKit" Version="4.14.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
@@ -38,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="API\DailyTasks\NewFolder\" />
     <Folder Include="Features\Authentication\" />
     <Folder Include="Features\DailyTasks\Validations\" />
     <Folder Include="Models\" />

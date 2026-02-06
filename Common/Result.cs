@@ -17,14 +17,12 @@ public class Result<T>
 }
 public static class ResultExtensions
 {
-    //FIX: No podemos mandar varios errores.
     public static IResult ToHttpResponse<T>(this Result<T> result)
     {
         return result.Status switch
         {
-            Status.Ok => TypedResults.Ok(result.Value),
-            Status.InvalidData => TypedResults.BadRequest(result.ErrorMessage),
-            Status.NotFound => TypedResults.NotFound(result.ErrorMessage),
+            Status.InvalidData => TypedResults.Problem(result.ErrorMessage, statusCode: 400),
+            Status.NotFound => TypedResults.Problem(result.ErrorMessage, statusCode: 404),
             _ => TypedResults.Problem(detail: "something went wrong", statusCode: 500)
         };
     }

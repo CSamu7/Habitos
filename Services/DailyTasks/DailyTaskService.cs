@@ -1,6 +1,5 @@
 ﻿using Habits.API.DailyTasks;
 using Habits.API.DailyTasks.DTO;
-using Habits.API.DailyTasks.Validation;
 using Habits.Common;
 using Habits.Features.DailyTasks.Models;
 using Habits.Models;
@@ -56,9 +55,9 @@ public class DailyTaskService
         if (dailyTask is null)
             return Result<DailyTask>.Failure(Status.NotFound, "Daily dask doesn't exist");
 
-        PatchValidation validation = new PatchValidation(dailyTask);
+        PatchValidation validation = new PatchValidation();
 
-        Result<DailyTask> result = validation.Validate();
+        Result<DailyTask> result = validation.Validate(dailyTask);
         if (!result.Status.Equals(Status.Ok)) return result;
 
         IDailyTaskPatchCommand command = GetPatchCommand(body.Operation);
