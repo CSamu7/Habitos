@@ -22,7 +22,7 @@ namespace Habits.API.Users
 
             userRoutes.MapGet("/{idUser}/tasks", TasksEndpoints.GetAllTasks)
                 .WithName("getAllTasks")
-                .Produces<List<ResponseTask>>(200);
+                .Produces<List<GetTaskResponse>>(200);
 
             return router;
         }

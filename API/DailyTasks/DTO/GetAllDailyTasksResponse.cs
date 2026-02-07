@@ -3,14 +3,19 @@ using Habits.Common;
 
 namespace Habits.API.DailyTasks.DTO
 {
-    public record GetAllResponse : ResponseBase<DailyTaskGetResponse>
+    public record GetAllDailyTasksResponse : BaseResponse<GetDailyTaskResponse>
     {
         public int TotalMinutes { get; set; } = 0;
         public int MinutesCompleted { get; set; } = 0;
         public int MinutesLeft { get; set; } = 0;
         public string PercentageCompleted { get; set; } = "0.00%";
-        public GetAllResponse(List<DailyTask> results) :
-            base(results.Select(res => res.ToGetResponse()).ToList(), results.Count)
+        public GetAllDailyTasksResponse(List<DailyTask> results) :
+            base(
+                results
+                    .Select(res => GetDailyTaskResponse.FromDailyTask(res))
+                    .ToList(), 
+                results.Count
+            )
         {
             TotalMinutes = GetTotalMinutes();
             MinutesCompleted = GetMinutesCompleted();

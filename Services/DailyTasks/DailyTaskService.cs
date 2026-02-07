@@ -1,5 +1,4 @@
-﻿using Habits.API.DailyTasks;
-using Habits.API.DailyTasks.DTO;
+﻿using Habits.API.DailyTasks.DTO;
 using Habits.Common;
 using Habits.Features.DailyTasks.Models;
 using Habits.Models;
@@ -18,7 +17,7 @@ public class DailyTaskService
 
         return dailyTask;
     }
-    public Result<List<DailyTask>> GetDailyTasks(int idUser, GetAllFilters filters)
+    public Result<List<DailyTask>> GetDailyTasks(int idUser, GetAllDailyTasksQueryParams queryParams)
     {
         var dailyTasks = _db.DailyTasks
             .Include(d => d.IdTaskNavigation)
@@ -31,24 +30,24 @@ public class DailyTaskService
         if (dailyTasks.Count() == 0)
             return Result<List<DailyTask>>.Failure(Status.NotFound, "This user doesn't have daily tasks");
 
-        List<DailyTask> filtered = Filter(dailyTasks, filters);
+        List<DailyTask> filtered = Filter(dailyTasks, queryParams);
 
         return Result<List<DailyTask>>.Success(filtered);
     }
-    private List<DailyTask> Filter(List<DailyTask> dailyTasks, GetAllFilters filters)
+    private List<DailyTask> Filter(List<DailyTask> dailyTasks, GetAllDailyTasksQueryParams queryParams)
     {
         List<DailyTask> byDate = dailyTasks
             .Where(d =>
-                DateTimeOffset.Compare(filters.DateStart.ToDateTimeOffset(), d.Date) <= 0 &&
-                DateTimeOffset.Compare(d.Date, filters.DateEnd.ToDateTimeOffset()) <= 0)
+                DateTimeOffset.Compare(queryParams.DateStart.ToDateTimeOffset(), d.Date) <= 0 &&
+                DateTimeOffset.Compare(d.Date, queryParams.DateEnd.ToDateTimeOffset()) <= 0)
             .ToList();
 
-        if (filters.Progress is not null)
-            byDate = byDate.Where(d => d.GetProgress() == filters.Progress).ToList();
+        if (queryParams.Progress is not null)
+            byDate = byDate.Where(d => d.GetProgress() == queryParams.Progress).ToList();
 
         return byDate;
     }
-    public async Task<Result<DailyTask>> PatchMinutes(int id, DailyTaskPatchRequest body)
+    public async Task<Result<DailyTask>> PatchMinutes(int id, PatchDailyTaskRequest body)
     {
         DailyTask? dailyTask = await _db.DailyTasks.FindAsync(id);
 

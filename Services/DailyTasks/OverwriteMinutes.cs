@@ -5,7 +5,7 @@ namespace Habits.Services.DailyTasks
 {
     public class OverwriteMinutes : IDailyTaskPatchCommand
     {
-        public void ChangeMinutes(DailyTask dailyTask, DailyTaskPatchRequest body)
+        public void ChangeMinutes(DailyTask dailyTask, PatchDailyTaskRequest body)
         {
             if (body.Minutes < dailyTask.TotalMinutes)
             {

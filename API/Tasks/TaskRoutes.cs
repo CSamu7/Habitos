@@ -10,7 +10,7 @@ namespace Habits.API.Tasks
 
             tasksRoutes.MapGet("/task/{id}", TasksEndpoints.GetTask)
                 .WithName("getTask")
-                .Produces<ResponseTask>()
+                .Produces<GetTaskResponse>()
                 .ProducesProblem(404);
 
             tasksRoutes.MapDelete("/task/{id}", TasksEndpoints.DeleteTask)

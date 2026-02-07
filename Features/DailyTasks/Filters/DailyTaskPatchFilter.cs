@@ -6,7 +6,7 @@ namespace Habits.Features.DailyTasks.Filters
     {
         public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
         {
-            var body = context.GetArgument<DailyTaskPatchRequest>(1);
+            var body = context.GetArgument<PatchDailyTaskRequest>(1);
 
             Dictionary<string, string[]> errors = Validate(body);
 
@@ -17,7 +17,7 @@ namespace Habits.Features.DailyTasks.Filters
 
             return await next(context);
         }
-        private Dictionary<string, string[]> Validate(DailyTaskPatchRequest body)
+        private Dictionary<string, string[]> Validate(PatchDailyTaskRequest body)
         {
             Dictionary<string, string[]> dicErrors = new();
             int maxMinutes = 480; // 8 horas

@@ -1,6 +1,7 @@
 using FluentValidation;
 using Habits.API;
 using Habits.API.DailyTasks;
+using Habits.API.DailyTasks.DTO;
 using Habits.API.DailyTasks.Validation;
 using Habits.API.Tasks;
 using Habits.API.Users;
@@ -8,7 +9,7 @@ using Habits.Infraestructure;
 using Habits.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddScoped<IValidator<GetAllFilters>, GetAllFiltersValidation>();
+builder.Services.AddScoped<IValidator<GetAllDailyTasksQueryParams>, GetAllFiltersValidation>();
 
 if (builder.Environment.IsDevelopment())
 {

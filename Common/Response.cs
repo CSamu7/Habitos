@@ -1,6 +1,4 @@
-﻿
-//FIX: ResponseList<T>
-public record ResponseBase<T>(
+﻿public record BaseResponse<T>(
     List<T> Results,
     int Total
 );

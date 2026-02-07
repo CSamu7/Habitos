@@ -12,9 +12,9 @@ namespace Habits.Services.Tasks
         public TaskService(HabitsContext db) { 
             _db = db;
         }
-        public async Task<Result<Habits.Models.Task>> PostTask(int idUser, PostTaskBody body)
+        public async Task<Result<Habits.Models.Task>> PostTask(int idUser, PostTaskRequest body)
         {
-            Task task = body.ToTask(idUser);
+            Task task = body.ToTask();
 
             await _db.Tasks.AddAsync(task);
             await _db.SaveChangesAsync();
