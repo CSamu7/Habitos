@@ -7,17 +7,17 @@ namespace Habits.API.Tasks
 { 
     public static class TasksEndpoints
     {
-        public static async Task<IResult> PostTask(int idUser, PostTaskBody body, LinkGenerator generator, TaskService service)
+        public static async Task<IResult> PostTask(int idUser, PostTaskRequest body, LinkGenerator generator, TaskService service)
         {
             Result<Habits.Models.Task> result = await service.PostTask(idUser, body);
 
             if (result.Status.Equals(Status.Ok))
             {
-                ResponseTask response = new ResponseTask(result.Value);
+                GetTaskResponse response = new GetTaskResponse(result.Value);
                 string? uri = generator.GetPathByName
                     ("getTask", new() { { "idTask", response.Id } });
 
-                return TypedResults.Created< ResponseTask>(uri, response);
+                return TypedResults.Created< GetTaskResponse>(uri, response);
             }
 
             return result.ToHttpResponse();
@@ -33,8 +33,8 @@ namespace Habits.API.Tasks
 
             if (result.Status.Equals(Status.Ok))
             {
-                List<ResponseTask> tasks = result.Value.Select(task => new ResponseTask(task)).ToList();
-                return TypedResults.Ok<List<ResponseTask>>(tasks);
+                List<GetTaskResponse> tasks = result.Value.Select(task => new GetTaskResponse(task)).ToList();
+                return TypedResults.Ok<List<GetTaskResponse>>(tasks);
             }
 
             return result.ToHttpResponse();
@@ -45,8 +45,8 @@ namespace Habits.API.Tasks
 
             if (result.Status.Equals(Status.Ok))
             {
-                ResponseTask response = new ResponseTask(result.Value);
-                return TypedResults.Ok<ResponseTask>(response);
+                GetTaskResponse response = new GetTaskResponse(result.Value);
+                return TypedResults.Ok<GetTaskResponse>(response);
             }
 
             return result.ToHttpResponse();

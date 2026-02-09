@@ -2,6 +2,7 @@
 using Habits.API.DailyTasks.Validation;
 using Habits.API.Tasks;
 using Habits.API.Tasks.DTO;
+using Habits.API.Tasks.Filters;
 using Microsoft.AspNetCore.Components.Routing;
 
 namespace Habits.API.Users
@@ -15,10 +16,11 @@ namespace Habits.API.Users
             //Nested dailyTasks
             userRoutes.MapGet("/{idUser}/dailyTasks/today", DailyTasksEndpoints.GetDailyTasks);
             userRoutes.MapGet("/{idUser}/dailyTasks", DailyTasksEndpoints.GetDailyTasks)
-            .AddEndpointFilter<GetAllEndpointFilter>();
+            .AddEndpointFilter<GetAllDailyTasksEndpointFilter>();
 
             //Nested tasks
-            userRoutes.MapPost("/{idUser}/tasks", TasksEndpoints.PostTask);
+            userRoutes.MapPost("/{idUser}/tasks", TasksEndpoints.PostTask)
+                .AddEndpointFilter<PostTaskFilter>();
 
             userRoutes.MapGet("/{idUser}/tasks", TasksEndpoints.GetAllTasks)
                 .WithName("getAllTasks")
