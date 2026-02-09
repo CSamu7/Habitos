@@ -4,12 +4,17 @@ using Habits.API.DailyTasks;
 using Habits.API.DailyTasks.DTO;
 using Habits.API.DailyTasks.Validation;
 using Habits.API.Tasks;
+using Habits.API.Tasks.DTO;
+using Habits.API.Tasks.Validation;
 using Habits.API.Users;
 using Habits.Infraestructure;
 using Habits.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddScoped<IValidator<GetAllDailyTasksQueryParams>, GetAllFiltersValidation>();
+builder.Services.AddScoped<IValidator<GetAllDailyTasksQueryParams>, DailyTaskQueryParamsValidation>();
+builder.Services.AddScoped<IValidator<PatchDailyTaskRequest>, PatchDailyTaskValidation>();
+builder.Services.AddScoped<IValidator<PostTaskRequest>, PostTaskRequestValidation>();
+
 
 if (builder.Environment.IsDevelopment())
 {

@@ -12,19 +12,19 @@ namespace Habits.API.DailyTasks
             //TODO: Realizar esta función
             return Results.Ok();
         }
-        public static IResult GetDailyTasks(int idUser, GetAllFilters filters, DailyTaskService service)
+        public static IResult GetDailyTasks(int idUser, GetAllDailyTasksQueryParams filters, DailyTaskService service)
         {
             Result<List<DailyTask>> result = service.GetDailyTasks(idUser, filters);
 
             if (result.Status.Equals(Status.Ok))
             {
-                GetAllResponse reds = new GetAllResponse(result.Value);
+                GetAllDailyTasksResponse reds = new GetAllDailyTasksResponse(result.Value);
                 return Results.Ok(reds);
             }
 
             return result.ToHttpResponse();
         }
-        public static async Task<IResult> PatchMinutes(int idDailyTask, DailyTaskPatchRequest body, DailyTaskService service)
+        public static async Task<IResult> PatchMinutes(int idDailyTask, PatchDailyTaskRequest body, DailyTaskService service)
         {
             Result<DailyTask> result = body.Operation switch
             {

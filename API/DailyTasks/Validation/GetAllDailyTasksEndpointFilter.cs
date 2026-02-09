@@ -1,16 +1,17 @@
 ﻿using FluentValidation;
+using Habits.API.DailyTasks.DTO;
 
 namespace Habits.API.DailyTasks.Validation
 {
-    public class GetAllEndpointFilter : IEndpointFilter
+    public class GetAllDailyTasksEndpointFilter : IEndpointFilter
     {
-        IValidator<GetAllFilters> _validation;
-        public GetAllEndpointFilter(IValidator<GetAllFilters> validation) { 
+        IValidator<GetAllDailyTasksQueryParams> _validation;
+        public GetAllDailyTasksEndpointFilter(IValidator<GetAllDailyTasksQueryParams> validation) { 
             _validation = validation;
         }
         public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
         {
-            GetAllFilters filters = context.GetArgument<GetAllFilters>(1);
+            GetAllDailyTasksQueryParams filters = context.GetArgument<GetAllDailyTasksQueryParams>(1);
 
             var validationResult = _validation.Validate(filters);
 
