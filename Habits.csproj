@@ -9,12 +9,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\Authentication\**" />
     <Compile Remove="Testing\**" />
     <Compile Remove="UnitTesting\**" />
+    <Content Remove="Features\Authentication\**" />
     <Content Remove="Testing\**" />
     <Content Remove="UnitTesting\**" />
+    <EmbeddedResource Remove="Features\Authentication\**" />
     <EmbeddedResource Remove="Testing\**" />
     <EmbeddedResource Remove="UnitTesting\**" />
+    <None Remove="Features\Authentication\**" />
     <None Remove="Testing\**" />
     <None Remove="UnitTesting\**" />
   </ItemGroup>
@@ -39,7 +43,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Authentication\" />
     <Folder Include="Features\DailyTasks\Validations\" />
     <Folder Include="Models\" />
   </ItemGroup>
