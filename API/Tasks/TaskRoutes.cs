@@ -8,12 +8,12 @@ namespace Habits.API.Tasks
         {
             var tasksRoutes = builder.MapGroup("/tasks");
 
-            tasksRoutes.MapGet("/task/{id}", TasksEndpoints.GetTask)
+            tasksRoutes.MapGet("{idTask}", TasksEndpoints.GetTask)
                 .WithName("getTask")
                 .Produces<GetTaskResponse>()
                 .ProducesProblem(404);
 
-            tasksRoutes.MapDelete("/task/{id}", TasksEndpoints.DeleteTask)
+            tasksRoutes.MapDelete("{idTask}", TasksEndpoints.DeleteTask)
                 .WithName("deleteTask")
                 .Produces(204)
                 .ProducesProblem(404);

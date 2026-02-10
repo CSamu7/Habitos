@@ -12,9 +12,17 @@ namespace Habits.Services.Tasks
         public TaskService(HabitsContext db) { 
             _db = db;
         }
-        public async Task<Result<Habits.Models.Task>> PostTask(int idUser, PostTaskRequest body)
+        public async Task<Result<Task>> PostTask(int idUser, PostTaskRequest body)
         {
             Task task = body.ToTask();
+            task.IdUser = idUser;
+
+            if (task.IdGroup is not null)
+            {
+                Group? group = await _db.Groups.Where(group => group.IdGroup == task.IdGroup).SingleOrDefaultAsync();
+
+                if (group is null) return Result<Task>.Failure(Status.InvalidData, $"Group with id {task.IdGroup} doesn't exist");
+            }
 
             await _db.Tasks.AddAsync(task);
             await _db.SaveChangesAsync();
