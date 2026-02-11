@@ -11,11 +11,15 @@ public class DailyTaskService
     {
         _db = db;
     }
-    public async Task<DailyTask?> GetDailyTask(int idDailyTask)
+    public async Task<Result<DailyTask>> GetDailyTask(int idDailyTask)
     {
-        var dailyTask = await _db.DailyTasks.FirstOrDefaultAsync(d => d.IdDailyTask == idDailyTask);
+        var dailyTask = await _db.DailyTasks
+            .Include(d => d.IdTaskNavigation)
+            .FirstOrDefaultAsync(d => d.IdDailyTask == idDailyTask);
 
-        return dailyTask;
+        if (dailyTask is null) return Result<DailyTask>.Failure(Status.NotFound, "Daily task doesn't exist");
+
+        return Result<DailyTask>.Success(dailyTask);
     }
     public Result<List<DailyTask>> GetDailyTasks(int idUser, GetAllDailyTasksQueryParams queryParams)
     {
@@ -24,11 +28,6 @@ public class DailyTaskService
             .Where(d => d.IdTaskNavigation.IdUser == idUser)
             .AsNoTracking()
             .ToList();
-        /*Esto sera removido porque primero checariamos si el usuario tiene permisos
-         para este endpoint. Por ahora retornaremos NotFound si el usuario no existe.
-         */
-        if (dailyTasks.Count() == 0)
-            return Result<List<DailyTask>>.Failure(Status.NotFound, "This user doesn't have daily tasks");
 
         List<DailyTask> filtered = Filter(dailyTasks, queryParams);
 
@@ -55,7 +54,6 @@ public class DailyTaskService
             return Result<DailyTask>.Failure(Status.NotFound, "Daily dask doesn't exist");
 
         PatchValidation validation = new PatchValidation();
-
         Result<DailyTask> result = validation.Validate(dailyTask);
         if (!result.Status.Equals(Status.Ok)) return result;
 

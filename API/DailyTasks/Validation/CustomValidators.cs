@@ -13,7 +13,7 @@ namespace Habits.API.DailyTasks.Validation
         public static IRuleBuilderOptions<T, int> MinutesAreValid<T>
             (this IRuleBuilder<T, int> ruleBuilder)
         {
-            int MAX_MINUTES = 480; //8 hours
+            int MAX_MINUTES = 480;
 
             return ruleBuilder
                 .GreaterThan(0).WithMessage("Minutes must be positive")

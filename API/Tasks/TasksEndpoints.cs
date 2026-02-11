@@ -7,6 +7,18 @@ namespace Habits.API.Tasks
 { 
     public static class TasksEndpoints
     {
+        public static async Task<IResult> GetTask(int idTask, TaskService service)
+        {
+            Result<Habits.Models.Task> result = await service.GetTask(idTask);
+
+            if (result.Status.Equals(Status.Ok))
+            {
+                GetTaskResponse response = new GetTaskResponse(result.Value);
+                return TypedResults.Ok<GetTaskResponse>(response);
+            }
+
+            return result.ToHttpResponse();
+        }
         public static async Task<IResult> PostTask(int idUser, PostTaskRequest body, LinkGenerator generator, TaskService service)
         {
             Result<Habits.Models.Task> result = await service.PostTask(idUser, body);
@@ -26,7 +38,6 @@ namespace Habits.API.Tasks
         {
             return Results.Ok();
         }
-
         public static async Task<IResult> GetAllTasks(int idUser, TaskService service)
         {
             Result<List<Habits.Models.Task>> result = await service.GetAllTasks(idUser);
@@ -39,18 +50,7 @@ namespace Habits.API.Tasks
 
             return result.ToHttpResponse();
         }
-        public static async Task<IResult> GetTask(int idTask, TaskService service)
-        {
-            Result<Habits.Models.Task> result = await service.GetTask(idTask);
 
-            if (result.Status.Equals(Status.Ok))
-            {
-                GetTaskResponse response = new GetTaskResponse(result.Value);
-                return TypedResults.Ok<GetTaskResponse>(response);
-            }
-
-            return result.ToHttpResponse();
-        }
         public static async Task<IResult> DeleteTask(int idTask, TaskService service)
         {
             Result<Habits.Models.Task> result = await service.DeleteTask(idTask);
