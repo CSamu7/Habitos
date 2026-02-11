@@ -25,8 +25,8 @@ namespace Habits.API
 
             var today = DateOnly.FromDateTime(DateTime.UtcNow);
 
-            services.AddScoped<GetAllDailyTasksQueryParams>
-                (filters => new GetAllDailyTasksQueryParams(today.AddDays(-1), today, null));
+            services.AddScoped<GetDailyTasksQueryParams>
+                (filters => new GetDailyTasksQueryParams(today.AddDays(-1), today, null));
 
             return services;
         }

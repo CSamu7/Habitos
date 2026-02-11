@@ -11,7 +11,7 @@ using Habits.Infraestructure;
 using Habits.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddScoped<IValidator<GetAllDailyTasksQueryParams>, DailyTaskQueryParamsValidation>();
+builder.Services.AddScoped<IValidator<GetDailyTasksQueryParams>, DailyTaskQueryParamsValidation>();
 builder.Services.AddScoped<IValidator<PatchDailyTaskRequest>, PatchDailyTaskValidation>();
 builder.Services.AddScoped<IValidator<PostTaskRequest>, PostTaskRequestValidation>();
 
@@ -29,7 +29,6 @@ builder.Services
 
 var app = builder.Build();
 
-app.UseExceptionHandler();
 app.UseStatusCodePages();
 
 if (app.Environment.IsDevelopment())

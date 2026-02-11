@@ -18,7 +18,7 @@ namespace Habits.API.Users
             userRoutes.MapGet("/{idUser}/dailyTasks", DailyTasksEndpoints.GetDailyTasks)
             .AddEndpointFilter<GetAllDailyTasksEndpointFilter>();
 
-            //Nested tasks
+            //TODO: Si el usuario no existe, da error.
             userRoutes.MapPost("/{idUser}/tasks", TasksEndpoints.PostTask)
                 .AddEndpointFilter<PostTaskFilter>();
 

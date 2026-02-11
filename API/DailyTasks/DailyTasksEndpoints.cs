@@ -12,7 +12,7 @@ namespace Habits.API.DailyTasks
             //TODO: Realizar esta función
             return Results.Ok();
         }
-        public static IResult GetDailyTasks(int idUser, GetAllDailyTasksQueryParams filters, DailyTaskService service)
+        public static IResult GetDailyTasks(int idUser, GetDailyTasksQueryParams filters, DailyTaskService service)
         {
             Result<List<DailyTask>> result = service.GetDailyTasks(idUser, filters);
 

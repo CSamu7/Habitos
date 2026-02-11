@@ -4,18 +4,18 @@ using System.Runtime.Serialization;
 
 namespace Habits.API.DailyTasks.DTO
 {
-    public record GetAllDailyTasksQueryParams
+    public record GetDailyTasksQueryParams
     {
         public DateOnly DateStart { get; set; }
         public DateOnly DateEnd { get; set; }
         public Progress? Progress { get; set; }
-        public GetAllDailyTasksQueryParams(DateOnly dateStart, DateOnly dateEnd, Progress? progress)
+        public GetDailyTasksQueryParams(DateOnly dateStart, DateOnly dateEnd, Progress? progress)
         {
             DateStart = dateStart;
             DateEnd = dateEnd;
             Progress = progress;
         }
-        public static async ValueTask<GetAllDailyTasksQueryParams?> BindAsync(HttpContext context)
+        public static async ValueTask<GetDailyTasksQueryParams?> BindAsync(HttpContext context)
         {
             const string dateStartKey = "dateStart";
             const string dateEndKey = "dateEnd";
@@ -29,9 +29,9 @@ namespace Habits.API.DailyTasks.DTO
             if (!DateOnly.TryParse(context.Request.Query[dateStartKey], out DateOnly dateStart))
                 dateStart = dateEnd.AddDays(-1);
 
-            var result = new GetAllDailyTasksQueryParams(dateStart, dateEnd, progress);
+            var result = new GetDailyTasksQueryParams(dateStart, dateEnd, progress);
 
-            return await ValueTask.FromResult<GetAllDailyTasksQueryParams?>(result);
+            return await ValueTask.FromResult<GetDailyTasksQueryParams?>(result);
         }
     }
 

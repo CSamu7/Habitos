@@ -17,7 +17,7 @@ public class DailyTaskService
 
         return dailyTask;
     }
-    public Result<List<DailyTask>> GetDailyTasks(int idUser, GetAllDailyTasksQueryParams queryParams)
+    public Result<List<DailyTask>> GetDailyTasks(int idUser, GetDailyTasksQueryParams queryParams)
     {
         var dailyTasks = _db.DailyTasks
             .Include(d => d.IdTaskNavigation)
@@ -34,7 +34,7 @@ public class DailyTaskService
 
         return Result<List<DailyTask>>.Success(filtered);
     }
-    private List<DailyTask> Filter(List<DailyTask> dailyTasks, GetAllDailyTasksQueryParams queryParams)
+    private List<DailyTask> Filter(List<DailyTask> dailyTasks, GetDailyTasksQueryParams queryParams)
     {
         List<DailyTask> byDate = dailyTasks
             .Where(d =>

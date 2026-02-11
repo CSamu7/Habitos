@@ -5,13 +5,13 @@ namespace Habits.API.DailyTasks.Validation
 {
     public class GetAllDailyTasksEndpointFilter : IEndpointFilter
     {
-        IValidator<GetAllDailyTasksQueryParams> _validation;
-        public GetAllDailyTasksEndpointFilter(IValidator<GetAllDailyTasksQueryParams> validation) { 
+        IValidator<GetDailyTasksQueryParams> _validation;
+        public GetAllDailyTasksEndpointFilter(IValidator<GetDailyTasksQueryParams> validation) { 
             _validation = validation;
         }
         public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
         {
-            GetAllDailyTasksQueryParams filters = context.GetArgument<GetAllDailyTasksQueryParams>(1);
+            GetDailyTasksQueryParams filters = context.GetArgument<GetDailyTasksQueryParams>(1);
 
             var validationResult = _validation.Validate(filters);
 
