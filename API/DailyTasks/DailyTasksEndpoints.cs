@@ -2,15 +2,22 @@
 using Habits.Models;
 using Habits.Services.DailyTasks;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace Habits.API.DailyTasks
 {
     public class DailyTasksEndpoints()
     {
-        public static IResult GetDailyTask(int idDailyTask, DailyTaskService service)
+        public static async Task<IResult> GetDailyTask(int idDailyTask, DailyTaskService service)
         {
-            //TODO: Realizar esta función
-            return Results.Ok();
+            Result<DailyTask> result = await service.GetDailyTask(idDailyTask);
+
+            if (result.Status.Equals(Status.Ok))
+            {
+                return Results.Ok(GetDailyTaskResponse.FromDailyTask(result.Value));
+            }
+
+            return result.ToHttpResponse();
         }
         public static IResult GetDailyTasks(int idUser, GetDailyTasksQueryParams filters, DailyTaskService service)
         {
@@ -18,8 +25,8 @@ namespace Habits.API.DailyTasks
 
             if (result.Status.Equals(Status.Ok))
             {
-                GetAllDailyTasksResponse reds = new GetAllDailyTasksResponse(result.Value);
-                return Results.Ok(reds);
+                GetAllDailyTasksResponse res = new GetAllDailyTasksResponse(result.Value);
+                return Results.Ok(res);
             }
 
             return result.ToHttpResponse();

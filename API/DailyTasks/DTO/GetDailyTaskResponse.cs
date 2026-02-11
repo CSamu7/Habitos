@@ -6,7 +6,7 @@ namespace Habits.API.DailyTasks.DTO
     public class GetDailyTaskResponse
     {
         public int IdDailyTask { get; init; }
-        public GetMinimalTaskResponse SimpleTask { get; init; }
+        public required GetMinimalTaskResponse SimpleTask { get; init; }
         public int MinutesCompleted { get; init; }
         public int TotalMinutes { get; init; }
         public double PercentageCompleted { get; init; }
