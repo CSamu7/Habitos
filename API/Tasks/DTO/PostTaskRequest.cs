@@ -26,5 +26,17 @@ namespace Habits.API.Tasks.DTO
                 IsActive = true
             };
         }
+
+        public static PostTaskRequest FromTask(this Task task)
+        {
+            return new PostTaskRequest
+            {
+                Name = task.Name,
+                Minutes = task.Minutes,
+                RepeatedEvery = task.RepeatedEvery,
+                IdGroup = task.IdGroup,
+                UnavailableDays = task.UnavailableDays,
+            };
+        }
     }
 }

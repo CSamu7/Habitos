@@ -1,7 +1,7 @@
 ﻿using Habits.API.Tasks.DTO;
 using Habits.Models;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 using Task = Habits.Models.Task;
 
 namespace Habits.Services.Tasks
@@ -21,7 +21,7 @@ namespace Habits.Services.Tasks
             {
                 Group? group = await _db.Groups.Where(group => group.IdGroup == task.IdGroup).SingleOrDefaultAsync();
 
-                if (group is null) return Result<Task>.Failure(Status.InvalidData, $"Group with id {task.IdGroup} doesn't exist");
+                if (group is null) return Result<Task>.Failure(Status.InvalidData, $"Group #{task.IdGroup} doesn't exist");
             }
 
             await _db.Tasks.AddAsync(task);
@@ -53,6 +53,19 @@ namespace Habits.Services.Tasks
             if (task is null) return Result<Task>.Failure(Status.NotFound, "The task doesn't exist");
 
             task.IsActive = false;
+            await _db.SaveChangesAsync();
+
+            return Result<Task>.Success(task);
+        }
+        public async Task<Result<Task>> PatchTask(int idTask, JsonPatchDocument body)
+        {
+            Task? task = await _db.Tasks.FindAsync(idTask);
+
+            if (task is null) return Result<Task>.Failure(Status.NotFound, "The task doesn't exist");
+
+            PostTaskRequest test = task.FromTask();
+            body.ApplyTo(test);
+
             await _db.SaveChangesAsync();
 
             return Result<Task>.Success(task);

@@ -1,0 +1,63 @@
+meta {
+  name: Patch Task
+  type: http
+  seq: 3
+}
+
+patch {
+  url: https://localhost:7074/api/tasks/2
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json-patch+json
+}
+
+body:json {
+  [
+    {
+      "op": "replace",
+      "path": "/IdTask",
+      "value": "Grokking Algorithms"
+    },
+    {
+      "op": "replace"
+    }
+  ]
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+example {
+  name: Suelta la sopa si quiere cambiar la ID
+  
+  request: {
+    url: https://localhost:7074/api/tasks/2
+    method: PATCH
+    mode: json
+    body:json: {
+      [
+        { "op": "replace", "path": "/Name", "value": "Grokking Algorithms" },
+        { "op": "replace", "path": "/IdTask", "value": 200 }
+      ]
+    }
+  }
+  
+  response: {
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: text
+      content: '''
+  
+      '''
+    }
+  }
+}

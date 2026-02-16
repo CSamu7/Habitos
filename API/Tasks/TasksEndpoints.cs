@@ -1,7 +1,11 @@
 ﻿using Habits.API.Tasks.DTO;
-using Habits.Models;
+using Habits.Common;
 using Habits.Services.Tasks;
-using System;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.Exceptions;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace Habits.API.Tasks
 { 
@@ -34,9 +38,21 @@ namespace Habits.API.Tasks
 
             return result.ToHttpResponse();
         }
-        public static async Task<IResult> ModifyTask(int idTask, TaskService service)
+        public static async Task<IResult> PatchTask(int idTask, [FromBody] JsonElement jsonElement, TaskService service, HttpRequest httpRequest)
         {
-            return Results.Ok();
+            var json = jsonElement.GetRawText();
+            var doc = JsonConvert.DeserializeObject<JsonPatchDocument>(json);
+
+            var newDoc = doc?.Sanitize();
+
+            try
+            {
+                await service.PatchTask(idTask, newDoc);
+                return Results.Ok();
+            } catch (JsonPatchException ex)
+            {
+                return Results.Problem(ex.Message, statusCode: 400);
+            }
         }
         public static async Task<IResult> GetAllTasks(int idUser, TaskService service)
         {

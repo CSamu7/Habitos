@@ -1,4 +1,6 @@
 ﻿using Habits.API.Tasks.DTO;
+using Microsoft.AspNetCore.JsonPatch;
+using System.Text.Json;
 
 namespace Habits.API.Tasks
 {
@@ -8,12 +10,19 @@ namespace Habits.API.Tasks
         {
             var tasksRoutes = builder.MapGroup("/tasks");
 
-            tasksRoutes.MapGet("{idTask}", TasksEndpoints.GetTask)
+            tasksRoutes.MapGet("{idTask}/", TasksEndpoints.GetTask)
                 .WithName("getTask")
                 .Produces<GetTaskResponse>()
                 .ProducesProblem(404);
 
-            tasksRoutes.MapDelete("{idTask}", TasksEndpoints.DeleteTask)
+            tasksRoutes.MapPatch("{idTask}/", TasksEndpoints.PatchTask)
+                .WithName("patchTask")
+                .Accepts<JsonPatchDocument<PostTaskRequest>>("application/json-patch+json")
+                .Produces<GetTaskResponse>()
+                .ProducesProblem(401)
+                .ProducesProblem(404);
+
+            tasksRoutes.MapDelete("{idTask}/", TasksEndpoints.DeleteTask)
                 .WithName("deleteTask")
                 .Produces(204)
                 .ProducesProblem(404);
