@@ -13,7 +13,7 @@ using Habits.Services;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddNewtonsoftJson();
 
-builder.Services.AddScoped<IValidator<GetAllDailyTasksQueryParams>, DailyTaskQueryParamsValidation>();
+builder.Services.AddScoped<IValidator<GetDailyTasksQueryParams>, DailyTaskQueryParamsValidation>();
 builder.Services.AddScoped<IValidator<PatchDailyTaskRequest>, PatchDailyTaskValidation>();
 builder.Services.AddScoped<IValidator<PostTaskRequest>, PostTaskRequestValidation>();
 

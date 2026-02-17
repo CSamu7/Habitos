@@ -10,7 +10,7 @@ namespace Habits.Common
             List<OperationType> operationsAllowed = [OperationType.Replace];
 
             patchDoc.Operations.RemoveAll(operation => !operationsAllowed.Contains(operation.OperationType));
-            patchDoc.Operations.RemoveAll(operation => operation.value is null || operation.path is null || operation.op is null);
+            patchDoc.Operations.RemoveAll(operation => operation.path is null || operation.op is null);
 
             return patchDoc;
         }
