@@ -18,13 +18,17 @@ namespace Habits.API.Users
             userRoutes.MapGet("/{idUser}/dailyTasks", DailyTasksEndpoints.GetDailyTasks)
             .AddEndpointFilter<GetAllDailyTasksEndpointFilter>();
 
-            //TODO: Si el usuario no existe, da error.
+            //Nestad Tasks
             userRoutes.MapPost("/{idUser}/tasks", TasksEndpoints.PostTask)
                 .AddEndpointFilter<PostTaskFilter>();
 
             userRoutes.MapGet("/{idUser}/tasks", TasksEndpoints.GetAllTasks)
                 .WithName("getAllTasks")
                 .Produces<List<GetTaskResponse>>(200);
+
+            //User Routes
+            userRoutes.MapGet("/{idUser}", UserEndpoints.GetUser);
+            userRoutes.MapGet("/login", UserEndpoints.Login);
 
             return router;
         }
