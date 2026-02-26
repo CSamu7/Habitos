@@ -1,11 +1,5 @@
 ﻿using FluentValidation.TestHelper;
-using Habits.API.Tasks.DTO;
-using Habits.API.Tasks.Validation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Habits.API.Routines.DTO;
 
 namespace Testing.UnitTesting.API.Validations
 {
@@ -14,15 +8,16 @@ namespace Testing.UnitTesting.API.Validations
         [Fact]
         public void Empty_name_is_invalid()
         {
-            PostTaskRequestValidation validationRules = new PostTaskRequestValidation();
-            PostTaskRequest request = new PostTaskRequest { Name = "" };
+            PostRoutineRequestValidation validationRules = new PostRoutineRequestValidation();
+            PostRoutineRequest request = new PostRoutineRequest { Name = "" };
 
             var result = validationRules.TestValidate(request);
 
             result.ShouldHaveValidationErrorFor(x => x.Name);
         }
-        public void Repetition_is_less_than_seven_days() { 
-            
+        public void Repetition_is_less_than_seven_days()
+        {
+
         }
     }
 }

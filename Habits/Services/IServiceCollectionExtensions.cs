@@ -4,10 +4,10 @@ namespace Habits.Services
 {
     public static class IServiceCollectionExtensions
     {
-        public static IServiceCollection AddDailyTasks(this IServiceCollection services)
+        public static IServiceCollection AddDbServices(this IServiceCollection services)
         {
-            services.AddScoped<DailyTaskService>();
-            services.AddScoped<TaskService>();
+            services.AddScoped<DailyRoutineService>();
+            services.AddScoped<RoutineService>();
 
             return services;
         }

@@ -1,0 +1,76 @@
+﻿using Habits.API.DailyRoutines.DTO;
+using Habits.Common;
+using Habits.Features.DailyTasks.Models;
+using Habits.Models;
+using Habits.Services.DailyRoutines;
+using Habits.Services.DailyTasks;
+using Microsoft.EntityFrameworkCore;
+public class DailyRoutineService
+{
+    private HabitsContext _db;
+    public DailyRoutineService(HabitsContext db)
+    {
+        _db = db;
+    }
+    public async Task<Result<DailyRoutine>> GetRoutine(int idDailyRoutine)
+    {
+        var dailyTask = await _db.DailyRoutines
+            .Include(d => d.IdRoutineNavigation)
+            .FirstOrDefaultAsync(d => d.IdDailyRoutine == idDailyRoutine);
+
+        if (dailyTask is null) return Result<DailyRoutine>.Failure(Status.NotFound, "Daily task doesn't exist");
+
+        return Result<DailyRoutine>.Success(dailyTask);
+    }
+    public Result<List<DailyRoutine>> GetRoutines(string idUser, GetDailyRoutineQueryParams queryParams)
+    {
+        var dailyTasks = _db.DailyRoutines
+            .Include(d => d.IdRoutineNavigation)
+            .Where(d => d.IdRoutineNavigation.IdUser == idUser)
+            .AsNoTracking()
+            .ToList();
+
+        List<DailyRoutine> filtered = Filter(dailyTasks, queryParams);
+
+        return Result<List<DailyRoutine>>.Success(filtered);
+    }
+    private List<DailyRoutine> Filter(List<DailyRoutine> dailyTasks, GetDailyRoutineQueryParams queryParams)
+    {
+        List<DailyRoutine> byDate = dailyTasks
+            .Where(d =>
+                DateTimeOffset.Compare(queryParams.DateStart.ToDateTimeOffset(), d.Date) <= 0 &&
+                DateTimeOffset.Compare(d.Date, queryParams.DateEnd.ToDateTimeOffset()) <= 0)
+            .ToList();
+
+        if (queryParams.Progress is not null)
+            byDate = byDate.Where(d => d.GetProgress() == queryParams.Progress).ToList();
+
+        return byDate;
+    }
+    public async Task<Result<DailyRoutine>> PatchMinutes(int id, PatchDailyRoutineRequest body)
+    {
+        DailyRoutine? dailyTask = await _db.DailyRoutines.FindAsync(id);
+
+        if (dailyTask is null)
+            return Result<DailyRoutine>.Failure(Status.NotFound, "Daily dask doesn't exist");
+
+        PatchValidation validation = new PatchValidation();
+        Result<DailyRoutine> result = validation.Validate(dailyTask);
+        if (!result.Status.Equals(Status.Ok)) return result;
+
+        IDailyTaskPatchCommand command = GetPatchCommand(body.Operation);
+
+        command.ChangeMinutes(dailyTask, body);
+        _db.SaveChanges();
+
+        return Result<DailyRoutine>.Success(result.Value);
+    }
+    private IDailyTaskPatchCommand GetPatchCommand(PatchOperations operation)
+    {
+        return operation switch
+        {
+            PatchOperations.Add => new AddMinutes(),
+            PatchOperations.Replace => new OverwriteMinutes()
+        };
+    }
+}

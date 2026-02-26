@@ -1,4 +1,4 @@
-﻿using Habits.API.DailyTasks.DTO;
+﻿using Habits.API.DailyRoutines.DTO;
 using System.Text.Json.Serialization;
 
 namespace Habits.API
@@ -25,8 +25,8 @@ namespace Habits.API
 
             var today = DateOnly.FromDateTime(DateTime.UtcNow);
 
-            services.AddScoped<GetDailyTasksQueryParams>
-                (filters => new GetDailyTasksQueryParams(today.AddDays(-1), today, null));
+            services.AddScoped<GetDailyRoutineQueryParams>
+                (filters => new GetDailyRoutineQueryParams(today.AddDays(-1), today, null));
 
             return services;
         }

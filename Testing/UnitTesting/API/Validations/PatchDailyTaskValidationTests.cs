@@ -1,7 +1,7 @@
 using FluentValidation.TestHelper;
-using Habits.API.DailyTasks.DTO;
-using Habits.API.DailyTasks.Validation;
-using Habits.Services.DailyTasks;
+using Habits.API.DailyRoutines.DTO;
+using Habits.API.DailyRoutines.Validation;
+using Habits.Services.DailyRoutines;
 
 namespace Testing.UnitTesting.API.Validations
 {
@@ -11,10 +11,10 @@ namespace Testing.UnitTesting.API.Validations
         public void Negative_minutes_are_invalid()
         {
             PatchDailyTaskValidation validation = new PatchDailyTaskValidation();
-            PatchDailyTaskRequest request = new PatchDailyTaskRequest 
-            { 
-                FinishedAt = new DateTime(2000,1,1), 
-                Minutes = -4, 
+            PatchDailyRoutineRequest request = new PatchDailyRoutineRequest
+            {
+                FinishedAt = new DateTime(2000, 1, 1),
+                Minutes = -4,
                 Operation = PatchOperations.Add
             };
 
@@ -29,7 +29,7 @@ namespace Testing.UnitTesting.API.Validations
         public void Minutes_greather_than_8_hours_are_invalid()
         {
             PatchDailyTaskValidation validation = new PatchDailyTaskValidation();
-            PatchDailyTaskRequest request = new PatchDailyTaskRequest
+            PatchDailyRoutineRequest request = new PatchDailyRoutineRequest
             {
                 FinishedAt = new DateTime(2000, 1, 1),
                 Minutes = (8 * 60),

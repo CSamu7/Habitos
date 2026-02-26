@@ -1,31 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace Habits.Models;
 
-public partial class User
+public partial class User : IdentityUser
 {
-    public int IdUser { get; set; }
-
-    public string Email { get; set; } = null!;
-
-    public string Username { get; set; } = null!;
-
-    public string Password { get; set; } = null!;
-
     public bool IsActive { get; set; }
 
     public DateTimeOffset LastSession { get; set; }
 
-    public decimal MinGoal { get; set; }
-
-    public int FreeTime { get; set; }
+    public int MinGoal { get; set; }
 
     public int Streak { get; set; }
 
-    public virtual ICollection<Group> Groups { get; set; } = new List<Group>();
+    public virtual ICollection<Category> Categories { get; set; } = new List<Category>();
 
-    public virtual ICollection<Schedule> Schedules { get; set; } = new List<Schedule>();
-
-    public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();
+    public virtual ICollection<Routine> Routines { get; set; } = new List<Routine>();
 }

@@ -1,11 +1,11 @@
 using FluentValidation;
 using Habits.API;
-using Habits.API.DailyTasks;
-using Habits.API.DailyTasks.DTO;
-using Habits.API.DailyTasks.Validation;
-using Habits.API.Tasks;
-using Habits.API.Tasks.DTO;
-using Habits.API.Tasks.Validation;
+using Habits.API.DailyRoutines;
+using Habits.API.DailyRoutines.DTO;
+using Habits.API.DailyRoutines.Validation;
+using Habits.API.Routines;
+using Habits.API.Routines.DTO;
+using Habits.API.Routines.Validation;
 using Habits.API.Users;
 using Habits.Infraestructure;
 using Habits.Services;
@@ -13,9 +13,9 @@ using Habits.Services;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddNewtonsoftJson();
 
-builder.Services.AddScoped<IValidator<GetDailyTasksQueryParams>, DailyTaskQueryParamsValidation>();
-builder.Services.AddScoped<IValidator<PatchDailyTaskRequest>, PatchDailyTaskValidation>();
-builder.Services.AddScoped<IValidator<PostTaskRequest>, PostTaskRequestValidation>();
+builder.Services.AddScoped<IValidator<GetDailyRoutineQueryParams>, DailyRoutineQueryParamsValidation>();
+builder.Services.AddScoped<IValidator<PatchDailyRoutineRequest>, PatchDailyTaskValidation>();
+builder.Services.AddScoped<IValidator<PostRoutineRequest>, PostRoutineRequestValidation>();
 
 if (builder.Environment.IsDevelopment())
 {
@@ -26,7 +26,7 @@ builder.Services
     .AddSwagger()
     .AddApiServices()
     .AddDatabase(builder.Configuration)
-    .AddDailyTasks();
+    .AddDbServices();
 
 var app = builder.Build();
 
@@ -44,9 +44,9 @@ if (app.Environment.IsDevelopment())
 
 var baseApi = app.MapGroup("/api/");
 
-baseApi.MapDailyTasks();
+baseApi.MapDailyRoutines();
 baseApi.MapUsers();
-baseApi.MapTasks();
+baseApi.MapRoutines();
 
 app.Run();
 public partial class Program { }

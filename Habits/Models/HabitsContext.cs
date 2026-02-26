@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Habits.Models;
 
-public partial class HabitsContext : DbContext
+public partial class HabitsContext : IdentityDbContext<User>
 {
     public HabitsContext()
     {
@@ -14,108 +13,78 @@ public partial class HabitsContext : DbContext
         : base(options)
     {
     }
-
-    public virtual DbSet<DailyTask> DailyTasks { get; set; }
-
-    public virtual DbSet<Group> Groups { get; set; }
-
-    public virtual DbSet<Schedule> Schedules { get; set; }
-
-    public virtual DbSet<SchedulesTask> SchedulesTasks { get; set; }
-
-    public virtual DbSet<Task> Tasks { get; set; }
-
     public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<Category> Categories { get; set; }
+
+    public virtual DbSet<DailyRoutine> DailyRoutines { get; set; }
+
+    public virtual DbSet<Routine> Routines { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        => optionsBuilder.UseSqlServer("Server=DESKTOP-UC7Q14C\\PCSAMU;Database=Habits;Trusted_Connection=True;Trust Server Certificate=true;");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<DailyTask>(entity =>
+        modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.IdDailyTask).HasName("PK__DailyTas__448329FEDBD0CF95");
-
-            entity.Property(e => e.IdDailyTask).HasColumnName("id_daily_task");
-            entity.Property(e => e.CompletedAt)
-                .HasDefaultValueSql("(NULL)")
-                .HasColumnName("completed_at");
-            entity.Property(e => e.Date)
-                .HasDefaultValueSql("(sysdatetime())")
-                .HasColumnName("date");
-            entity.Property(e => e.IdTask).HasColumnName("id_task");
-            entity.Property(e => e.MinutesCompleted).HasColumnName("minutes_completed");
-            entity.Property(e => e.TotalMinutes).HasColumnName("total_minutes");
-
-            entity.HasOne(d => d.IdTaskNavigation).WithMany(p => p.DailyTasks)
-                .HasForeignKey(d => d.IdTask)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_DailyTasks_Tasks");
+            entity.Property(e => e.Email).HasMaxLength(256);
+            entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
+            entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
+            entity.Property(e => e.UserName).HasMaxLength(256);
         });
 
-        modelBuilder.Entity<Group>(entity =>
+        modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.IdGroup).HasName("PK__Groups__8BE8BA1BED37C6F0");
+            entity.HasKey(e => e.IdCategory).HasName("PK__Categori__E548B673567B220D");
 
-            entity.Property(e => e.IdGroup).HasColumnName("id_group");
+            entity.Property(e => e.IdCategory).HasColumnName("id_category");
             entity.Property(e => e.Color)
                 .HasDefaultValueSql("('#66ff33')")
                 .HasColumnName("color");
-            entity.Property(e => e.IdUser).HasColumnName("id_user");
+            entity.Property(e => e.IdUser)
+                .HasMaxLength(450)
+                .HasColumnName("id_user");
             entity.Property(e => e.Name)
                 .HasMaxLength(40)
                 .IsUnicode(false)
                 .HasColumnName("name");
 
-            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Groups)
-                .HasForeignKey(d => d.IdUser)
-                .HasConstraintName("FK_Groups_Users");
-        });
-
-        modelBuilder.Entity<Schedule>(entity =>
-        {
-            entity.HasKey(e => e.IdSchedule).HasName("PK__Schedule__15FE7E33C6663388");
-
-            entity.Property(e => e.IdSchedule).HasColumnName("id_schedule");
-            entity.Property(e => e.Days)
-                .HasMaxLength(1)
-                .HasDefaultValueSql("((0))")
-                .IsFixedLength()
-                .HasColumnName("days");
-            entity.Property(e => e.IdUser).HasColumnName("id_user");
-            entity.Property(e => e.Name)
-                .HasMaxLength(25)
-                .IsUnicode(false)
-                .HasColumnName("name");
-
-            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Schedules)
+            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Categories)
                 .HasForeignKey(d => d.IdUser)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Schedules_Users");
+                .HasConstraintName("FK_Categories_AspNetUsers");
         });
 
-        modelBuilder.Entity<SchedulesTask>(entity =>
+        modelBuilder.Entity<DailyRoutine>(entity =>
         {
-            entity.HasKey(e => new { e.IdSchedule, e.IdTask }).HasName("PK__Schedule__79E352522DEB3726");
+            entity.HasKey(e => e.IdDailyRoutine).HasName("PK__DailyRoutines__448329FE1BAF407B");
 
-            entity.ToTable("Schedules_Tasks");
+            entity.Property(e => e.IdDailyRoutine).HasColumnName("id_daily_routine");
+            entity.Property(e => e.CompletedAt)
+                .HasDefaultValueSql("(NULL)")
+                .HasColumnName("completed_at");
+            entity.Property(e => e.Date)
+                .HasDefaultValueSql("((sysdatetimeoffset() AT TIME ZONE 'UTC'))")
+                .HasColumnName("date");
+            entity.Property(e => e.IdRoutine).HasColumnName("id_routine");
+            entity.Property(e => e.MinutesCompleted).HasColumnName("minutes_completed");
+            entity.Property(e => e.TotalMinutes).HasColumnName("total_minutes");
 
-            entity.Property(e => e.IdSchedule).HasColumnName("id_schedule");
-            entity.Property(e => e.IdTask).HasColumnName("id_task");
-            entity.Property(e => e.Position).HasColumnName("position");
-
-            entity.HasOne(d => d.IdScheduleNavigation).WithMany(p => p.SchedulesTasks)
-                .HasForeignKey(d => d.IdSchedule)
-                .HasConstraintName("FK_Schedules_Tasks_Schedules");
-
-            entity.HasOne(d => d.IdTaskNavigation).WithMany(p => p.SchedulesTasks)
-                .HasForeignKey(d => d.IdTask)
-                .HasConstraintName("FK_Schedules_Tasks_Tasks");
+            entity.HasOne(d => d.IdRoutineNavigation).WithMany(p => p.DailyRoutines)
+                .HasForeignKey(d => d.IdRoutine)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_DailyRoutines_Routines");
         });
 
-        modelBuilder.Entity<Task>(entity =>
+        modelBuilder.Entity<Routine>(entity =>
         {
-            entity.HasKey(e => e.IdTask).HasName("PK__Tasks__C1D2C6176E6BF301");
+            entity.HasKey(e => e.IdRoutine).HasName("PK__Routines__855C1AF2DB47931C");
 
-            entity.Property(e => e.IdTask).HasColumnName("id_task");
-            entity.Property(e => e.IdGroup).HasColumnName("id_group");
-            entity.Property(e => e.IdUser).HasColumnName("id_user");
+            entity.Property(e => e.IdRoutine).HasColumnName("id_routine");
+            entity.Property(e => e.IdCategory).HasColumnName("id_category");
+            entity.Property(e => e.IdUser)
+                .HasMaxLength(450)
+                .HasColumnName("id_user");
             entity.Property(e => e.IsActive)
                 .HasDefaultValue(true)
                 .HasColumnName("is_active");
@@ -124,54 +93,15 @@ public partial class HabitsContext : DbContext
                 .HasMaxLength(40)
                 .IsUnicode(false)
                 .HasColumnName("name");
-            entity.Property(e => e.RepeatedEvery)
-                .HasDefaultValue(1)
-                .HasColumnName("repeated_every");
-            entity.Property(e => e.UnavailableDays)
-                .HasMaxLength(1)
-                .HasDefaultValueSql("((0))")
-                .IsFixedLength()
-                .HasColumnName("unavailable_days");
 
-            entity.HasOne(d => d.IdGroupNavigation).WithMany(p => p.Tasks)
-                .HasForeignKey(d => d.IdGroup)
-                .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("FK_Tasks_Groups");
+            entity.HasOne(d => d.IdCategoryNavigation).WithMany(p => p.Routines)
+                .HasForeignKey(d => d.IdCategory)
+                .HasConstraintName("FK_Routines_Categories");
 
-            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Tasks)
+            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Routines)
                 .HasForeignKey(d => d.IdUser)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Tasks_Users");
-        });
-
-        modelBuilder.Entity<User>(entity =>
-        {
-            entity.HasKey(e => e.IdUser).HasName("PK__Users__D2D14637FBBA8416");
-
-            entity.Property(e => e.IdUser).HasColumnName("id_user");
-            entity.Property(e => e.Email)
-                .HasMaxLength(256)
-                .IsUnicode(false)
-                .HasColumnName("email");
-            entity.Property(e => e.FreeTime).HasColumnName("free_time");
-            entity.Property(e => e.IsActive).HasColumnName("is_active");
-            entity.Property(e => e.LastSession)
-                .HasPrecision(0)
-                .HasDefaultValueSql("(sysdatetime())")
-                .HasColumnName("last_session");
-            entity.Property(e => e.MinGoal)
-                .HasDefaultValue(0.70m)
-                .HasColumnType("decimal(6, 6)")
-                .HasColumnName("min_goal");
-            entity.Property(e => e.Password)
-                .HasMaxLength(128)
-                .IsUnicode(false)
-                .HasColumnName("password");
-            entity.Property(e => e.Streak).HasColumnName("streak");
-            entity.Property(e => e.Username)
-                .HasMaxLength(20)
-                .IsUnicode(false)
-                .HasColumnName("username");
+                .HasConstraintName("FK_Routines_AspNetUsers");
         });
 
         OnModelCreatingPartial(modelBuilder);
