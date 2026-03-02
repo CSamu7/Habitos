@@ -7,8 +7,12 @@ using Habits.API.Routines;
 using Habits.API.Routines.DTO;
 using Habits.API.Routines.Validation;
 using Habits.API.Users;
+using Habits.API.Users.DTO;
+using Habits.API.Users.Validations;
 using Habits.Infraestructure;
+using Habits.Models;
 using Habits.Services;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddNewtonsoftJson();
@@ -16,6 +20,17 @@ builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddScoped<IValidator<GetDailyRoutineQueryParams>, DailyRoutineQueryParamsValidation>();
 builder.Services.AddScoped<IValidator<PatchDailyRoutineRequest>, PatchDailyTaskValidation>();
 builder.Services.AddScoped<IValidator<PostRoutineRequest>, PostRoutineRequestValidation>();
+builder.Services.AddScoped<IValidator<RegisterUserRequest>, RegisterUserRequestValidation>();
+
+builder.Services.AddIdentity<User, IdentityRole>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 8;
+    options.User.RequireUniqueEmail = true;
+}).AddEntityFrameworkStores<HabitsContext>();
 
 if (builder.Environment.IsDevelopment())
 {

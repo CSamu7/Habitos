@@ -1,5 +1,8 @@
-﻿namespace Habits.Models;
+﻿using Microsoft.EntityFrameworkCore;
 
+namespace Habits.Models;
+
+[PrimaryKey("IdCategory")]
 public partial class Category
 {
     public int IdCategory { get; set; }

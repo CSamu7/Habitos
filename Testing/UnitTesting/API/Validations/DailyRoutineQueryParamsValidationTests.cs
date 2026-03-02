@@ -13,9 +13,9 @@ namespace Testing.UnitTesting.API.Validations
             TimeProvider timeProvider = new FakeTimeProvider(startDateTime: new DateTime(2020, 10, 1));
             GetDailyRoutineQueryParams queryParams =
                 new(new DateOnly(2025, 1, 1), new DateOnly(2024, 1, 1), null);
-            DailyRoutineQueryParamsValidation validation = new(timeProvider);
+            DailyRoutineQueryParamsValidation sut = new(timeProvider);
 
-            var result = validation.TestValidate(queryParams);
+            var result = sut.TestValidate(queryParams);
 
             result.ShouldHaveValidationErrorFor(x => x.DateStart)
                 .WithErrorMessage("Start date must be before date end");
@@ -41,9 +41,9 @@ namespace Testing.UnitTesting.API.Validations
 
             GetDailyRoutineQueryParams queryParams =
                 new(new DateOnly(2025, 1, 1), new DateOnly(2950, 1, 1), null);
-            DailyRoutineQueryParamsValidation validation = new(timeProvider);
+            DailyRoutineQueryParamsValidation sut = new(timeProvider);
 
-            var result = validation.TestValidate(queryParams);
+            var result = sut.TestValidate(queryParams);
 
             result.ShouldHaveValidationErrorFor(x => x.DateEnd)
                 .WithErrorMessage("Date end must be in the present.");

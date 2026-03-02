@@ -1,5 +1,6 @@
 ﻿using FluentValidation.TestHelper;
 using Habits.API.Routines.DTO;
+using Habits.API.Routines.Validation;
 
 namespace Testing.UnitTesting.API.Validations
 {
@@ -8,10 +9,10 @@ namespace Testing.UnitTesting.API.Validations
         [Fact]
         public void Empty_name_is_invalid()
         {
-            PostRoutineRequestValidation validationRules = new PostRoutineRequestValidation();
+            PostRoutineRequestValidation sut = new PostRoutineRequestValidation();
             PostRoutineRequest request = new PostRoutineRequest { Name = "" };
 
-            var result = validationRules.TestValidate(request);
+            var result = sut.TestValidate(request);
 
             result.ShouldHaveValidationErrorFor(x => x.Name);
         }

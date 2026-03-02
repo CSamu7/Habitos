@@ -3,6 +3,7 @@ using Habits.API.DailyRoutines.Validation;
 using Habits.API.Routines;
 using Habits.API.Routines.DTO;
 using Habits.API.Routines.Filters;
+using Habits.API.Users.Filters;
 
 namespace Habits.API.Users
 {
@@ -27,6 +28,9 @@ namespace Habits.API.Users
 
             //User Routes
             userRoutes.MapGet("/{idUser}", UserEndpoints.GetUser);
+            userRoutes.MapPost("/register", UserEndpoints.Register)
+                .AddEndpointFilter<RegisterUserEndpointFilter>()
+                .WithName("registerUser");
             userRoutes.MapGet("/login", UserEndpoints.Login);
 
             return router;

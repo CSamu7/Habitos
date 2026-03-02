@@ -13,16 +13,9 @@ public partial class HabitsContext : IdentityDbContext<User>
         : base(options)
     {
     }
-    public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<Category> Categories { get; set; }
-
     public virtual DbSet<DailyRoutine> DailyRoutines { get; set; }
-
     public virtual DbSet<Routine> Routines { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Server=DESKTOP-UC7Q14C\\PCSAMU;Database=Habits;Trusted_Connection=True;Trust Server Certificate=true;");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>(entity =>
@@ -105,6 +98,7 @@ public partial class HabitsContext : IdentityDbContext<User>
         });
 
         OnModelCreatingPartial(modelBuilder);
+        base.OnModelCreating(modelBuilder);
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

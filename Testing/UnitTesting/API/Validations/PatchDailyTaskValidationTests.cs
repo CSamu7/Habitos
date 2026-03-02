@@ -10,7 +10,7 @@ namespace Testing.UnitTesting.API.Validations
         [Fact]
         public void Negative_minutes_are_invalid()
         {
-            PatchDailyTaskValidation validation = new PatchDailyTaskValidation();
+            PatchDailyTaskValidation sut = new PatchDailyTaskValidation();
             PatchDailyRoutineRequest request = new PatchDailyRoutineRequest
             {
                 FinishedAt = new DateTime(2000, 1, 1),
@@ -18,7 +18,7 @@ namespace Testing.UnitTesting.API.Validations
                 Operation = PatchOperations.Add
             };
 
-            var result = validation.TestValidate(request);
+            var result = sut.TestValidate(request);
 
             result.ShouldHaveValidationErrorFor(request => request.Minutes)
                 .WithErrorMessage("Minutes must be positive")
@@ -28,7 +28,7 @@ namespace Testing.UnitTesting.API.Validations
         [Fact]
         public void Minutes_greather_than_8_hours_are_invalid()
         {
-            PatchDailyTaskValidation validation = new PatchDailyTaskValidation();
+            PatchDailyTaskValidation sut = new PatchDailyTaskValidation();
             PatchDailyRoutineRequest request = new PatchDailyRoutineRequest
             {
                 FinishedAt = new DateTime(2000, 1, 1),
@@ -36,7 +36,7 @@ namespace Testing.UnitTesting.API.Validations
                 Operation = PatchOperations.Add
             };
 
-            var result = validation.TestValidate(request);
+            var result = sut.TestValidate(request);
 
             result.ShouldHaveValidationErrorFor(request => request.Minutes)
                 .WithErrorMessage("You can't add more than 8 hours")
