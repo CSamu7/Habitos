@@ -47,6 +47,9 @@ var app = builder.Build();
 
 app.UseStatusCodePages();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

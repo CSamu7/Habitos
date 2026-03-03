@@ -5,8 +5,12 @@ info:
 
 http:
   method: GET
-  url: https://localhost:7074/api/users/login
-  auth: inherit
+  url: https://localhost:7074/api/users
+  headers:
+    - name: Set-Cookie
+      value: '""'
+    - name: Cookie
+      value: '""'
 
 settings:
   encodeUrl: true

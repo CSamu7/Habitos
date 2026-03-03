@@ -2,6 +2,7 @@
 {
     public class DailyRoutineGetFilters() : IEndpointFilter
     {
+        //TODO: Use FluentValidations
         public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
         {
             var dateStart = context.GetArgument<DateOnly?>(1);

@@ -15,6 +15,7 @@ namespace Habits.API.Users
 
             //Nested dailyTasks
             userRoutes.MapGet("/{idUser}/dailyRoutines/today", DailyRoutineEndpoints.GetDailyRoutines);
+            
             userRoutes.MapGet("/{idUser}/dailyRoutines", DailyRoutineEndpoints.GetDailyRoutines)
             .AddEndpointFilter<GetAllDailyRoutinesEndpointFilter>();
 
@@ -27,11 +28,15 @@ namespace Habits.API.Users
                 .Produces<List<GetRoutineResponse>>(200);
 
             //User Routes
-            userRoutes.MapGet("/{idUser}", UserEndpoints.GetUser);
+            userRoutes.MapGet("", UserEndpoints.GetUser)
+                .WithName("getUser");
+            
             userRoutes.MapPost("/register", UserEndpoints.Register)
                 .AddEndpointFilter<RegisterUserEndpointFilter>()
                 .WithName("registerUser");
-            userRoutes.MapGet("/login", UserEndpoints.Login);
+
+            userRoutes.MapPost("/login", UserEndpoints.Login)
+                .WithName("loginUser");
 
             return router;
         }
