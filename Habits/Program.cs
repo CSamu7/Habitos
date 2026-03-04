@@ -3,6 +3,7 @@ using Habits.API;
 using Habits.API.DailyRoutines;
 using Habits.API.DailyRoutines.DTO;
 using Habits.API.DailyRoutines.Validation;
+using Habits.API.Policies;
 using Habits.API.Routines;
 using Habits.API.Routines.DTO;
 using Habits.API.Routines.Validation;
@@ -12,6 +13,8 @@ using Habits.API.Users.Validations;
 using Habits.Infraestructure;
 using Habits.Models;
 using Habits.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +24,7 @@ builder.Services.AddScoped<IValidator<GetDailyRoutineQueryParams>, DailyRoutineQ
 builder.Services.AddScoped<IValidator<PatchDailyRoutineRequest>, PatchDailyTaskValidation>();
 builder.Services.AddScoped<IValidator<PostRoutineRequest>, PostRoutineRequestValidation>();
 builder.Services.AddScoped<IValidator<RegisterUserRequest>, RegisterUserRequestValidation>();
+builder.Services.AddScoped<IAuthorizationHandler, RoutineAuthorizationHandler>();
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
@@ -36,6 +40,10 @@ if (builder.Environment.IsDevelopment())
 {
     builder.Configuration.AddUserSecrets<Program>();
 }
+
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("IsRoutineOwner", policy => policy.Requirements.Add(new RoutineOwnerRequirement()));
+
 
 builder.Services
     .AddSwagger()

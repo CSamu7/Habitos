@@ -1,4 +1,4 @@
-﻿public enum Status { Ok, InvalidData, NotFound, }
+﻿public enum Status { Ok, InvalidData, NotFound, NotOwner }
 public class Result<T>
 {
     private string _message { get; init; } = "";
@@ -22,6 +22,7 @@ public static class ResultExtensions
         return result.Status switch
         {
             Status.InvalidData => TypedResults.Problem(result.ErrorMessage, statusCode: 400),
+            Status.NotOwner => TypedResults.Problem(result.ErrorMessage, statusCode: 401),
             Status.NotFound => TypedResults.Problem(result.ErrorMessage, statusCode: 404),
             _ => TypedResults.Problem(detail: "something went wrong", statusCode: 500)
         };

@@ -7,8 +7,6 @@ namespace Habits.API
     {
         public static IServiceCollection AddApiServices(this IServiceCollection services)
         {
-            //Quiero entender que hacen especificamente estas lineas.
-
             //ConfigureHttpJsonOptions. Configura las opciones para leer y escribir JSON
             services.ConfigureHttpJsonOptions(options =>
             {

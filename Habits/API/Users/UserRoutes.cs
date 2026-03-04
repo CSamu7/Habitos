@@ -14,16 +14,16 @@ namespace Habits.API.Users
             var userRoutes = router.MapGroup("/users");
 
             //Nested dailyTasks
-            userRoutes.MapGet("/{idUser}/dailyRoutines/today", DailyRoutineEndpoints.GetDailyRoutines);
+            userRoutes.MapGet("/{username}/dailyRoutines/today", DailyRoutineEndpoints.GetDailyRoutines);
             
-            userRoutes.MapGet("/{idUser}/dailyRoutines", DailyRoutineEndpoints.GetDailyRoutines)
+            userRoutes.MapGet("/{username}/dailyRoutines", DailyRoutineEndpoints.GetDailyRoutines)
             .AddEndpointFilter<GetAllDailyRoutinesEndpointFilter>();
 
             //Nestad Tasks
             userRoutes.MapPost("/{idUser}/routines", RoutineEndpoints.PostRoutine)
                 .AddEndpointFilter<PostRoutineFilter>();
 
-            userRoutes.MapGet("/{idUser}/routines", RoutineEndpoints.GetAllRoutines)
+            userRoutes.MapGet("/{username}/routines", RoutineEndpoints.GetAllRoutines)
                 .WithName("getAllTasks")
                 .Produces<List<GetRoutineResponse>>(200);
 

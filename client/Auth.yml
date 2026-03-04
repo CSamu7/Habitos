@@ -7,10 +7,8 @@ http:
   method: GET
   url: https://localhost:7074/api/users
   headers:
-    - name: Set-Cookie
-      value: '""'
     - name: Cookie
-      value: '""'
+      value: .AspNetCore.Identity.Application=CfDJ8AzW9XRVJlJMpfBBRQJM9LVRO-960FFzbfnizzZYbcOJ5ENBRuaXohmGbvg8XCHiEmSaVlXy2Cb8XDrSaN2jCdaPyzGLm82ECFns-Nx_hXArKLyysHFt8dar6tnlXgeTvfq8suC7CkJ_LVmCkrb5Y0a31HgArnwYj_KEAjWYuNUajVy-Giz2pP6j7c2sYVwo1JAgaFXPrxsikqc_KFl56S2_EAjxjeHrEnNCKZtPiwPCa8ohFfZ3rwbTFk8u88o-2Z-FOuxP7NxCIxDh8YdceHbR81Le9tZ9R47e-kkbmgMHRn5sDBBcSexp1kdQWiw5WgjaY3MSXyrSEmRWqDlZvhLdiI-hFgheEdK2MowvzykIAQNTVMWIbrF5gK5u9QJtYfj-gql0m5DhM8t4iHcb4b1dlOfvqIVkeXs-t904bud_epXuxNCT3lGOocftcQFUMOEqL1bBkj0S3KRosT-skxOccY_oonbAQ-qXM2ZqZMUToR2-_Q9_wtUdKfXmKd-nDg9daWtPjc1aiH5Yf90uuw0e1ZmtlGJ4ecDToXLhzMhpb6IPkASh542RsdaNaTvem6haNrI-AVuutJHsc-f0DmK1W3vHJ3R1rNzfUvK1FIg83KsKDJ9VYx9CD4wkslCQofo-Zsk_eYxYEhCVjE5NRIrRds5fDaq1lBZqc6UHmVx8cKVoYg9sS4iVFpB3JaWaHJORW7ebOe3iOAI57fYJlcLEpHsptOdJdpFk2x2oDFf1; path=/; secure; samesite=lax; httponly
 
 settings:
   encodeUrl: true

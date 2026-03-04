@@ -1,19 +1,29 @@
-﻿using Habits.API.Routines.DTO;
+﻿using Habits.API.Policies;
+using Habits.API.Routines.DTO;
 using Habits.Common;
+using Habits.Models;
 using Habits.Services.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Security.Claims;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace Habits.API.Routines
 {
     public static class RoutineEndpoints
     {
-        public static async Task<IResult> GetRoutine(int idRoutine, RoutineService service)
+        public static async Task<IResult> GetRoutine(int idRoutine, RoutineService service, IAuthorizationService authService, HttpContext ctx)
         {
-            Result<Habits.Models.Routine> result = await service.GetRoutine(idRoutine);
+            Result<Routine> result = await service.GetRoutine(idRoutine);
+
+            var authResult = await authService.AuthorizeAsync(ctx.User, result.Value, new RoutineOwnerRequirement());
+
+            if (!authResult.Succeeded)
+                return TypedResults.Unauthorized();
 
             if (result.Status.Equals(Status.Ok))
             {
@@ -25,7 +35,7 @@ namespace Habits.API.Routines
         }
         public static async Task<IResult> PostRoutine(string idUser, PostRoutineRequest body, LinkGenerator generator, RoutineService service)
         {
-            Result<Habits.Models.Routine> result = await service.PostRoutine(idUser, body);
+            Result<Routine> result = await service.PostRoutine(idUser, body);
 
             if (result.Status.Equals(Status.Ok))
             {
@@ -56,7 +66,7 @@ namespace Habits.API.Routines
         }
         public static async Task<IResult> GetAllRoutines(string idUser, RoutineService service)
         {
-            Result<List<Habits.Models.Routine>> result = await service.GetAllRoutines(idUser);
+            Result<List<Routine>> result = await service.GetAllRoutines(idUser);
 
             if (result.Status.Equals(Status.Ok))
             {
@@ -69,7 +79,7 @@ namespace Habits.API.Routines
 
         public static async Task<IResult> DeleteTask(int idRoutine, RoutineService service)
         {
-            Result<Habits.Models.Routine> result = await service.DeleteTask(idRoutine);
+            Result<Routine> result = await service.DeleteTask(idRoutine);
 
             if (result.Status.Equals(Status.Ok))
                 return TypedResults.NoContent();
