@@ -1,10 +1,8 @@
-﻿using Habits.API.Policies;
-using Habits.API.Routines.DTO;
+﻿using Habits.API.Routines.DTO;
 using Habits.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
 namespace Habits.Services.Tasks
 {
@@ -19,7 +17,9 @@ namespace Habits.Services.Tasks
         }
         public async Task<Result<Routine>> GetRoutine(int idRoutine)
         {
-            Routine? task = await _db.Routines.FindAsync(idRoutine);
+            Routine? task = await _db.Routines
+                .Include(x => x.IdUserNavigation)
+                .SingleOrDefaultAsync(x => x.IdRoutine == idRoutine);
 
             if (task is null) return Result<Routine>.Failure(Status.NotFound, "The routine doesn't exist");
 
@@ -51,29 +51,26 @@ namespace Habits.Services.Tasks
 
             return Result<Habits.Models.Routine>.Success(routine);
         }
-        public async Task<Result<Routine>> PatchTask(int idTask, JsonPatchDocument body)
+        //TODO: Implementar pruebas de integración.
+        public async Task<Result<Routine>> PatchTask(int idRoutine, JsonPatchDocument body)
         {
-            Routine? task = await _db.Routines.FindAsync(idTask);
+            var result = await GetRoutine(idRoutine);
 
-            if (task is null) return Result<Routine>.Failure(Status.NotFound, "The task doesn't exist");
-
-            PostRoutineRequest test = task.FromTask();
-            body.ApplyTo(test);
+            PostRoutineRequest patchRoutine = result.Value.FromTask();
+            body.ApplyTo(patchRoutine);
 
             await _db.SaveChangesAsync();
 
-            return Result<Routine>.Success(task);
+            return Result<Routine>.Success(result.Value);
         }
-        public async Task<Result<Routine>> DeleteTask(int idTask)
+        public async Task<Result<Routine>> DeleteTask(int idRoutine)
         {
-            Routine? task = await _db.Routines.FindAsync(idTask);
+            var result = await GetRoutine(idRoutine);
 
-            if (task is null) return Result<Routine>.Failure(Status.NotFound, "The task doesn't exist");
-
-            task.IsActive = false;
+            result.Value.IsActive = false;
             await _db.SaveChangesAsync();
 
-            return Result<Routine>.Success(task);
+            return Result<Routine>.Success(result.Value);
         }
     }
 }

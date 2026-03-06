@@ -17,9 +17,9 @@ namespace Habits.API.DailyRoutines
 
             return result.ToHttpResponse();
         }
-        public static IResult GetDailyRoutines(string idUser, GetDailyRoutineQueryParams filters, DailyRoutineService service)
+        public static IResult GetDailyRoutines(string username, GetDailyRoutineQueryParams filters, DailyRoutineService service)
         {
-            Result<List<DailyRoutine>> result = service.GetRoutines(idUser, filters);
+            Result<List<DailyRoutine>> result = service.GetRoutines(username, filters);
 
             if (result.Status.Equals(Status.Ok))
             {

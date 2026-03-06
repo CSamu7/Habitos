@@ -1,4 +1,5 @@
 ﻿using Habits.API.Routines.DTO;
+using Habits.API.Routines.Filters;
 using Microsoft.AspNetCore.JsonPatch;
 
 namespace Habits.API.Routines
@@ -8,6 +9,8 @@ namespace Habits.API.Routines
         public static IEndpointRouteBuilder MapRoutines(this IEndpointRouteBuilder builder)
         {
             var tasksRoutes = builder.MapGroup("/routines");
+
+            tasksRoutes.AddEndpointFilter<IsSameRoutineOwnerFilter>();
 
             tasksRoutes.MapGet("{idRoutine}/", RoutineEndpoints.GetRoutine)
                 .WithName("getRoutine")

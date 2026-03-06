@@ -5,7 +5,11 @@ info:
 
 http:
   method: GET
-  url: ""
+  url: https://localhost:7074/api/routines/1
+  headers:
+    - name: Cookie
+      value: .AspNetCore.Identity.Application=CfDJ8AzW9XRVJlJMpfBBRQJM9LWfnebJJO_IEdlx1B7FTp36gHAvrFhJqdD0VVGfOFh0OHOXQcHZHo59ziXsUWEgcdk92JSXbmXLF2jobsWl5UEhZ23YTvgXY13E4G_VDp6GXqG5Yi3R7gq49rOACBFDQAl_TKpm33dL1C9DIZVIfpA1V9ReLg_ynaWEjmOwddTVYhOgqHE5AQR5pB1cJLCWuyUx4m6hWAqQ8OD2w2xjR92RRZ-JxZ-ewcUNUXjIk3gBGzjqmvcghIDyiuBuAMenVi5ipHQ37Ls1YXE7WyXeqkQRPlw47_mFDRGH5YdRe0TPSYj7gKo1DAtQxCrC_y9VKyLCuqVKwMn4UVQSpH6CVkDP7Du4D8yecE2yoHCD1lNZtw1RNJ9b5KBlCfGGZnoS8FZ2XpnJBUIBGdlVhzNYJH-j-lhIzIwVK7YCTQIiuP-TJ_Ztc68fqXuxCd2yntqIfLdfsqp65QaNIe7m0veLWsl4eqQwCT0hGGqZgmi8T2sw3xOC1lig9CUUiWMxk-bhTXTZmIf5OpvUpId_a9ca2KMdWCYU8Mipb1xig_-d1xUJjJrRKUAAk2lmd1kvovLakvS8pm7WyD7XBDUy_guBoThoFx2KV9JIEUe3L6Lv1W1vFJZgx6I8us1jmD8q48aueJsVAu9dsY17ibrj9sqwrcrRMFLUbZQrAqKl1PYauT5vcLyMEAb563rdkLXusMVUU4IK3WdD99_8bMk8FOr82Y0b; path=/; secure; samesite=lax; httponly
+      disabled: true
   auth: inherit
 
 settings:

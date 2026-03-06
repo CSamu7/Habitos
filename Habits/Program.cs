@@ -13,7 +13,6 @@ using Habits.API.Users.Validations;
 using Habits.Infraestructure;
 using Habits.Models;
 using Habits.Services;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
@@ -25,6 +24,7 @@ builder.Services.AddScoped<IValidator<PatchDailyRoutineRequest>, PatchDailyTaskV
 builder.Services.AddScoped<IValidator<PostRoutineRequest>, PostRoutineRequestValidation>();
 builder.Services.AddScoped<IValidator<RegisterUserRequest>, RegisterUserRequestValidation>();
 builder.Services.AddScoped<IAuthorizationHandler, RoutineAuthorizationHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, IsOwnerHandler>();
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
@@ -40,6 +40,11 @@ if (builder.Environment.IsDevelopment())
 {
     builder.Configuration.AddUserSecrets<Program>();
 }
+
+//builder.Services.AddAuthentication(options =>
+//{
+//    options.RequireAuthenticatedSignIn = true;
+//});
 
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy("IsRoutineOwner", policy => policy.Requirements.Add(new RoutineOwnerRequirement()));

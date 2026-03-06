@@ -1,4 +1,5 @@
-﻿using Habits.Features.DailyTasks.Filters;
+﻿using Habits.API.DailyRoutines.Filters;
+using Habits.Features.DailyTasks.Filters;
 
 namespace Habits.API.DailyRoutines
 {
@@ -6,7 +7,8 @@ namespace Habits.API.DailyRoutines
     {
         public static IEndpointRouteBuilder MapDailyRoutines(this IEndpointRouteBuilder router)
         {
-            var dailyTasksRoute = router.MapGroup("/dailyRoutines");
+            var dailyTasksRoute = router.MapGroup("/dailyRoutines")
+                .AddEndpointFilter<DailyRoutineOwnerFilter>();
 
             dailyTasksRoute.MapGet("{idDailyRoutine}", DailyRoutineEndpoints.GetDailyRoutine)
                 .Produces(200)

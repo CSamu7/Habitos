@@ -1,0 +1,18 @@
+info:
+  name: GetAll
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: https://localhost:7074/api/users/sam/dailyroutines
+  headers:
+    - name: Cookie
+      value: .AspNetCore.Identity.Application=CfDJ8AzW9XRVJlJMpfBBRQJM9LXx2DBq_DMZguCe1RuRFl-HB0tQM0JD8d0HHUegsrIHnCfeh1Gtm2T48oUqWD4RGiOM5f7z1aXu9_lN8_32lzin7dmkyj10sKxkpCC20RA468g9hpLWXu-zEBda5SDMumi6e0Pllx2NWKckF7Q8RujVnANTMg066XPu7B6b4NBi5llCrFLFddMr7l-A6SoVVg2Kvf2EeMFAbU5ZGQ90wxWXl60oeIWiljR09uvAktSCy79fYa4JN4BqPfmk4lbBVgcnlwvdLXF2Long3lVpmx8NRhMr0FvyfaEOpcDUawmsB46pybE8h1gkKr-hwDNZPd3Xro2uf4zW3qbQRQrDKVhZcj_DGETzZqZfP85EHSsoGn9TqOJoZMeTzwwhJW3VGUoTE2Nfoqe8iZfcrcnd6bPjwsgHahC-g2iXPvuAAmnI2XB9EzS187lQRA1CcfcgArvZo4LCIC8gn54QaE3dq1H1Q_wAwWL3xo0tH5f-Fn8PWbwvz8pNvDxnLyTO6XMb4qlHceshGZoEycusGPUAS-lQH4Z6LBb7NuafTsHI1V5Z7-rVZrCX48TXSQefXfTI9IufdijgrJTox73lwe50c6JaW6z0BXfzAlibAYOs2AXOhLRrUVAhTh0ZbpKxNnipajy3v5ZhDY_uMfhy9uLEtC4b-fOV4m2IJtbMNn_B9UV6OZf3bG1jt7KfdWNVRpkJ5qticI4Nc1JSrVI8x_9XWyWs; path=/; secure; samesite=lax; httponly
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

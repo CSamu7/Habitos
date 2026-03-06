@@ -15,7 +15,7 @@ public class DailyRoutineService
     public async Task<Result<DailyRoutine>> GetRoutine(int idDailyRoutine)
     {
         var dailyTask = await _db.DailyRoutines
-            .Include(d => d.IdRoutineNavigation)
+            .Include(d => d.IdRoutineNavigation.IdUserNavigation)
             .FirstOrDefaultAsync(d => d.IdDailyRoutine == idDailyRoutine);
 
         if (dailyTask is null) return Result<DailyRoutine>.Failure(Status.NotFound, "Daily task doesn't exist");

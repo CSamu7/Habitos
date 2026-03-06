@@ -1,5 +1,6 @@
 ﻿using Habits.API.DailyRoutines;
 using Habits.API.DailyRoutines.Validation;
+using Habits.API.Policies;
 using Habits.API.Routines;
 using Habits.API.Routines.DTO;
 using Habits.API.Routines.Filters;
@@ -14,16 +15,20 @@ namespace Habits.API.Users
             var userRoutes = router.MapGroup("/users");
 
             //Nested dailyTasks
-            userRoutes.MapGet("/{username}/dailyRoutines/today", DailyRoutineEndpoints.GetDailyRoutines);
-            
+            userRoutes.MapGet("/{username}/dailyRoutines/today", DailyRoutineEndpoints.GetDailyRoutines)
+                .AddEndpointFilter<IsOwnerFilter>();
+
             userRoutes.MapGet("/{username}/dailyRoutines", DailyRoutineEndpoints.GetDailyRoutines)
-            .AddEndpointFilter<GetAllDailyRoutinesEndpointFilter>();
+                .AddEndpointFilter<IsOwnerFilter>()
+                .AddEndpointFilter<GetAllDailyRoutinesEndpointFilter>();
 
             //Nestad Tasks
-            userRoutes.MapPost("/{idUser}/routines", RoutineEndpoints.PostRoutine)
+            userRoutes.MapPost("/{username}/routines", RoutineEndpoints.PostRoutine)
+                .AddEndpointFilter<IsOwnerFilter>()
                 .AddEndpointFilter<PostRoutineFilter>();
 
             userRoutes.MapGet("/{username}/routines", RoutineEndpoints.GetAllRoutines)
+                .AddEndpointFilter<IsOwnerFilter>()
                 .WithName("getAllTasks")
                 .Produces<List<GetRoutineResponse>>(200);
 

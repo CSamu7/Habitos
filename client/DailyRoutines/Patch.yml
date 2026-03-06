@@ -1,18 +1,16 @@
 info:
-  name: Create
+  name: Patch
   type: http
-  seq: 1
+  seq: 4
 
 http:
-  method: POST
-  url: https://localhost:7074/api/users/samu/routines/
+  method: PATCH
+  url: https://localhost:7074/api/routines/1
   body:
     type: json
     data: |-
       {
-        "name": "zzz",
-        "minutes": 30,
-        "idCategory": null
+        "minutes": 40
       }
   auth: inherit
 
