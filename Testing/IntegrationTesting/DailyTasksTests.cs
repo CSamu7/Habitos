@@ -15,11 +15,11 @@ namespace Testing.IntegrationTesting
         [Fact]
         public async Task DailyTasksTodayNotReturnDailyTasksFromPreviousDays()
         {
-            var testServer = new TestServer(new WebHostBuilder().UseStartup<Startup>());
+            var testServer = new TestServer(new WebHostBuilder().UseStartup<Program>());
 
             var client = _factory.CreateClient();
 
-            var response = await client.GetAsync();
+            var response = await client.GetAsync("http");
         }
     }
 }
