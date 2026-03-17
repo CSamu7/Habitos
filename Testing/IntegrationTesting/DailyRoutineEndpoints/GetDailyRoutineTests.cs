@@ -1,10 +1,6 @@
 ﻿using Habits.API.DailyRoutines.DTO;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using Testing.IntegrationTesting.Helpers;
 
 namespace Testing.IntegrationTesting.DailyRoutineEndpoints
 {
@@ -30,25 +26,9 @@ namespace Testing.IntegrationTesting.DailyRoutineEndpoints
         [Fact]
         public async Task Get_daily_routine()
         {
-            var client = testApp.WithWebHostBuilder(builder =>
-            {
-                builder.ConfigureTestServices(services =>
-                {
-                    services.AddAuthentication(defaultScheme: "TestScheme")
-                        .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>
-                            ("TestScheme", _ => { });
-
-                    services.Configure<AuthenticationOptions>(options =>
-                    {
-                        options.DefaultAuthenticateScheme = "TestScheme";
-                        options.DefaultChallengeScheme = "TestScheme";
-                    });
-                });
-            }).CreateClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(scheme: "TestScheme");
+            var client = testApp.CreateAuthClient();
 
             var response = await client.GetAsync("https://localhost:7074/api/dailyRoutines/2");
-            var aa = await response.Content.ReadAsStringAsync();
             response.EnsureSuccessStatusCode();
             GetDailyRoutineResponse? json = await response.Content.ReadFromJsonAsync<GetDailyRoutineResponse>();
 
