@@ -2,6 +2,7 @@ using FluentValidation;
 using Habits.API;
 using Habits.API.DailyRoutines;
 using Habits.API.DailyRoutines.DTO;
+using Habits.API.DailyRoutines.Filters;
 using Habits.API.DailyRoutines.Validation;
 using Habits.API.Policies;
 using Habits.API.Routines;
@@ -25,6 +26,7 @@ builder.Services.AddScoped<IValidator<PostRoutineRequest>, PostRoutineRequestVal
 builder.Services.AddScoped<IValidator<RegisterUserRequest>, RegisterUserRequestValidation>();
 builder.Services.AddScoped<IAuthorizationHandler, RoutineAuthorizationHandler>();
 builder.Services.AddScoped<IAuthorizationHandler, IsOwnerHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, IsDailyRoutineOwner>();
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {

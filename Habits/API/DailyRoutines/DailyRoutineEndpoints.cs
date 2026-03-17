@@ -12,7 +12,7 @@ namespace Habits.API.DailyRoutines
 
             if (result.Status.Equals(Status.Ok))
             {
-                return Results.Ok(GetDailyRoutineResponse.FromDailyTask(result.Value));
+                return TypedResults.Ok(result.Value.ToGetDailyRoutineResponse());
             }
 
             return result.ToHttpResponse();
@@ -24,7 +24,7 @@ namespace Habits.API.DailyRoutines
             if (result.Status.Equals(Status.Ok))
             {
                 GetAllDailyRoutinesResponse res = new GetAllDailyRoutinesResponse(result.Value);
-                return Results.Ok(res);
+                return TypedResults.Ok(res);
             }
 
             return result.ToHttpResponse();

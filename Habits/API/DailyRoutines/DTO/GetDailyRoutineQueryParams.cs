@@ -2,7 +2,7 @@
 
 namespace Habits.API.DailyRoutines.DTO
 {
-    public record GetDailyRoutineQueryParams
+    public class GetDailyRoutineQueryParams
     {
         public DateOnly DateStart { get; set; }
         public DateOnly DateEnd { get; set; }

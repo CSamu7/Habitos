@@ -1,37 +1,52 @@
-﻿using Habits.Models;
+﻿using DotNet.Testcontainers.Builders;
+using Habits.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Testcontainers.MsSql;
 
 namespace Testing.IntegrationTesting
 {
+    [CollectionDefinition("HabitsTests")]
+    public class DbSharedTestCollection : ICollectionFixture<CustomWebApplication>;
+
     public class CustomWebApplication : WebApplicationFactory<Program>, IAsyncLifetime
     {
-        public System.Threading.Tasks.Task InitializeAsync()
+        private readonly MsSqlContainer _sqlContainer = new MsSqlBuilder
+            ("habits-test-database")
+            .WithName("test")
+            .WithWaitStrategy(Wait.ForUnixContainer().UntilMessageIsLogged("All done!"))
+            .Build();
+        public async Task InitializeAsync()
         {
-            throw new NotImplementedException();
-        }
+            await _sqlContainer.StartAsync();
 
+            using var scope = Services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetService<HabitsContext>();
+
+            dbContext.Database.EnsureCreated();
+        }
+        public new async Task DisposeAsync()
+        {
+            await _sqlContainer.DisposeAsync();
+        }
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.ConfigureServices(services =>
             {
+                string connectionString = _sqlContainer.GetConnectionString();
+                SqlConnectionStringBuilder builder = new(connectionString);
+
+                builder.InitialCatalog = "Habits";
+
                 var dbContextDescriptor = services.SingleOrDefault
                 (d => d.ServiceType == typeof(DbContextOptions<HabitsContext>));
 
                 services.Remove(dbContextDescriptor);
-                
+                services.AddDbContext<HabitsContext>((_, option) => option.UseSqlServer(builder.ToString()));
             });
-        }
-
-        System.Threading.Tasks.Task IAsyncLifetime.DisposeAsync()
-        {
-            throw new NotImplementedException();
         }
     }
 }

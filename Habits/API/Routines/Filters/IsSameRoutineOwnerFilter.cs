@@ -1,5 +1,4 @@
-﻿
-using Habits.API.Policies;
+﻿using Habits.API.Policies;
 using Habits.Models;
 using Habits.Services.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -8,8 +7,8 @@ namespace Habits.API.Routines.Filters
 {
     public class IsSameRoutineOwnerFilter : IEndpointFilter
     {
-        private readonly RoutineService _service;
         private readonly IAuthorizationService _authService;
+        private readonly RoutineService _service;
         public IsSameRoutineOwnerFilter(RoutineService service, IAuthorizationService authService)
         {
             _service = service;

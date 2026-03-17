@@ -32,7 +32,7 @@ public partial class HabitsContext : IdentityDbContext<User>
 
             entity.Property(e => e.IdCategory).HasColumnName("id_category");
             entity.Property(e => e.Color)
-                .HasDefaultValueSql("('#66ff33')")
+                .HasDefaultValueSql("('6750003')")
                 .HasColumnName("color");
             entity.Property(e => e.IdUser)
                 .HasMaxLength(450)

@@ -1,5 +1,4 @@
 ﻿namespace Habits.Models;
-
 public partial class Routine
 {
     public int IdRoutine { get; set; }

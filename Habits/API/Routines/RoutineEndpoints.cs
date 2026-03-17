@@ -19,7 +19,9 @@ namespace Habits.API.Routines
 
             if (result.Status.Equals(Status.Ok))
             {
-                GetRoutineResponse response = new GetRoutineResponse(result.Value);
+                Routine routine = result.Value;
+
+                GetRoutineResponse response = new GetRoutineResponse(routine.IdRoutine, routine.Name, routine.Minutes, routine.IdCategory); 
                 return TypedResults.Ok<GetRoutineResponse>(response);
             }
 
@@ -32,7 +34,9 @@ namespace Habits.API.Routines
 
             if (result.Status.Equals(Status.Ok))
             {
-                GetRoutineResponse response = new GetRoutineResponse(result.Value);
+                Routine routine = result.Value;
+
+                GetRoutineResponse response = new GetRoutineResponse(routine.IdRoutine, routine.Name, routine.Minutes, routine.IdCategory);
                 string? uri = generator.GetPathByName
                     ("getTask", new() { { "idTask", response.Id } });
 
@@ -65,7 +69,7 @@ namespace Habits.API.Routines
 
             if (result.Status.Equals(Status.Ok))
             {
-                List<GetRoutineResponse> tasks = result.Value.Select(task => new GetRoutineResponse(task)).ToList();
+                List<GetRoutineResponse> tasks = result.Value.Select(task => new GetRoutineResponse(task.IdRoutine, task.Name, task.Minutes, task.IdCategory)).ToList();
                 return TypedResults.Ok<List<GetRoutineResponse>>(tasks);
             }
 

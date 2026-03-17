@@ -1,17 +1,18 @@
-﻿using Habits.Models;
+﻿using Habits.Common;
+using Habits.Models;
 
 namespace Habits.API.DailyRoutines.DTO
 {
-    public record GetAllDailyRoutinesResponse : BaseResponse<GetDailyRoutineResponse>
+    public record GetAllDailyRoutinesResponse : BaseListResponse<GetDailyRoutineResponse>
     {
-        public int TotalMinutes { get; set; } = 0;
-        public int MinutesCompleted { get; set; } = 0;
-        public int MinutesLeft { get; set; } = 0;
-        public string PercentageCompleted { get; set; } = "0.00%";
+        public int TotalMinutes { get; init; } = 0;
+        public int MinutesCompleted { get; init; } = 0;
+        public int MinutesLeft { get; init; } = 0;
+        public string PercentageCompleted { get; init; } = "0.00%";
         public GetAllDailyRoutinesResponse(List<DailyRoutine> results) :
             base(
                 results
-                    .Select(res => GetDailyRoutineResponse.FromDailyTask(res))
+                    .Select(res => res.ToGetDailyRoutineResponse())
                     .ToList(),
                 results.Count
             )

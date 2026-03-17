@@ -1,5 +1,4 @@
-﻿
-using Habits.API.Policies;
+﻿using Habits.API.Policies;
 using Habits.Models;
 using Microsoft.AspNetCore.Authorization;
 
@@ -15,7 +14,6 @@ namespace Habits.API.DailyRoutines.Filters
         }
         public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
         {
-            {
                 var user = context.HttpContext.User;
                 var idRoutine = context.GetArgument<int>(0);
 
@@ -25,13 +23,12 @@ namespace Habits.API.DailyRoutines.Filters
                     return TypedResults.NotFound();
 
                 var authResult = await _authService.AuthorizeAsync
-                    (user, result.Value, new RoutineOwnerRequirement());
+                    (user, result.Value, new DailyRoutineOwnerRequirement());
 
                 if (!authResult.Succeeded)
                     return TypedResults.Forbid();
 
                 return await next(context);
-            }
         }
     }
 }
