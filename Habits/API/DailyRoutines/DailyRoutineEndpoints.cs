@@ -10,24 +10,17 @@ namespace Habits.API.DailyRoutines
         {
             Result<DailyRoutine> result = await service.GetRoutine(idDailyRoutine);
 
-            if (result.Status.Equals(Status.Ok))
-            {
-                return TypedResults.Ok(result.Value.ToGetDailyRoutineResponse());
-            }
-
-            return result.ToHttpResponse();
+            return result.Status.Equals(Status.Ok)
+                ? TypedResults.Ok(result.Value.ToGetDailyRoutineResponse())
+                : result.ToHttpResponse();
         }
-        public static IResult GetDailyRoutines(string username, GetDailyRoutineQueryParams filters, DailyRoutineService service)
+        public static async Task<IResult> GetDailyRoutines(string username, GetDailyRoutineQueryParams filters, DailyRoutineService service)
         {
-            Result<List<DailyRoutine>> result = service.GetRoutines(username, filters);
+            Result<List<DailyRoutine>> result = await service.GetRoutines(username, filters);
 
-            if (result.Status.Equals(Status.Ok))
-            {
-                GetAllDailyRoutinesResponse res = new GetAllDailyRoutinesResponse(result.Value);
-                return TypedResults.Ok(res);
-            }
-
-            return result.ToHttpResponse();
+            return result.Status.Equals(Status.Ok)
+                ? TypedResults.Ok(result.Value.ToGetAllDailyRoutinesResponse())
+                : result.ToHttpResponse();
         }
         public static async Task<IResult> PatchMinutes(int idDailyRoutine, PatchDailyRoutineRequest body, DailyRoutineService service)
         {

@@ -5,10 +5,10 @@ namespace Habits.API.DailyRoutines.DTO
 {
     public record GetDailyRoutineResponse(
         int IdDailyRoutine, 
-        GetMinimalRoutineResponse SimpleTask, 
+        GetMinimalRoutineResponse Routine, 
         int MinutesCompleted, 
         int TotalMinutes, 
-        double PercentageCompleted,
+        string PercentageCompleted,
         DateTimeOffset? CompletedAt
     );
 
@@ -24,7 +24,7 @@ namespace Habits.API.DailyRoutines.DTO
                 new GetMinimalRoutineResponse(task.IdRoutine, task.Name),
                 dailyRoutine.MinutesCompleted,
                 dailyRoutine.TotalMinutes,
-                percentage,
+                $"{percentage.ToString("00.00")}%",
                 dailyRoutine.CompletedAt
             );
         }

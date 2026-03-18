@@ -3,36 +3,33 @@ using Habits.Models;
 
 namespace Habits.API.DailyRoutines.DTO
 {
-    public record GetAllDailyRoutinesResponse : BaseListResponse<GetDailyRoutineResponse>
+    public record GetAllDailyRoutinesResponse
+        (
+        List <GetDailyRoutineResponse > Results,
+        int Count,
+        int TotalMinutes,
+        int MinutesCompleted,
+        int MinutesLeft,
+        string PercentageCompleted
+        ) : IBaseListResponse<GetDailyRoutineResponse>;
+    
+    public static class GetAllDailyRoutinesResponseExtensions
     {
-        public int TotalMinutes { get; init; } = 0;
-        public int MinutesCompleted { get; init; } = 0;
-        public int MinutesLeft { get; init; } = 0;
-        public string PercentageCompleted { get; init; } = "0.00%";
-        public GetAllDailyRoutinesResponse(List<DailyRoutine> results) :
-            base(
-                results
-                    .Select(res => res.ToGetDailyRoutineResponse())
-                    .ToList(),
-                results.Count
-            )
+        public static GetAllDailyRoutinesResponse ToGetAllDailyRoutinesResponse(this List<DailyRoutine> list)
         {
-            TotalMinutes = GetTotalMinutes();
-            MinutesCompleted = GetMinutesCompleted();
-            MinutesLeft = TotalMinutes - MinutesCompleted;
-            PercentageCompleted = GetTotalPercentage();
-        }
-        public int GetMinutesCompleted() =>
-            Results.Aggregate(0, (acc, task) => acc += task.MinutesCompleted);
-        public int GetTotalMinutes() =>
-            Results.Aggregate(0, (acc, task) => acc += task.TotalMinutes);
-        public string GetTotalPercentage()
-        {
-            double percentage = (double)GetMinutesCompleted() / GetTotalMinutes() * 100;
+            int minutesCompleted = list.Aggregate(0, (acc, task) => acc += task.MinutesCompleted);
+            int totalMinutes = list.Aggregate(0, (acc, task) => acc += task.TotalMinutes);
+            double percentage = (double)minutesCompleted / totalMinutes * 100;
 
-            return double.IsFinite(percentage)
-                ? $"{percentage.ToString("00.00")}%"
-                : "0.00%";
+            return new GetAllDailyRoutinesResponse(
+                list.Select(d => d.ToGetDailyRoutineResponse()).ToList(),
+                list.Count,
+                totalMinutes,
+                minutesCompleted,
+                totalMinutes - minutesCompleted,
+                $"{percentage.ToString("00.00")}%"
+
+            );
         }
     }
 }

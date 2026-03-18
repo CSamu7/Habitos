@@ -1,4 +1,8 @@
 ﻿namespace Habits.Common
 {
-    public record BaseListResponse<T>(List<T> Results, int Count);
+    public interface IBaseListResponse<T>
+    {
+        public List<T> Results { get; init; }
+        public int Count { get; init; }
+    }
 }
