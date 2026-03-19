@@ -14,7 +14,7 @@ namespace Testing.IntegrationTesting
     public class CustomWebApplication : WebApplicationFactory<Program>, IAsyncLifetime
     {
         private readonly MsSqlContainer _sqlContainer = new MsSqlBuilder
-            ("habits-test-database:0.1")
+            ("samu6767/habits-test-db:1.0")
             .WithName("test")
             .WithWaitStrategy(Wait.ForUnixContainer().UntilMessageIsLogged("All done!"))
             .Build();
