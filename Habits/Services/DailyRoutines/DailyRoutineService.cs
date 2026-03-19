@@ -4,12 +4,15 @@ using Habits.Features.DailyTasks.Models;
 using Habits.Models;
 using Habits.Services.DailyRoutines;
 using Habits.Services.DailyTasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 public class DailyRoutineService
 {
     private HabitsContext _db;
-    public DailyRoutineService(HabitsContext db)
+    private UserManager<User> _userManager;
+    public DailyRoutineService(HabitsContext db, UserManager<User> userManager)
     {
+        _userManager = userManager;
         _db = db;
     }
     public async Task<Result<DailyRoutine>> GetRoutine(int idDailyRoutine)
@@ -22,11 +25,13 @@ public class DailyRoutineService
 
         return Result<DailyRoutine>.Success(dailyTask);
     }
-    public Result<List<DailyRoutine>> GetRoutines(string idUser, GetDailyRoutineQueryParams queryParams)
+    public async Task<Result<List<DailyRoutine>>> GetRoutines(string username, GetDailyRoutineQueryParams queryParams)
     {
+        User? user = await _userManager.FindByNameAsync(username);
+
         var dailyTasks = _db.DailyRoutines
             .Include(d => d.IdRoutineNavigation)
-            .Where(d => d.IdRoutineNavigation.IdUser == idUser)
+            .Where(d => d.IdRoutineNavigation.IdUser == user.Id)
             .AsNoTracking()
             .ToList();
 

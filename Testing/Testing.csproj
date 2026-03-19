@@ -29,4 +29,9 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="IntegrationTesting\UserEndpoints\" />
+    <Folder Include="IntegrationTesting\RoutineEndpoints\" />
+  </ItemGroup>
+
 </Project>

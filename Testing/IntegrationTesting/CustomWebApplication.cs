@@ -9,13 +9,12 @@ using Testcontainers.MsSql;
 
 namespace Testing.IntegrationTesting
 {
-    [CollectionDefinition("HabitsTests")]
-    public class DbSharedTestCollection : ICollectionFixture<CustomWebApplication>;
-
+    [CollectionDefinition("Database collection")]
+    public class DbSharedTestCollection : ICollectionFixture<CustomWebApplication> { }
     public class CustomWebApplication : WebApplicationFactory<Program>, IAsyncLifetime
     {
         private readonly MsSqlContainer _sqlContainer = new MsSqlBuilder
-            ("habits-test-database")
+            ("habits-test-database:0.1")
             .WithName("test")
             .WithWaitStrategy(Wait.ForUnixContainer().UntilMessageIsLogged("All done!"))
             .Build();
