@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Habits.API.Policies
 {
-    
+
     public class IsOwnerFilter : IEndpointFilter
     {
         private readonly IAuthorizationService _authService;

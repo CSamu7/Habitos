@@ -35,7 +35,7 @@ namespace Habits.API.Users
             //User Routes
             userRoutes.MapGet("", UserEndpoints.GetUser)
                 .WithName("getUser");
-            
+
             userRoutes.MapPost("/register", UserEndpoints.Register)
                 .AddEndpointFilter<RegisterUserEndpointFilter>()
                 .WithName("registerUser");

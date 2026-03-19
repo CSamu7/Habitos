@@ -1,5 +1,4 @@
 ﻿using Habits.API.Policies;
-using Habits.Models;
 using Habits.Services.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
@@ -29,7 +28,7 @@ namespace Habits.API.Routines.Filters
 
             if (!authResult.Succeeded)
                 return TypedResults.Forbid();
-                    
+
             return await next(context);
         }
     }

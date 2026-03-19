@@ -1,8 +1,6 @@
 ﻿using Habits.API.Users.DTO;
 using Habits.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Immutable;
 using System.Security.Claims;
 
 namespace Habits.API.Users
@@ -29,7 +27,7 @@ namespace Habits.API.Users
         }
         public static async Task<IResult> Login(LoginUser loginUser, UserManager<User> userManager, SignInManager<User> signInManager)
         {
-           var result = await signInManager.PasswordSignInAsync(loginUser.Username, loginUser.Password, false, false);
+            var result = await signInManager.PasswordSignInAsync(loginUser.Username, loginUser.Password, false, false);
 
             if (!result.Succeeded)
                 return TypedResults.Problem("Invalid username or password", statusCode: 401);

@@ -13,7 +13,7 @@ namespace Testing
         {
             DateTimeOffset today = new DateTime(2026, 2, 26);
             TimeProvider testDate = new FakeTimeProvider(today);
-            
+
             builder.ConfigureTestServices(services =>
             {
                 services.RemoveAll<TimeProvider>();

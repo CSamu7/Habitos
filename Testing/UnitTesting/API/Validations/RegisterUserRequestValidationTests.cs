@@ -1,11 +1,10 @@
 ﻿using FluentValidation.TestHelper;
 using Habits.API.Users.DTO;
 using Habits.API.Users.Validations;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace Testing.UnitTesting.API.Validations
 {
-    public class RegisterUserRequestValidationTests 
+    public class RegisterUserRequestValidationTests
     {
         [Fact]
         public void Min_goal_is_between_50_and_100()
@@ -32,7 +31,8 @@ namespace Testing.UnitTesting.API.Validations
         }
 
         [Fact]
-        public void Password_is_not_empty() {
+        public void Password_is_not_empty()
+        {
             var sut = new RegisterUserRequestValidation();
             RegisterUserRequest dto = new("Test", "valido@.com", "", 24, new DateTime(2020, 1, 1, 23, 11, 11));
 

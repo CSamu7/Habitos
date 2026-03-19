@@ -1,6 +1,5 @@
 ﻿using Habits.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Routing;
 
 namespace Habits.API.Policies
 {

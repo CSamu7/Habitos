@@ -5,14 +5,14 @@ namespace Habits.API.DailyRoutines.DTO
 {
     public record GetAllDailyRoutinesResponse
         (
-        List <GetDailyRoutineResponse > Results,
+        List<GetDailyRoutineResponse> Results,
         int Count,
         int TotalMinutes,
         int MinutesCompleted,
         int MinutesLeft,
         string PercentageCompleted
         ) : IBaseListResponse<GetDailyRoutineResponse>;
-    
+
     public static class GetAllDailyRoutinesResponseExtensions
     {
         public static GetAllDailyRoutinesResponse ToGetAllDailyRoutinesResponse(this List<DailyRoutine> list)

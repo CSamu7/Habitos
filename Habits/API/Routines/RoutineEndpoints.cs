@@ -2,7 +2,6 @@
 using Habits.Common;
 using Habits.Models;
 using Habits.Services.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +20,7 @@ namespace Habits.API.Routines
             {
                 Routine routine = result.Value;
 
-                GetRoutineResponse response = new GetRoutineResponse(routine.IdRoutine, routine.Name, routine.Minutes, routine.IdCategory); 
+                GetRoutineResponse response = new GetRoutineResponse(routine.IdRoutine, routine.Name, routine.Minutes, routine.IdCategory);
                 return TypedResults.Ok<GetRoutineResponse>(response);
             }
 
@@ -46,7 +45,7 @@ namespace Habits.API.Routines
             return result.ToHttpResponse();
         }
         public static async Task<IResult> PatchRoutine(
-            int idRoutine, 
+            int idRoutine,
             [FromBody] JsonElement jsonElement,
             RoutineService service)
         {
@@ -54,7 +53,7 @@ namespace Habits.API.Routines
             var doc = JsonConvert.DeserializeObject<JsonPatchDocument>(json)?.Sanitize();
 
             try
-            { 
+            {
                 var result = await service.PatchTask(idRoutine, doc);
                 return Results.Ok();
             } catch (JsonPatchException ex)

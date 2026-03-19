@@ -8,7 +8,7 @@ namespace Habits.API.DailyRoutines.Filters
     {
         protected override Task HandleRequirementAsync(
             AuthorizationHandlerContext context,
-            DailyRoutineOwnerRequirement requirement, 
+            DailyRoutineOwnerRequirement requirement,
             DailyRoutine resource)
         {
             string? user = context.User.Identity?.Name;

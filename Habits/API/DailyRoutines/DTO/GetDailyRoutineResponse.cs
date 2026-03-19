@@ -4,10 +4,10 @@ using Habits.Models;
 namespace Habits.API.DailyRoutines.DTO
 {
     public record GetDailyRoutineResponse(
-        int IdDailyRoutine, 
-        GetMinimalRoutineResponse Routine, 
-        int MinutesCompleted, 
-        int TotalMinutes, 
+        int IdDailyRoutine,
+        GetMinimalRoutineResponse Routine,
+        int MinutesCompleted,
+        int TotalMinutes,
         string PercentageCompleted,
         DateTimeOffset? CompletedAt
     );

@@ -3,10 +3,10 @@
 namespace Habits.API.Users.DTO
 {
     public record RegisterUserRequest(
-        string Username, 
-        string Email, 
+        string Username,
+        string Email,
         string Password,
-        byte MinGoal, 
+        byte MinGoal,
         DateTimeOffset CutOffTime
     );
     public static class RegisterUserExtensions

@@ -7,8 +7,8 @@ namespace Habits.API.Policies
     public class RoutineAuthorizationHandler : AuthorizationHandler<RoutineOwnerRequirement, Routine>
     {
         protected override Task HandleRequirementAsync(
-            AuthorizationHandlerContext context, 
-            RoutineOwnerRequirement requirement, 
+            AuthorizationHandlerContext context,
+            RoutineOwnerRequirement requirement,
             Routine routine)
         {
             string? owner = routine.IdUserNavigation?.UserName;

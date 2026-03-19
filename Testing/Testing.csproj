@@ -10,6 +10,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="IntegrationTesting\RoutineEndpoints\**" />
+    <Compile Remove="IntegrationTesting\UserEndpoints\**" />
+    <EmbeddedResource Remove="IntegrationTesting\RoutineEndpoints\**" />
+    <EmbeddedResource Remove="IntegrationTesting\UserEndpoints\**" />
+    <None Remove="IntegrationTesting\RoutineEndpoints\**" />
+    <None Remove="IntegrationTesting\UserEndpoints\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.24" />
     <PackageReference Include="Microsoft.Extensions.TimeProvider.Testing" Version="10.3.0" />
@@ -27,11 +36,6 @@
 
   <ItemGroup>
     <Using Include="Xunit" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="IntegrationTesting\UserEndpoints\" />
-    <Folder Include="IntegrationTesting\RoutineEndpoints\" />
   </ItemGroup>
 
 </Project>

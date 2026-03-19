@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using Habits.API.Routines.DTO;
 using Habits.API.Users.DTO;
 
 namespace Habits.API.Users.Validations
@@ -21,9 +20,9 @@ namespace Habits.API.Users.Validations
                 .WithMessage("You can't enter an empty password");
 
             RuleFor(x => x.MinGoal)
-                .GreaterThanOrEqualTo((byte) 50)
+                .GreaterThanOrEqualTo((byte)50)
                 .WithMessage("You can't enter less than 50%")
-                .LessThanOrEqualTo((byte) 100)
+                .LessThanOrEqualTo((byte)100)
                 .WithMessage("You can't enter greather than 100%");
         }
     }

@@ -11,7 +11,7 @@ namespace Habits.API.Policies
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, IsOwnerRequirement requirement, string resource)
         {
             var username = context.User.Identity?.Name;
-            
+
             if (username is not null && username == resource)
             {
                 context.Succeed(requirement);
