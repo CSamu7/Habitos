@@ -1,4 +1,4 @@
-# HABITS
+# Habitos
 Un proyecto para dar un seguimiento a mi rutina
 
 Este proyecto empezó porque yo le doy un seguimiento a mi rutina en una hoja de Excel, y aunque me ha servido para lo básico, pero se ha vuelto complicado querer implementar nuevas características como estadísticas o la automatización de creación de tareas diarias. 
