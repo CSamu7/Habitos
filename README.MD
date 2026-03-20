@@ -24,8 +24,7 @@ git clone https://github.com/CSamu7/Habitos.git
 ## Diagramas del proyecto
 ### Base de datos
 <img width="715" height="763" alt="Image" src="https://github.com/user-attachments/assets/3b9c628a-4031-414f-badd-9a68124e5d18" />
+
 ### Sistema
-[
-![Image](https://github.com/user-attachments/assets/4f07fe32-d7c1-4685-89db-906e2b464707)
-](url)
+[![Image](https://github.com/user-attachments/assets/4f07fe32-d7c1-4685-89db-906e2b464707)](url)
 
