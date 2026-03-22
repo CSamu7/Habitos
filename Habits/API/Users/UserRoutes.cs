@@ -14,7 +14,7 @@ namespace Habits.API.Users
         {
             var userRoutes = router.MapGroup("/users");
 
-            //Nested dailyTasks
+            //Nested dailyRoutines
             userRoutes.MapGet("/{username}/dailyRoutines/today", DailyRoutineEndpoints.GetDailyRoutines)
                 .AddEndpointFilter<IsOwnerFilter>();
 
@@ -22,7 +22,7 @@ namespace Habits.API.Users
                 .AddEndpointFilter<IsOwnerFilter>()
                 .AddEndpointFilter<GetAllDailyRoutinesEndpointFilter>();
 
-            //Nestad Tasks
+            //Nested Routines
             userRoutes.MapPost("/{username}/routines", RoutineEndpoints.PostRoutine)
                 .AddEndpointFilter<IsOwnerFilter>()
                 .AddEndpointFilter<PostRoutineFilter>();

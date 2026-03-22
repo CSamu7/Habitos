@@ -5,18 +5,17 @@ using Habits.Services.DailyRoutines;
 
 namespace Testing.UnitTesting.API.Validations
 {
-    public class PatchDailyTaskValidationTests
+    public class PatchDailyRoutineValidationTests
     {
         [Fact]
         public void Negative_minutes_are_invalid()
         {
             PatchDailyTaskValidation sut = new PatchDailyTaskValidation();
-            PatchDailyRoutineRequest request = new PatchDailyRoutineRequest
-            {
-                FinishedAt = new DateTime(2000, 1, 1),
-                Minutes = -4,
-                Operation = PatchOperations.Add
-            };
+            PatchDailyRoutineRequest request = new PatchDailyRoutineRequest(
+                -4,
+                 new DateTime(2000, 1, 1),
+                 PatchOperations.Add
+            );
 
             var result = sut.TestValidate(request);
 
@@ -29,12 +28,11 @@ namespace Testing.UnitTesting.API.Validations
         public void Minutes_greather_than_8_hours_are_invalid()
         {
             PatchDailyTaskValidation sut = new PatchDailyTaskValidation();
-            PatchDailyRoutineRequest request = new PatchDailyRoutineRequest
-            {
-                FinishedAt = new DateTime(2000, 1, 1),
-                Minutes = (8 * 60),
-                Operation = PatchOperations.Add
-            };
+            PatchDailyRoutineRequest request = new PatchDailyRoutineRequest(
+                8 * 60,
+                new DateTime(2000, 1, 1),
+                PatchOperations.Add
+            );
 
             var result = sut.TestValidate(request);
 

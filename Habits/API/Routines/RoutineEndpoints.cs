@@ -2,6 +2,7 @@
 using Habits.Common;
 using Habits.Models;
 using Habits.Services.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -26,10 +27,10 @@ namespace Habits.API.Routines
 
             return result.ToHttpResponse();
         }
-        public static async Task<IResult> PostRoutine(string username, PostRoutineRequest body, LinkGenerator generator, RoutineService service)
+        public static async Task<IResult> PostRoutine(string username, PostRoutineRequest body, LinkGenerator generator, RoutineService service, UserManager<User> manager)
         {
-            Result<Routine> result = await service.PostRoutine(username, body);
-            //TODO: IsSameUser Authorization
+            var user = await manager.FindByNameAsync(username);
+            Result<Routine> result = await service.PostRoutine(user.Id, body);
 
             if (result.Status.Equals(Status.Ok))
             {
@@ -37,9 +38,23 @@ namespace Habits.API.Routines
 
                 GetRoutineResponse response = new GetRoutineResponse(routine.IdRoutine, routine.Name, routine.Minutes, routine.IdCategory);
                 string? uri = generator.GetPathByName
-                    ("getTask", new() { { "idTask", response.Id } });
+                    ("getRoutine", new() { { "idRoutine", response.Id } });
 
                 return TypedResults.Created<GetRoutineResponse>(uri, response);
+            }
+
+            return result.ToHttpResponse();
+        }
+        public static async Task<IResult> GetAllRoutines(string username, RoutineService service, UserManager<User> manager)
+        {
+            //TODO: IsSameUser Authorization
+            var user = await manager.FindByNameAsync(username);
+            Result<List<Routine>> result = await service.GetAllRoutines(user.Id);
+
+            if (result.Status.Equals(Status.Ok))
+            {
+                List<GetRoutineResponse> tasks = result.Value.Select(task => new GetRoutineResponse(task.IdRoutine, task.Name, task.Minutes, task.IdCategory)).ToList();
+                return TypedResults.Ok(tasks);
             }
 
             return result.ToHttpResponse();
@@ -61,24 +76,12 @@ namespace Habits.API.Routines
                 return Results.Problem(ex.Message, statusCode: 400);
             }
         }
-        public static async Task<IResult> GetAllRoutines(string username, RoutineService service)
-        {
-            //TODO: IsSameUser Authorization
-            Result<List<Routine>> result = await service.GetAllRoutines(username);
 
-            if (result.Status.Equals(Status.Ok))
-            {
-                List<GetRoutineResponse> tasks = result.Value.Select(task => new GetRoutineResponse(task.IdRoutine, task.Name, task.Minutes, task.IdCategory)).ToList();
-                return TypedResults.Ok<List<GetRoutineResponse>>(tasks);
-            }
-
-            return result.ToHttpResponse();
-        }
         public static async Task<IResult> DeleteTask(int idRoutine, RoutineService service)
         {
             Result<Routine> result = await service.DeleteTask(idRoutine);
 
-            return Results.Ok();
+            return Results.NoContent();
         }
     }
 }
