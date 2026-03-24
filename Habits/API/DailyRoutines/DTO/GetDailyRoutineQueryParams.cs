@@ -6,8 +6,8 @@ namespace Habits.API.DailyRoutines.DTO
     {
         public DateOnly DateStart { get; set; }
         public DateOnly DateEnd { get; set; }
-        public Progress? Progress { get; set; }
-        public GetDailyRoutineQueryParams(DateOnly dateStart, DateOnly dateEnd, Progress? progress)
+        public Progress[] Progress { get; set; }
+        public GetDailyRoutineQueryParams(DateOnly dateStart, DateOnly dateEnd, Progress[] progress)
         {
             DateStart = dateStart;
             DateEnd = dateEnd;
@@ -19,7 +19,15 @@ namespace Habits.API.DailyRoutines.DTO
             const string dateEndKey = "dateEnd";
             const string progressKey = "progress";
 
-            Enum.TryParse(context.Request.Query[progressKey], ignoreCase: true, out Progress progress);
+            string? progressParams = context.Request.Query[progressKey];
+            string[] progressList = progressParams?.Split(",") ?? [];
+            List<Progress> finalProgress = [];
+
+            foreach(string strProgress in progressList)
+            {
+                Enum.TryParse(strProgress, ignoreCase: true, out Progress progress);
+                finalProgress.Add(progress);
+            }
 
             if (!DateOnly.TryParse(context.Request.Query[dateEndKey], out DateOnly dateEnd))
                 dateEnd = DateOnly.FromDateTime(DateTime.UtcNow);
@@ -27,7 +35,7 @@ namespace Habits.API.DailyRoutines.DTO
             if (!DateOnly.TryParse(context.Request.Query[dateStartKey], out DateOnly dateStart))
                 dateStart = dateEnd.AddDays(-1);
 
-            var result = new GetDailyRoutineQueryParams(dateStart, dateEnd, progress);
+            var result = new GetDailyRoutineQueryParams(dateStart, dateEnd, finalProgress.ToArray());
 
             return await ValueTask.FromResult<GetDailyRoutineQueryParams?>(result);
         }

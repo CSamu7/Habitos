@@ -9,19 +9,22 @@ namespace Habits.Features.DailyTasks.Models
         {
             DateTimeOffset today = DateTimeOffset.UtcNow;
 
-            bool isTodayTask = dailyTask.Date > today.Subtract(new TimeSpan(23, 59, 59));
-            bool taskNotCompleted = dailyTask.MinutesCompleted < dailyTask.TotalMinutes;
-            bool taskCompleted = dailyTask.MinutesCompleted == dailyTask.TotalMinutes;
-            bool taskOverDone = dailyTask.MinutesCompleted > dailyTask.TotalMinutes;
+            bool isTaskActive = dailyTask.Date > today.Subtract(new TimeSpan(23, 59, 59));
+            bool isTaskStarted = dailyTask.MinutesCompleted < dailyTask.TotalMinutes && dailyTask.TotalMinutes > 0;
 
-            //Tarea que no ha sido iniciada pero todavia se puede hacer
-            if (isTodayTask && taskNotCompleted)
+            bool isTaskCompleted = dailyTask.MinutesCompleted == dailyTask.TotalMinutes;
+            bool isTaskOverdone = dailyTask.MinutesCompleted > dailyTask.TotalMinutes;
+
+            if (isTaskActive && dailyTask.MinutesCompleted == 0)
                 return Progress.NotDone;
 
-            if (taskCompleted)
+            if (isTaskActive && isTaskStarted)
+                return Progress.InProgress;
+
+            if (isTaskCompleted)
                 return Progress.Done;
 
-            if (taskOverDone)
+            if (isTaskOverdone)
                 return Progress.Overdone;
 
             return Progress.Incomplete;

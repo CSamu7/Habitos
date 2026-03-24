@@ -20,7 +20,14 @@ namespace Habits.API.Users
 
             userRoutes.MapGet("/{username}/dailyRoutines", DailyRoutineEndpoints.GetDailyRoutines)
                 .AddEndpointFilter<IsOwnerFilter>()
-                .AddEndpointFilter<GetAllDailyRoutinesEndpointFilter>();
+                .AddEndpointFilter<GetAllDailyRoutinesEndpointFilter>()
+                .WithDescription("""
+                    NotDone: Task that is available and it haven't been started
+                    InProgress: Task that is available and it has been started but not completed
+                    Done: Task completed
+                    Incomplete: Task that is not available and it wasn't completed.
+                    Overdone: Task that overpassed its time. 
+                """);
 
             //Nested Routines
             userRoutes.MapPost("/{username}/routines", RoutineEndpoints.PostRoutine)
