@@ -48,7 +48,7 @@ public class DailyRoutineService
             .ToList();
 
         if (queryParams.Progress is not null)
-            byDate = byDate.Where(d => d.GetProgress() == queryParams.Progress).ToList();
+            byDate = byDate.Where(d => queryParams.Progress.Contains(d.GetProgress())).ToList();
 
         return byDate;
     }

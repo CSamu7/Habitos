@@ -20,7 +20,7 @@ namespace Testing.UnitTesting.API
 
         private JsonPatchDocument CreateInvalidDocument()
         {
-            string rawJson = "[\n  {\n    \"op\": \"replace\",\n    \"path\": \"/IdTask\",\n    \"value\": \"Grokking Algorithms\"\n  },\n  {\n    \"op\": \"replace\"\n  }\n]";
+            string rawJson = "[\n{\n\"op\":\"replace\",\n\"path\": \"/IdTask\",\n \"value\":\"Grokking Algorithms\"\n  },\n  {\n\"op\": \"replace\"\n  }\n]";
 
             var document = JsonConvert.DeserializeObject<JsonPatchDocument>(rawJson);
 

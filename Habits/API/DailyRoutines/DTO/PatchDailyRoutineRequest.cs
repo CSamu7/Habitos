@@ -2,10 +2,5 @@
 
 namespace Habits.API.DailyRoutines.DTO
 {
-    public class PatchDailyRoutineRequest
-    {
-        public int Minutes { get; set; }
-        public DateTimeOffset FinishedAt { get; set; }
-        public PatchOperations Operation { get; set; }
-    }
+    public record PatchDailyRoutineRequest(int Minutes, DateTimeOffset FinishedAt, PatchOperations Operation);
 }

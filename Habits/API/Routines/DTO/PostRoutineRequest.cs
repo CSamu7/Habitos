@@ -2,13 +2,7 @@
 
 namespace Habits.API.Routines.DTO
 {
-    public class PostRoutineRequest
-    {
-        public required string Name { get; set; }
-        public int Minutes { get; set; }
-        public int? IdCategory { get; set; } = null;
-    }
-
+    public record PostRoutineRequest(string Name, int Minutes, int? IdCategory);
     public static class PostTaskRequestExtensions
     {
         public static Routine ToTask(this PostRoutineRequest postRoutineRequest)
@@ -25,11 +19,11 @@ namespace Habits.API.Routines.DTO
         public static PostRoutineRequest FromTask(this Routine task)
         {
             return new PostRoutineRequest
-            {
-                Name = task.Name,
-                Minutes = task.Minutes,
-                IdCategory = task.IdCategory,
-            };
+            (
+                task.Name,
+                task.Minutes,
+                task.IdCategory
+            );
         }
     }
 }

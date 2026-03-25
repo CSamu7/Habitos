@@ -19,7 +19,7 @@ namespace Habits.API.DailyRoutines.DTO
         {
             int minutesCompleted = list.Aggregate(0, (acc, task) => acc += task.MinutesCompleted);
             int totalMinutes = list.Aggregate(0, (acc, task) => acc += task.TotalMinutes);
-            double percentage = (double)minutesCompleted / totalMinutes * 100;
+            double percentage = totalMinutes > 0 ? (double)minutesCompleted / totalMinutes * 100 : 0;
 
             return new GetAllDailyRoutinesResponse(
                 list.Select(d => d.ToGetDailyRoutineResponse()).ToList(),

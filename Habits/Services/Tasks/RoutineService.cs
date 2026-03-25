@@ -1,6 +1,6 @@
 ﻿using Habits.API.Routines.DTO;
 using Habits.Models;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,11 +9,9 @@ namespace Habits.Services.Tasks
     public class RoutineService
     {
         private HabitsContext _db;
-        private IAuthorizationService _authService;
-        public RoutineService(HabitsContext db, IAuthorizationService authService)
+        public RoutineService(HabitsContext db, UserManager<User> authService)
         {
             _db = db;
-            _authService = authService;
         }
         public async Task<Result<Routine>> GetRoutine(int idRoutine)
         {
@@ -34,10 +32,10 @@ namespace Habits.Services.Tasks
 
             return Result<List<Routine>>.Success(tasks);
         }
-        public async Task<Result<Routine>> PostRoutine(string idUser, PostRoutineRequest body)
+        public async Task<Result<Routine>> PostRoutine(string id, PostRoutineRequest body)
         {
             Routine routine = body.ToTask();
-            routine.IdUser = idUser;
+            routine.IdUser = id;
 
             if (routine.IdCategory is not null)
             {
@@ -46,10 +44,10 @@ namespace Habits.Services.Tasks
                 if (group is null) return Result<Routine>.Failure(Status.InvalidData, $"Category #{routine.IdCategory} doesn't exist");
             }
 
-            await _db.Routines.AddAsync(routine);
+            _db.Routines.Add(routine);
             await _db.SaveChangesAsync();
 
-            return Result<Habits.Models.Routine>.Success(routine);
+            return Result<Routine>.Success(routine);
         }
         //TODO: Implementar pruebas de integración.
         public async Task<Result<Routine>> PatchTask(int idRoutine, JsonPatchDocument body)
