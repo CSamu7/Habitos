@@ -28,7 +28,6 @@ namespace Habits.API
 
             return services;
         }
-
         public static IServiceCollection AddSwagger(this IServiceCollection services)
         {
             services.AddEndpointsApiExplorer();

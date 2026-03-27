@@ -51,6 +51,13 @@ if (builder.Environment.IsDevelopment())
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy("IsRoutineOwner", policy => policy.Requirements.Add(new RoutineOwnerRequirement()));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("PagesAllowed", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173").AllowAnyMethod().AllowAnyHeader();
+    });
+});
 
 builder.Services
     .AddSwagger()
@@ -60,8 +67,8 @@ builder.Services
 
 var app = builder.Build();
 
+app.UseCors("PagesAllowed");
 app.UseStatusCodePages();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
