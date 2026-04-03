@@ -1,40 +1,36 @@
 import { useState } from "react";
 import styles from "./Login.module.css";
 import Header from "../../../Components/Header";
-import { LOGIN_URL } from "../api";
+import { useLocation } from "wouter";
+import { authUser } from "../services/login";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-
-  interface LoginUserData {
-    username: string;
-    password: string;
-  }
+  const [error, setError] = useState("");
+  const [_, navigate] = useLocation();
 
   const handleSubmit = async () => {
-    setError(null);
+    setError("");
 
     if (!username || !password) {
-      setError("Por favor ingresa todos los campos");
+      setError("Por favor rellena todos los campos");
       return;
     }
 
-    const data: LoginUserData = { username, password };
+    const data = { username, password };
+    const response = await authUser(data);
 
-    const result = await fetch(LOGIN_URL, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-type": "application/json",
-      },
-    });
+    if (response.code != 200) {
+      setError(response.message);
+    } else {
+      navigate("/home");
+    }
   };
 
   return (
     <div className={styles.page}>
-      <Header>PORQUE</Header>
+      <Header>dsad</Header>
 
       <main className={styles.main}>
         <div className={styles.card}>
