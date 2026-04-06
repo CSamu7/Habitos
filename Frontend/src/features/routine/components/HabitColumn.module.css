@@ -1,0 +1,65 @@
+.column {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 16px;
+  border-right: 1px solid #e0e0e0;
+}
+
+.column:last-child {
+  border-right: none;
+}
+
+.columnHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 4px;
+}
+
+.statusLabel {
+  font-size: 1.3rem;
+  font-weight: 600;
+  flex: 1;
+}
+
+.pending {
+  color: var(--light-red);
+}
+
+.incomplete {
+  color: #c9a227;
+}
+.completed {
+  color: #4db6ac;
+}
+
+.count {
+  font-size: 14px;
+  color: #999;
+  font-weight: 500;
+}
+
+.sortBtn {
+  background: none;
+  border: none;
+  padding: 2px 4px;
+  cursor: pointer;
+  color: #aaa;
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  transition: color 0.15s;
+}
+
+.sortBtn:hover {
+  color: #555;
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

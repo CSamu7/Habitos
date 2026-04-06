@@ -14,6 +14,7 @@ export async function authUser(body: LoginUserData): Promise<ResponseMessage> {
   const result = await fetch(LOGIN_URL, {
     method: "POST",
     body: JSON.stringify(body),
+    credentials: "include",
     headers: {
       "Content-type": "application/json",
     },

@@ -1,6 +1,7 @@
-const URL_BASE: string = "https://localhost:7074";
-const API_URL: string = `${URL_BASE}/api`;
+const URL_BASE = "https://localhost:7074";
+const API_URL = `${URL_BASE}/api`;
 
-const USER_URL: string = `${API_URL}/users`;
+export const USER_URL = `${API_URL}/users`;
+export const ROUTINE_URL = `${API_URL}/routines/`;
 
-export const LOGIN_URL: string = `${USER_URL}/login`;
+export const LOGIN_URL = `${USER_URL}/login`;

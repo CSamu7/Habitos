@@ -24,7 +24,7 @@ export default function Login() {
     if (response.code != 200) {
       setError(response.message);
     } else {
-      navigate("/home");
+      navigate("/dashboard");
     }
   };
 

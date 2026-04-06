@@ -1,0 +1,11 @@
+.menu {
+  display: flex;
+  gap: 20px;
+  list-style-type: none;
+  align-items: center;
+}
+
+.menuLink {
+  color: white;
+  text-decoration: none;
+}

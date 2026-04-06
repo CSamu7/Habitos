@@ -1,0 +1,28 @@
+.summary {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding-bottom: 12px;
+}
+
+.summaryText {
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.summaryText strong {
+  font-weight: 700;
+  color: #111;
+}
+
+.summaryTime {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #555;
+}
+
+.summaryTime svg {
+  color: #888;
+}
