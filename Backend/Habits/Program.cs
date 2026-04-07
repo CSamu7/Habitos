@@ -55,7 +55,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("PagesAllowed", policy =>
     {
-        policy.WithOrigins("http://localhost:5173").AllowAnyMethod().AllowAnyHeader();
+        policy.WithOrigins("http://localhost:5173").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
     });
 });
 

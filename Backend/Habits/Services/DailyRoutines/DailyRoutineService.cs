@@ -41,10 +41,13 @@ public class DailyRoutineService
     }
     private List<DailyRoutine> Filter(List<DailyRoutine> dailyTasks, GetDailyRoutineQueryParams queryParams)
     {
+        DateTimeOffset startDate = queryParams.DateStart.ToDateTimeOffset();
+        DateTimeOffset dateEnd = queryParams.DateEnd.ToDateTimeOffset();
+
         List<DailyRoutine> byDate = dailyTasks
             .Where(d =>
-                DateTimeOffset.Compare(queryParams.DateStart.ToDateTimeOffset(), d.Date) <= 0 &&
-                DateTimeOffset.Compare(d.Date, queryParams.DateEnd.ToDateTimeOffset()) <= 0)
+                DateTimeOffset.Compare(startDate, d.Date) <= 0 &&
+                DateTimeOffset.Compare(d.Date, dateEnd) < 0)
             .ToList();
 
         if (queryParams.Progress is not null)
