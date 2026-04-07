@@ -2,7 +2,7 @@ import HabitColumn from "./HabitColumn";
 import styles from "./HabitBoard.module.css";
 import type { GetDailyTasksResponse } from "../types";
 import { useEffect, useState } from "react";
-import { getAllRoutines } from "../services/routineServices";
+import { getTodayTasks } from "../services/routineServices";
 import BoardSummary from "./BoardSummary";
 
 export default function HabitBoard({ username }: { username: string }) {
@@ -20,7 +20,7 @@ export default function HabitBoard({ username }: { username: string }) {
   useEffect(() => {
     const getRoutines = async () => {
       setError(null);
-      const routines = await getAllRoutines(username);
+      const routines = await getTodayTasks(username);
 
       if ("message" in routines) {
         setError(routines.message);

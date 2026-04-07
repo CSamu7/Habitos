@@ -9,7 +9,7 @@
 
 .columns {
   display: flex;
-  gap: 0;
+  gap: 20px;
   flex: 1;
   align-items: flex-start;
 }
