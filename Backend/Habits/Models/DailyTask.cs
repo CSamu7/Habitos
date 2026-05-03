@@ -1,8 +1,8 @@
 ﻿namespace Habits.Models;
 
-public partial class DailyRoutine
+public partial class DailyTask
 {
-    public int IdDailyRoutine { get; set; }
+    public int IdDailyTask { get; set; }
 
     public int IdRoutine { get; set; }
 

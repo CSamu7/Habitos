@@ -8,7 +8,7 @@ namespace Habits.API.DailyRoutines
     {
         public static async Task<IResult> GetDailyRoutine(int idDailyRoutine, DailyRoutineService service)
         {
-            Result<DailyRoutine> result = await service.GetRoutine(idDailyRoutine);
+            Result<DailyTask> result = await service.GetRoutine(idDailyRoutine);
 
             return result.Status.Equals(Status.Ok)
                 ? TypedResults.Ok(result.Value.ToGetDailyRoutineResponse())
@@ -16,7 +16,7 @@ namespace Habits.API.DailyRoutines
         }
         public static async Task<IResult> GetDailyRoutines(string username, GetDailyRoutineQueryParams filters, DailyRoutineService service)
         {
-            Result<List<DailyRoutine>> result = await service.GetRoutines(username, filters);
+            Result<List<DailyTask>> result = await service.GetRoutines(username, filters);
 
             return result.Status.Equals(Status.Ok)
                 ? TypedResults.Ok(result.Value.ToGetAllDailyRoutinesResponse())
@@ -24,7 +24,7 @@ namespace Habits.API.DailyRoutines
         }
         public static async Task<IResult> PatchMinutes(int idDailyRoutine, PatchDailyRoutineRequest body, DailyRoutineService service)
         {
-            Result<DailyRoutine> result = body.Operation switch
+            Result<DailyTask> result = body.Operation switch
             {
                 PatchOperations.Add => await service.PatchMinutes(idDailyRoutine, body),
                 _ => await service.PatchMinutes(idDailyRoutine, body),

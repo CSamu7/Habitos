@@ -5,7 +5,7 @@ namespace Habits.Services.DailyRoutines
 {
     public interface IDailyTaskPatchCommand
     {
-        public void ChangeMinutes(DailyRoutine dailyTask, PatchDailyRoutineRequest body);
+        public void ChangeMinutes(DailyTask dailyTask, PatchDailyRoutineRequest body);
     }
     public enum PatchOperations { Add, Replace }
 }

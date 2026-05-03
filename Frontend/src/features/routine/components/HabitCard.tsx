@@ -1,5 +1,14 @@
 import type { DailyTaskResponse } from "../types";
+import AddMinutesForm from "./AddMinutesForm";
 import styles from "./HabitCard.module.css";
+
+type HabitCardDetails = {
+  activeIndex: number;
+  onActive: (key: number) => void;
+  position: number;
+};
+
+type HabitCardProps = DailyTaskResponse & HabitCardDetails;
 
 export default function HabitCard({
   idDailyRoutine,
@@ -8,12 +17,12 @@ export default function HabitCard({
   totalMinutes,
   percentageCompleted,
   completedAt,
-}: DailyTaskResponse) {
+  onActive,
+  position,
+  activeIndex,
+}: HabitCardProps) {
   return (
-    <div
-      className={`${styles.card}`}
-      onClick={() => console.log("CLICK CLICK")}
-    >
+    <div className={`${styles.card}`} onClick={() => onActive(position)}>
       <div className={styles.header}>
         <span className={styles.name}>{routine.name}</span>
       </div>
@@ -28,6 +37,9 @@ export default function HabitCard({
           <span>{percentageCompleted}</span>
         </div>
       </div>
+      {activeIndex === position && (
+        <AddMinutesForm idDailyTask={idDailyRoutine}></AddMinutesForm>
+      )}
     </div>
   );
 }

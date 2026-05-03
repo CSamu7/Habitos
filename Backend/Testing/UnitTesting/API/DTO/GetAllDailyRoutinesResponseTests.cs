@@ -8,7 +8,7 @@ namespace Testing.UnitTesting.API.DTO
         [Fact]
         public void Percentage_completed_is_0_when_no_daily_tasks()
         {
-            List<DailyRoutine> tasks = [];
+            List<DailyTask> tasks = [];
 
             var sut = tasks.ToGetAllDailyRoutinesResponse();
 

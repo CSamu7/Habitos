@@ -5,9 +5,9 @@ namespace Habits.API.Policies
 {
     public class DailyRoutineRequirement : IAuthorizationRequirement;
 
-    public class DailyRoutineOwnerHandler : AuthorizationHandler<DailyRoutineRequirement, DailyRoutine>
+    public class DailyRoutineOwnerHandler : AuthorizationHandler<DailyRoutineRequirement, DailyTask>
     {
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, DailyRoutineRequirement requirement, DailyRoutine resource)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, DailyRoutineRequirement requirement, DailyTask resource)
         {
             string? owner = resource.IdRoutineNavigation.IdUserNavigation?.UserName;
             string? user = context.User.Identity?.Name;

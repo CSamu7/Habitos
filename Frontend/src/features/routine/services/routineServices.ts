@@ -1,4 +1,4 @@
-import { USER_URL } from "../../auth/api";
+import { DAILY_TASK_URL, USER_URL } from "../../auth/api";
 import type { ResponseMessage } from "../../auth/services/login";
 import type { GetDailyTasksResponse } from "../types";
 
@@ -14,4 +14,18 @@ export async function getTodayTasks(
   const response = await request.json();
 
   return response;
+}
+
+export type ModifyTodayTaskBody = {
+  idDailyTask: number;
+  minutes: number;
+  date: string;
+};
+
+export async function ModifyTodayTask({
+  idDailyTask,
+  minutes,
+  date,
+}: ModifyTodayTaskBody) {
+  const request = await fetch(`${DAILY_TASK_URL}/${idDailyTask}`);
 }

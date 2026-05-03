@@ -14,13 +14,13 @@ namespace Habits.API.DailyRoutines.DTO
 
     public static class GetDailyRoutineResponseExtensions
     {
-        public static GetDailyRoutineResponse ToGetDailyRoutineResponse(this DailyRoutine dailyRoutine)
+        public static GetDailyRoutineResponse ToGetDailyRoutineResponse(this DailyTask dailyRoutine)
         {
             double percentage = (double)dailyRoutine.MinutesCompleted / dailyRoutine.TotalMinutes * 100;
             Routine task = dailyRoutine.IdRoutineNavigation;
 
             return new GetDailyRoutineResponse(
-                dailyRoutine.IdDailyRoutine,
+                dailyRoutine.IdDailyTask,
                 new GetMinimalRoutineResponse(task.IdRoutine, task.Name),
                 dailyRoutine.MinutesCompleted,
                 dailyRoutine.TotalMinutes,

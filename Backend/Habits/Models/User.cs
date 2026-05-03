@@ -6,8 +6,10 @@ public partial class User : IdentityUser
     public bool IsActive { get; set; }
     public DateTimeOffset LastSession { get; set; }
     public byte MinGoal { get; set; }
-    public DateTimeOffset CutOffTime { get; set; }
+    public int CutOffTime { get; set; }
     public int Streak { get; set; }
-    public virtual ICollection<Category> Categories { get; set; } = new List<Category>();
+    public int TimeZone { get; set; }
+    public virtual ICollection<RoutineCategory> Categories { get; set; } = new List<RoutineCategory>();
     public virtual ICollection<Routine> Routines { get; set; } = new List<Routine>();
+
 }

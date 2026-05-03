@@ -5,7 +5,7 @@ namespace Habits.Features.DailyTasks.Models
 {
     public static class DailyRoutineExtensions
     {
-        public static Progress GetProgress(this DailyRoutine dailyTask)
+        public static Progress GetProgress(this DailyTask dailyTask)
         {
             DateTimeOffset today = DateTimeOffset.UtcNow;
 

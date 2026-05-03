@@ -6,6 +6,9 @@ info:
 http:
   method: GET
   url: https://localhost:7074/api/users/sam/dailyroutines/today
+  headers:
+    - name: Cookie
+      value: .AspNetCore.Identity.Application=CfDJ8AzW9XRVJlJMpfBBRQJM9LW0sFnAX3VxTLPkcVHcfJQy3or5ZCHOw2vAQqRoTAuEJV1wTLImhHs4MJxFD4sJW-r4bDDyT3s4oXoIP-qIFD7TIRLIAnddRUQTslOE_e9E59n-rq3YLpMXR7U6toV2XnDrlmezfRWQm5E90xiEh5U4-hy7Wa6hXjZ9D3e2r-5NvxG92rdweEZUdw63UQK5h5ThAAaTXBoTApnBcZ_7lk2wxmkKBh22Ps4Lq_QGIYMExza30WB1UsGqKHwPa59xq2oRQg_vVyArCwAH1ONut3xpBZwHiveeKJHHU2wX_yctA1FGtE5sffij61ETxoDWjZWT7Wgj7C7RIb3xU6hZYM-EYk1vNPtfZD3E1wsaX9cgYkxb7YdbT0p6CJsLDbhP4_Idy3a-bv-EC5kG3-BwPlqFxh-L_p5s9hy44NlJlWPPz0TEn9k2i1WNAVNSr01MK5suQkleUZxwazavYf41AK7pDmleEnT5JT_KJEKHBEzZzblmb-Tl4y0XIlBEdS12gZlWzw6lz902eKVodwJGGbkFIAJtUccWTvmdLfGTuD9DnUQJQPodUptiHXS2CMfV7G46PQfG4j1YZVdZfqSxdB9KeaNB4WHiRFD9DCV-_xOe4XC5V9-aRDrAmP08H_ujwrH6zcz4izHfh0oSOSExJIBHVWZ93Ux40aTlMOGNC-JgGrMsiWLs7VvHU9Rl3L6S3bNhRu8CVYT8iRwD8CAllG1p; path=/; secure; samesite=lax; httponly
   auth: inherit
 
 settings:

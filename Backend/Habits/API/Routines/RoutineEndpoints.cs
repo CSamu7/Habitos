@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Text;
 using System.Text.Json;
 
 namespace Habits.API.Routines
@@ -21,8 +22,8 @@ namespace Habits.API.Routines
             {
                 Routine routine = result.Value;
 
-                GetRoutineResponse response = new GetRoutineResponse(routine.IdRoutine, routine.Name, routine.Minutes, routine.IdCategory);
-                return TypedResults.Ok<GetRoutineResponse>(response);
+                var response = new GetRoutineResponse(routine.IdRoutine, routine.Name, routine.Minutes, routine.IdRoutineCategory, routine.IdRoutineCategoryNavigation.Color.ToString() ?? "FFF");
+                return TypedResults.Ok(response);
             }
 
             return result.ToHttpResponse();
@@ -36,11 +37,11 @@ namespace Habits.API.Routines
             {
                 Routine routine = result.Value;
 
-                GetRoutineResponse response = new GetRoutineResponse(routine.IdRoutine, routine.Name, routine.Minutes, routine.IdCategory);
+                var response = new GetRoutineResponse(routine.IdRoutine, routine.Name, routine.Minutes, routine.IdRoutineCategory, routine.IdRoutineCategoryNavigation.Color.ToString());
                 string? uri = generator.GetPathByName
                     ("getRoutine", new() { { "idRoutine", response.Id } });
 
-                return TypedResults.Created<GetRoutineResponse>(uri, response);
+                return TypedResults.Created(uri, response);
             }
 
             return result.ToHttpResponse();
@@ -53,7 +54,11 @@ namespace Habits.API.Routines
 
             if (result.Status.Equals(Status.Ok))
             {
-                List<GetRoutineResponse> tasks = result.Value.Select(task => new GetRoutineResponse(task.IdRoutine, task.Name, task.Minutes, task.IdCategory)).ToList();
+                List<GetRoutineResponse> tasks = result.Value
+                    .Select(task => new GetRoutineResponse(task.IdRoutine, task.Name, task.Minutes, task.IdRoutineCategory, task?.IdRoutineCategoryNavigation.Color))
+                    .ToList();
+                    
+                    
                 return TypedResults.Ok(tasks);
             }
 
@@ -66,6 +71,8 @@ namespace Habits.API.Routines
         {
             var json = jsonElement.GetRawText();
             var doc = JsonConvert.DeserializeObject<JsonPatchDocument>(json)?.Sanitize();
+
+            if (doc is null) return Results.BadRequest();
 
             try
             {

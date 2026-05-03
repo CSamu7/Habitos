@@ -37,11 +37,11 @@ namespace Habits.Services.Tasks
             Routine routine = body.ToTask();
             routine.IdUser = id;
 
-            if (routine.IdCategory is not null)
+            if (routine.IdRoutineCategory is not null)
             {
-                Category? group = await _db.Categories.Where(group => group.IdCategory == routine.IdCategory).SingleOrDefaultAsync();
+                RoutineCategory? group = await _db.RoutineCategories.Where(group => group.IdRoutineCategory == routine.IdRoutineCategory).SingleOrDefaultAsync();
 
-                if (group is null) return Result<Routine>.Failure(Status.InvalidData, $"Category #{routine.IdCategory} doesn't exist");
+                if (group is null) return Result<Routine>.Failure(Status.InvalidData, $"Category #{routine.IdRoutineCategory} doesn't exist");
             }
 
             _db.Routines.Add(routine);

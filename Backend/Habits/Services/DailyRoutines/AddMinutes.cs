@@ -5,7 +5,7 @@ namespace Habits.Services.DailyRoutines
 {
     public class AddMinutes : IDailyTaskPatchCommand
     {
-        public void ChangeMinutes(DailyRoutine dailyTask, PatchDailyRoutineRequest body)
+        public void ChangeMinutes(DailyTask dailyTask, PatchDailyRoutineRequest body)
         {
             dailyTask.MinutesCompleted += body.Minutes;
 

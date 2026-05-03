@@ -11,7 +11,7 @@ namespace Habits.API.Routines.DTO
             {
                 Name = postRoutineRequest.Name,
                 Minutes = postRoutineRequest.Minutes,
-                IdCategory = postRoutineRequest.IdCategory,
+                IdRoutineCategory = postRoutineRequest.IdCategory,
                 IsActive = true
             };
         }
@@ -22,7 +22,7 @@ namespace Habits.API.Routines.DTO
             (
                 task.Name,
                 task.Minutes,
-                task.IdCategory
+                task.IdRoutineCategory
             );
         }
     }

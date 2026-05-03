@@ -5,7 +5,7 @@ namespace Habits.API.Users.DTO
     public record GetUserResponse(
         string Username,
         byte MinGoal,
-        DateTimeOffset CutOffTime,
+        int CutOffTime,
         int Streak);
 
     public static class GetUserResponseExtensions

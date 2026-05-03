@@ -7,7 +7,7 @@ namespace Habits.API.Users.DTO
         string Email,
         string Password,
         byte MinGoal,
-        DateTimeOffset CutOffTime
+        int CutOffTime
     );
     public static class RegisterUserExtensions
     {

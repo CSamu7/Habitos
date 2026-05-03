@@ -15,7 +15,7 @@ namespace Habits.API.DailyRoutines.DTO
 
     public static class GetAllDailyRoutinesResponseExtensions
     {
-        public static GetAllDailyRoutinesResponse ToGetAllDailyRoutinesResponse(this List<DailyRoutine> list)
+        public static GetAllDailyRoutinesResponse ToGetAllDailyRoutinesResponse(this List<DailyTask> list)
         {
             int minutesCompleted = list.Aggregate(0, (acc, task) => acc += task.MinutesCompleted);
             int totalMinutes = list.Aggregate(0, (acc, task) => acc += task.TotalMinutes);
