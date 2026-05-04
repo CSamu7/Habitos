@@ -38,7 +38,6 @@ namespace Habits.API.Users
         {
             User user = registerUser.ToUser();
 
-            //Check if email or username is unique
             var result = await validator.ValidateAsync(manager, user);
 
             /*Actually, I shouldn't return a error. I should send an email and apply rate limiting.
