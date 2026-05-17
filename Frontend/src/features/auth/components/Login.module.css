@@ -106,3 +106,10 @@
   background-color: #0a81d1;
   margin-top: 64px;
 }
+
+.registerLink {
+  color: #0a81d1;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: 10px;
+}

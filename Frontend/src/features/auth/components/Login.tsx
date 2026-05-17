@@ -3,6 +3,7 @@ import styles from "./Login.module.css";
 import Header from "../../../Components/Header";
 import { useLocation } from "wouter";
 import { authUser } from "../services/login";
+import { Link } from "wouter";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -70,6 +71,9 @@ export default function Login() {
             >
               Continuar
             </button>
+            <Link to="/register" className={`${styles.registerLink}`}>
+              ¿No tienes una cuenta? Registrate.
+            </Link>
           </div>
         </div>
       </main>
