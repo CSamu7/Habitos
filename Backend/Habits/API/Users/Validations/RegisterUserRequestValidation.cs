@@ -33,14 +33,8 @@ namespace Habits.API.Users.Validations
             RuleFor(x => x.Timezone)
                 .Custom((x, context) =>
                 {
-                    try
-                    {
-                        var id = TimeZoneInfo.FindSystemTimeZoneById(x);
-                    }
-                    catch(TimeZoneNotFoundException _)
-                    {
+                    if (!TimeZoneInfo.TryConvertIanaIdToWindowsId(x, out _))
                         context.AddFailure("This timezone doesn't exist");
-                    }
                 });
         }
     }

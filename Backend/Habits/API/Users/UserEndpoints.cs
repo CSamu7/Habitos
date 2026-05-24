@@ -45,13 +45,15 @@ namespace Habits.API.Users
             if (!result.Succeeded)
                 return TypedResults.BadRequest("Email or username is invalid.");
 
-            //Check password
-            var creationResult = await manager.CreateAsync(user, registerUser.Password);
+            TimeZoneInfo.TryConvertIanaIdToWindowsId(user.TimeZone, out string? windowsId);
+            user.TimeZone = windowsId ?? user.TimeZone; //No me gusta esta solución porque podría permitir una zona horaria no valida.
 
-            if (!creationResult.Succeeded)
+            var transaction = await manager.CreateAsync(user, registerUser.Password);
+
+            if (!transaction.Succeeded)
                 return TypedResults.ValidationProblem(new Dictionary<string, string[]>()
                 {
-                    {"Password", creationResult.Errors.Select(x => x.Description).ToArray() }
+                    {"Password", transaction.Errors.Select(x => x.Description).ToArray() }
                 });
 
             return Results.Created();
