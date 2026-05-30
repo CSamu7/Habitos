@@ -36,7 +36,8 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequiredLength = 8;
     options.User.RequireUniqueEmail = true;
-}).AddEntityFrameworkStores<HabitsContext>();
+}).AddEntityFrameworkStores<HabitsContext>()
+.AddErrorDescriber<IdentitySpanishDescriber>();
 
 if (builder.Environment.IsDevelopment())
 {

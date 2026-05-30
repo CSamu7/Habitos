@@ -1,6 +1,8 @@
 ﻿
 using FluentValidation;
 using Habits.API.Users.DTO;
+using Habits.API.Users.Validations;
+using Habits.Models;
 
 namespace Habits.API.Users.Filters
 {
@@ -15,10 +17,10 @@ namespace Habits.API.Users.Filters
         {
             RegisterUserRequest dto = context.GetArgument<RegisterUserRequest>(0);
 
-            var result = await _validation.ValidateAsync(dto);
+            var validation = _validation.Validate(dto);
 
-            if (!result.IsValid)
-                return TypedResults.ValidationProblem(result.ToDictionary());
+            if (!validation.IsValid)
+                return TypedResults.ValidationProblem(validation.ToDictionary());
 
             return await next(context);
         }

@@ -5,10 +5,7 @@ namespace Habits.API.Users.DTO
     public record RegisterUserRequest(
         string Username,
         string Email,
-        string Password,
-        byte MinGoal,
-        int CutOffTime,
-        string Timezone
+        string Password
     );
     public static class RegisterUserExtensions
     {
@@ -18,9 +15,9 @@ namespace Habits.API.Users.DTO
             {
                 UserName = user.Username,
                 Email = user.Email,
-                MinGoal = user.MinGoal,
-                CutOffTime = user.CutOffTime,
-                TimeZone = user.Timezone
+                MinGoal = 75,
+                CutOffTime = 0,
+                TimeZone = "UTC"
             };
         }
     }

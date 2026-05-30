@@ -34,27 +34,20 @@ namespace Habits.API.Users
 
             return Results.Ok();
         }
-        public async static Task<IResult> Register(RegisterUserRequest registerUser, UserManager<User> manager, IUserValidator<User> validator)
+        public async static Task<IResult> Register(RegisterUserRequest registerUser, UserManager<User> manager)
         {
             User user = registerUser.ToUser();
 
-            var result = await validator.ValidateAsync(manager, user);
+            var result = await manager.CreateAsync(user, registerUser.Password);
 
-            /*Actually, I shouldn't return a error. I should send an email and apply rate limiting.
-            TOOD: But for now it's good for me, in the future I'd like to improve this. */
             if (!result.Succeeded)
-                return TypedResults.BadRequest("Email or username is invalid.");
+            {
+                Dictionary<string, string[]> errors = result.Errors
+                    .GroupBy(e => e.Code)
+                    .ToDictionary(e => e.Key, e => e.Select(info => info.Description).ToArray());
 
-            TimeZoneInfo.TryConvertIanaIdToWindowsId(user.TimeZone, out string? windowsId);
-            user.TimeZone = windowsId ?? user.TimeZone; //No me gusta esta solución porque podría permitir una zona horaria no valida.
-
-            var transaction = await manager.CreateAsync(user, registerUser.Password);
-
-            if (!transaction.Succeeded)
-                return TypedResults.ValidationProblem(new Dictionary<string, string[]>()
-                {
-                    {"Password", transaction.Errors.Select(x => x.Description).ToArray() }
-                });
+                return TypedResults.BadRequest(errors);
+            }
 
             return Results.Created();
         }
