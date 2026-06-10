@@ -1,8 +1,6 @@
 ﻿
 using FluentValidation;
 using Habits.API.Users.DTO;
-using Habits.API.Users.Validations;
-using Habits.Models;
 
 namespace Habits.API.Users.Filters
 {

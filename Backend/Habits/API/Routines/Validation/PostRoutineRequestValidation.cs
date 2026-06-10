@@ -9,10 +9,8 @@ namespace Habits.API.Routines.Validation
         public PostRoutineRequestValidation()
         {
             RuleFor(x => x.Name)
-                .NotNull()
-                .WithMessage("Name can't be null")
                 .NotEmpty()
-                .WithMessage("Name is required");
+                .WithMessage("El nombre esta vacio");
 
             RuleFor(x => x.Minutes).MinutesAreValid();
         }

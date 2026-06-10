@@ -54,6 +54,11 @@ namespace Habits.API.Users
                 .AddEndpointFilter<RegisterUserEndpointFilter>()
                 .WithName("registerUser");
 
+            userRoutes.MapPatch("", UserEndpoints.ModifyUser)
+                .AddEndpointFilter<IsOwnerFilter>()
+                .WithName("modifyUser").Produces(200);
+
+
             userRoutes.MapPost("/login", UserEndpoints.Login)
                 .WithName("loginUser");
 

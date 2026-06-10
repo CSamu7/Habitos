@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Habits.Models;
+﻿namespace Habits.Models;
 
 public partial class DailyTask
 {

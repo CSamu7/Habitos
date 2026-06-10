@@ -3,10 +3,8 @@ using Habits.Common;
 using Habits.Models;
 using Habits.Services.Tasks;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Exceptions;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using System.Text.Json;
 
 namespace Habits.API.Routines
@@ -68,8 +66,7 @@ namespace Habits.API.Routines
             [FromBody] JsonElement jsonElement,
             RoutineService service)
         {
-            var json = jsonElement.GetRawText();
-            var doc = JsonConvert.DeserializeObject<JsonPatchDocument>(json)?.Sanitize();
+            var doc = jsonElement.ToPatchDocument();
 
             if (doc is null) return Results.BadRequest();
 

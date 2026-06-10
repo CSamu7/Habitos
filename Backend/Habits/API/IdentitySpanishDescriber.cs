@@ -21,5 +21,23 @@ namespace Habits.API
                 Description = "El correo ya esta en uso"
             };
         }
+
+        public override IdentityError DuplicateUserName(string userName)
+        {
+            return new IdentityError()
+            {
+                Code = "Username",
+                Description = $"El nombre de usuario {userName} ya esta en uso"
+            };
+        }
+
+        public override IdentityError InvalidUserName(string? userName)
+        {
+            return new IdentityError()
+            {
+                Code = "Username",
+                Description = "El nombre de usuario solo puede tener letras o digitos"
+            };
+        }
     }
 }

@@ -1,7 +1,12 @@
 ﻿using Habits.API.Users.DTO;
+using Habits.Common;
 using Habits.Models;
+using Habits.Services.Users;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.JsonPatch.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace Habits.API.Users
 {
@@ -14,12 +19,12 @@ namespace Habits.API.Users
             string? username = claims?.Identity?.Name;
 
             if (username is null)
-                return TypedResults.Problem("You have to login", statusCode: 401);
+                return TypedResults.Problem("No tienes acceso a este recurso", statusCode: 401);
 
             User? user = await userManager.FindByNameAsync(username);
 
             if (user is null)
-                return TypedResults.Problem("There's some problem with the user", statusCode: 401);
+                return TypedResults.Problem("No tienes acceso a este recurso", statusCode: 401);
 
             GetUserResponse response = user.ToGetResponse();
 
@@ -30,7 +35,7 @@ namespace Habits.API.Users
             var result = await signInManager.PasswordSignInAsync(loginUser.Username, loginUser.Password, false, false);
 
             if (!result.Succeeded)
-                return TypedResults.Problem("Invalid username or password", statusCode: 401);
+                return TypedResults.Problem("Nombre de usuario o contraseña incorrectos", statusCode: 401);
 
             return Results.Ok();
         }
@@ -44,17 +49,28 @@ namespace Habits.API.Users
             {
                 Dictionary<string, string[]> errors = result.Errors
                     .GroupBy(e => e.Code)
-                    .ToDictionary(e => e.Key, e => e.Select(info => info.Description).ToArray());
+                    .ToDictionary(e => e.Key.ToLower(), e => e.Select(info => info.Description).ToArray());
 
-                return TypedResults.BadRequest(errors);
+                return TypedResults.ValidationProblem(errors);
             }
 
             return Results.Created();
         }
-        public static IResult ModifyUser()
+        public async static Task<IResult> ModifyUser([FromBody] JsonElement jsonElement, UserService userService)
         {
-            return Results.Ok();
+            var doc = jsonElement.ToPatchDocument();
 
+            if (doc is null) return Results.BadRequest();
+
+            try
+            {
+                userService.ModifyUser(doc);
+                return Results.Ok();
+            }
+            catch (JsonPatchException ex)
+            {
+                return Results.Problem(ex.Message, statusCode: 400);
+            }
         }
         public static IResult DeleteUser()
         {
