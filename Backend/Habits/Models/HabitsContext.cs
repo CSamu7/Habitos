@@ -17,6 +17,7 @@ public partial class HabitsContext : IdentityDbContext<User>
     public virtual DbSet<DailyTask> DailyTasks { get; set; }
     public virtual DbSet<Routine> Routines { get; set; }
     public virtual DbSet<RoutineCategory> RoutineCategories { get; set; }
+    public virtual DbSet<MinGoalHistory> MinGoalHistory { get; set; } 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 
@@ -102,6 +103,15 @@ public partial class HabitsContext : IdentityDbContext<User>
                 .HasForeignKey(d => d.IdUser)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_RoutineCategories_AspNetUsers");
+        });
+
+        modelBuilder.Entity<MinGoalHistory>(entity =>
+        {
+            entity.HasKey(e => e.IdMinGoalHistory);
+            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.MinGoalHistories)
+                .HasForeignKey(d => d.IdUser)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_MinGoalHistory_AspNetUsers");
         });
 
         OnModelCreatingPartial(modelBuilder);
