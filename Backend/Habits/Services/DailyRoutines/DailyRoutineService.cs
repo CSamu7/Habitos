@@ -21,7 +21,7 @@ public class DailyRoutineService
             .Include(d => d.IdRoutineNavigation.IdUser)
             .FirstOrDefaultAsync(d => d.IdDailyTask == idDailyRoutine);
 
-        if (dailyTask is null) return Result<DailyTask>.Failure(Status.NotFound, "Daily task doesn't exist");
+        if (dailyTask is null) return Result<DailyTask>.Failure(Status.NotFound, "No existe la tarea diaria");
 
         return Result<DailyTask>.Success(dailyTask);
     }
@@ -29,7 +29,7 @@ public class DailyRoutineService
     {
         User? user = await _userManager.FindByNameAsync(username);
 
-        if (user is null) return Result<List<DailyTask>>.Failure(Status.NotOwner, "Credentials problem");
+        if (user is null) return Result<List<DailyTask>>.Failure(Status.NotOwner, "Problemas de credenciales");
 
         var dailyTasks = _db.DailyTasks
             .Include(d => d.IdRoutineNavigation)
@@ -52,7 +52,7 @@ public class DailyRoutineService
                 DateTimeOffset.Compare(d.Date, dateEnd) < 0)
             .ToList();
 
-        if (queryParams.Progress is not null)
+        if (queryParams.Progress.Any())
             byDate = byDate.Where(d => queryParams.Progress.Contains(d.GetProgress())).ToList();
 
         return byDate;
@@ -81,7 +81,7 @@ public class DailyRoutineService
         {
             PatchOperations.Add => new AddMinutes(),
             PatchOperations.Replace => new OverwriteMinutes(),
-            _ => throw new Exception("This operation doesn't exist")
+            _ => throw new Exception("Esta operación no existe")
         };
     }
 }

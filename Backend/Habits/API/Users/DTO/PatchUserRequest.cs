@@ -2,7 +2,7 @@
 
 namespace Habits.API.Users.DTO
 {
-    public record PatchUserRequest(string Timezone, int CutOffTime, int MinGoal);
+    public record PatchUserRequest(string? Timezone, int? CutOffTime, int? MinGoal);
 
     public static class PatchUserRequestExtensions
     {

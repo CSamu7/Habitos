@@ -9,10 +9,9 @@ namespace Habits.API.Users.Validations
         {
             RuleFor(x => x.MinGoal)
                 .GreaterThanOrEqualTo(50)
-                .WithMessage("")
                 .LessThanOrEqualTo(100)
-
                 .WithMessage("Debes ingresar un porcentaje entre 50 y 100%");
+
             RuleFor(x => x.CutOffTime)
                 .GreaterThanOrEqualTo(0)
                 .LessThanOrEqualTo(23)
@@ -21,6 +20,8 @@ namespace Habits.API.Users.Validations
             RuleFor(x => x.Timezone)
                 .Custom((x, context) =>
                 {
+                    if (x is null) return;
+
                     if (!TimeZoneInfo.TryConvertIanaIdToWindowsId(x, out _))
                         context.AddFailure("No existe esta zona horaria");
                 });

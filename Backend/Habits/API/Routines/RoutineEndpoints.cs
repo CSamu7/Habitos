@@ -19,7 +19,9 @@ namespace Habits.API.Routines
             {
                 Routine routine = result.Value;
 
-                var response = new GetRoutineResponse(routine.IdRoutine, routine.Name, routine.Minutes, routine.IdRoutineCategory, routine.IdRoutineCategoryNavigation.Color.ToString() ?? "FFF");
+                var response = new GetRoutineResponse
+                    (routine.IdRoutine, routine.Name, routine.Minutes, routine.IdRoutineCategory, 
+                    routine.IdRoutineCategoryNavigation.Color.ToString() ?? "FFF");
                 return TypedResults.Ok(response);
             }
 
@@ -28,6 +30,9 @@ namespace Habits.API.Routines
         public static async Task<IResult> PostRoutine(string username, PostRoutineRequest body, LinkGenerator generator, RoutineService service, UserManager<User> manager)
         {
             var user = await manager.FindByNameAsync(username);
+
+            if (user is null) return TypedResults.Unauthorized();
+
             Result<Routine> result = await service.PostRoutine(user.Id, body);
 
             if (result.Status.Equals(Status.Ok))

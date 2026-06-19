@@ -1,9 +1,8 @@
-﻿using Habits.API.Users.DTO;
-using Habits.Common;
+﻿using FluentValidation;
+using Habits.API.Users.DTO;
 using Habits.Models;
 using Habits.Services.Users;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.JsonPatch.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Text.Json;
@@ -56,21 +55,31 @@ namespace Habits.API.Users
 
             return Results.Created();
         }
-        public async static Task<IResult> ModifyUser([FromBody] JsonElement jsonElement, UserService userService)
+        public async static Task<IResult> ModifyUser(
+            [FromBody] JsonElement body, 
+            UserService userService, 
+            IValidator<PatchUserRequest> bodyValidation, 
+            HttpContext ctx)
         {
-            var doc = jsonElement.ToPatchDocument();
-
-            if (doc is null) return Results.BadRequest();
-
-            try
+            PatchUserRequest? bodyDeserialize = body.Deserialize<PatchUserRequest>(new JsonSerializerOptions()
             {
-                userService.ModifyUser(doc);
-                return Results.Ok();
-            }
-            catch (JsonPatchException ex)
-            {
-                return Results.Problem(ex.Message, statusCode: 400);
-            }
+                PropertyNameCaseInsensitive = true
+            });
+
+            if (bodyDeserialize is null) return TypedResults.BadRequest("Hubo un error en el formato del cuerpo");
+
+            string username = ctx.User.Identity?.Name ?? String.Empty;
+
+            var validationResult = bodyValidation.Validate(bodyDeserialize);
+
+            if (!validationResult.IsValid)
+                return TypedResults.ValidationProblem(validationResult.ToDictionary());
+
+            var operationResult = await userService.ModifyUser(username, bodyDeserialize);
+
+            if (operationResult.Status != Status.Ok) return TypedResults.BadRequest(operationResult.ErrorMessage);
+
+            return Results.Ok();
         }
         public static IResult DeleteUser()
         {

@@ -55,7 +55,6 @@ namespace Habits.API.Users
                 .WithName("registerUser");
 
             userRoutes.MapPatch("", UserEndpoints.ModifyUser)
-                .AddEndpointFilter<IsOwnerFilter>()
                 .WithName("modifyUser").Produces(200);
 
 

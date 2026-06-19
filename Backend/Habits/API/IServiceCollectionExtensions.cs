@@ -39,7 +39,6 @@ namespace Habits.API
 
         public static IServiceCollection AddValidations(this IServiceCollection services)
         {
-
             services.AddScoped<IValidator<GetDailyRoutineQueryParams>, DailyRoutineQueryParamsValidation>();
             services.AddScoped<IValidator<PatchDailyRoutineRequest>, PatchDailyTaskValidation>();
             services.AddScoped<IValidator<PostRoutineRequest>, PostRoutineRequestValidation>();

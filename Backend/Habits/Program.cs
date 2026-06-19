@@ -42,6 +42,14 @@ app.UseAuthorization();
 
 if (app.Environment.IsDevelopment())
 {
+    app.UseExceptionHandler(errorapp =>
+    {
+        errorapp.Run(async context =>
+        {
+            var a = TypedResults.Problem("Hubo un problema en el servidor", title: "Problema en el servidor");
+            await context.Response.WriteAsJsonAsync(a.ProblemDetails);
+        });
+    });
     app.UseSwagger();
     app.UseSwaggerUI(opt =>
     {
@@ -55,6 +63,7 @@ var baseApi = app.MapGroup("/api/");
 baseApi.MapDailyRoutines();
 baseApi.MapUsers();
 baseApi.MapRoutines();
+
 
 app.Run();
 public partial class Program { }

@@ -19,7 +19,7 @@ namespace Habits.Services.Tasks
                 .Include(x => x.IdUserNavigation)
                 .SingleOrDefaultAsync(x => x.IdRoutine == idRoutine);
 
-            if (task is null) return Result<Routine>.Failure(Status.NotFound, "The routine doesn't exist");
+            if (task is null) return Result<Routine>.Failure(Status.NotFound, "La rutina no existe");
 
             return Result<Routine>.Success(task);
         }
@@ -39,9 +39,12 @@ namespace Habits.Services.Tasks
 
             if (routine.IdRoutineCategory is not null)
             {
-                RoutineCategory? group = await _db.RoutineCategories.Where(group => group.IdRoutineCategory == routine.IdRoutineCategory).SingleOrDefaultAsync();
+                RoutineCategory? group = await _db.RoutineCategories
+                    .Where(group => group.IdRoutineCategory == routine.IdRoutineCategory)
+                    .SingleOrDefaultAsync();
 
-                if (group is null) return Result<Routine>.Failure(Status.InvalidData, $"Category #{routine.IdRoutineCategory} doesn't exist");
+                if (group is null) return Result<Routine>.Failure
+                        (Status.InvalidData, $"La categoria #{routine.IdRoutineCategory} no existe");
             }
 
             _db.Routines.Add(routine);
@@ -49,7 +52,6 @@ namespace Habits.Services.Tasks
 
             return Result<Routine>.Success(routine);
         }
-        //TODO: Implementar pruebas de integración.
         public async Task<Result<Routine>> PatchTask(int idRoutine, JsonPatchDocument body)
         {
             var result = await GetRoutine(idRoutine);
