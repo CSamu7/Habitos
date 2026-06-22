@@ -1,4 +1,4 @@
-import type { DailyTaskResponse } from "../types";
+import type { DailyTaskInformation } from "../../../types/DailyTasksTypes";
 import AddMinutesForm from "./AddMinutesForm";
 import styles from "./HabitCard.module.css";
 
@@ -8,7 +8,7 @@ type HabitCardDetails = {
   position: number;
 };
 
-type HabitCardProps = DailyTaskResponse & HabitCardDetails;
+type HabitCardProps = DailyTaskInformation & HabitCardDetails;
 
 export default function HabitCard({
   idDailyRoutine,

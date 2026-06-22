@@ -1,14 +1,16 @@
 import HabitBoard from "./HabitBoard";
-import { useState } from "react";
 import Heatmap from "./Heatmap";
-import AuthPageLayout from "../../../Components/AuthPageLayout";
+import AuthPageLayout from "../../../components/AuthPageLayout";
+import useUser from "../../../hooks/useUser";
 
 export default function MainPage() {
-  const [user, setUser] = useState("sam");
+  const { user } = useUser();
+
+  console.log(user);
 
   return (
     <AuthPageLayout>
-      <HabitBoard username={user} />
+      <HabitBoard username={user?.username ?? ""} />
       <Heatmap></Heatmap>
     </AuthPageLayout>
   );

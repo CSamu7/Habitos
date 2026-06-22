@@ -1,54 +1,31 @@
 import HabitColumn from "./HabitColumn";
 import styles from "./HabitBoard.module.css";
-import type { GetDailyTasksResponse } from "../types";
-import { useEffect, useState } from "react";
-import { getTodayTasks } from "../services/routineServices";
 import BoardSummary from "./BoardSummary";
+import useDailyTasks from "../../../hooks/useDailyTasks";
+import type { DailyTaskInformation } from "../../../types/DailyTasksTypes";
 
 export default function HabitBoard({ username }: { username: string }) {
-  const [dailyTasks, setDailyTasks] = useState<GetDailyTasksResponse>({
-    count: 0,
-    minutesCompleted: 0,
-    minutesLeft: 0,
-    totalMinutes: 0,
-    results: [],
-    percentageCompleted: "00.00%",
-  });
+  const { dailyTasks } = useDailyTasks({ username });
 
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const getRoutines = async () => {
-      setError(null);
-      const routines = await getTodayTasks(username);
-
-      if ("message" in routines) {
-        setError(routines.message);
-      } else {
-        setDailyTasks(routines as GetDailyTasksResponse);
-      }
-    };
-
-    getRoutines();
-  }, [username]);
-
-  const pending =
-    dailyTasks?.results.filter((t) => t.minutesCompleted === 0) ?? [];
-
-  const incomplete =
-    dailyTasks?.results.filter(
-      (t) => t.minutesCompleted > 0 && t.minutesCompleted < t.totalMinutes,
+  const pending: Array<DailyTaskInformation> =
+    dailyTasks?.list.filter(
+      (dailyTask) =>
+        dailyTask.status == "Pending" || dailyTask.status == "InProgress",
     ) ?? [];
 
-  const completed =
-    dailyTasks?.results.filter((t) => t.minutesCompleted >= t.totalMinutes) ??
+  const incomplete: Array<DailyTaskInformation> =
+    dailyTasks?.list.filter((dailyTask) => dailyTask.status == "Incomplete") ??
+    [];
+
+  const completed: Array<DailyTaskInformation> =
+    dailyTasks?.list.filter((dailyTask) => dailyTask.status == "Completed") ??
     [];
 
   return (
     <div className={styles.board}>
       <BoardSummary
-        dailyTasks={dailyTasks as GetDailyTasksResponse}
-        completedTasks={completed.length}
+        dailyTasks={dailyTasks}
+        completedTasks={completed.length ?? 0}
       ></BoardSummary>
       <div className={styles.columns}>
         <HabitColumn progress="Pending" routines={pending} />

@@ -1,18 +1,21 @@
 import { useState } from "react";
-import type { DailyTaskResponse, HabitProgress } from "../types";
 import HabitCard from "./HabitCard";
 import styles from "./HabitColumn.module.css";
+import {
+  type DailyTaskStatus,
+  type DailyTaskInformation,
+} from "../../../types/DailyTasksTypes";
 
 type HabitColumnProps = {
-  progress: HabitProgress;
-  routines: DailyTaskResponse[];
+  progress: DailyTaskStatus;
+  routines: DailyTaskInformation[];
 };
 
 export default function HabitColumn({ progress, routines }: HabitColumnProps) {
   const total = routines.length;
   const [activeIndex, setActiveIndex] = useState(-1);
 
-  const mapping: Record<HabitProgress, string> = {
+  const mapping: Record<DailyTaskStatus, string> = {
     Pending: "Pendiente",
     Completed: "Completo",
     Incomplete: "Incompleto",

@@ -1,29 +1,30 @@
 import { useState } from "react";
 import styles from "./Login.module.css";
-import Header from "../../../Components/Header";
+import Header from "../../../components/Header";
 import { useLocation } from "wouter";
-import { authUser } from "../services/login";
 import { Link } from "wouter";
+import useUser from "../../../hooks/useUser";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [_, navigate] = useLocation();
+  const [, navigate] = useLocation();
+  const { loginUser } = useUser();
 
   const handleSubmit = async () => {
     setError("");
 
     if (!username || !password) {
-      setError("Por favor rellena todos los campos");
+      setError("Por favor rellena los campos");
       return;
     }
 
     const data = { username, password };
-    const response = await authUser(data);
+    const response = await loginUser(data);
 
-    if (response.code != 200) {
-      setError(response.message);
+    if (response.error) {
+      setError(response.error.detail ?? "Ha habido un error");
     } else {
       navigate("/dashboard");
     }
