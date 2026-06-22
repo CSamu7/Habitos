@@ -5,7 +5,7 @@ namespace Habits.API.DailyRoutines.DTO
 {
     public record GetAllDailyRoutinesResponse
         (
-        List<GetDailyRoutineResponse> Results,
+        List<GetDailyRoutineResponse> List,
         int Count,
         int TotalMinutes,
         int MinutesCompleted,

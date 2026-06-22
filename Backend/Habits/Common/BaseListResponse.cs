@@ -2,7 +2,7 @@
 {
     public interface IBaseListResponse<T>
     {
-        public List<T> Results { get; init; }
+        public List<T> List { get; init; }
         public int Count { get; init; }
     }
 }

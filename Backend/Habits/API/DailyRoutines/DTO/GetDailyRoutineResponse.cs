@@ -1,4 +1,6 @@
 ﻿using Habits.API.Routines.DTO;
+using Habits.Common.DailyRoutines;
+using Habits.Features.DailyTasks.Models;
 using Habits.Models;
 
 namespace Habits.API.DailyRoutines.DTO
@@ -9,6 +11,7 @@ namespace Habits.API.DailyRoutines.DTO
         int MinutesCompleted,
         int TotalMinutes,
         string PercentageCompleted,
+        string Status,
         DateTimeOffset? CompletedAt
     );
 
@@ -19,12 +22,15 @@ namespace Habits.API.DailyRoutines.DTO
             double percentage = (double)dailyRoutine.MinutesCompleted / dailyRoutine.TotalMinutes * 100;
             Routine task = dailyRoutine.IdRoutineNavigation;
 
+            Progress status = dailyRoutine.GetProgress();
+
             return new GetDailyRoutineResponse(
                 dailyRoutine.IdDailyTask,
                 new GetMinimalRoutineResponse(task.IdRoutine, task.Name),
                 dailyRoutine.MinutesCompleted,
                 dailyRoutine.TotalMinutes,
                 $"{percentage.ToString("00.00")}%",
+                status.ToString(),
                 dailyRoutine.CompletedAt
             );
         }
