@@ -9,7 +9,7 @@ namespace Habits.Features.DailyTasks.Models
         {
             DateTimeOffset today = DateTimeOffset.UtcNow;
 
-            bool isTaskActive = dailyTask.Date > today.Subtract(new TimeSpan(23, 59, 59));
+            bool isTaskActive = dailyTask.Date > today.AddDays(-1);
             bool isTaskStarted = dailyTask.MinutesCompleted < dailyTask.TotalMinutes && dailyTask.TotalMinutes > 0;
 
             bool isTaskCompleted = dailyTask.MinutesCompleted == dailyTask.TotalMinutes;

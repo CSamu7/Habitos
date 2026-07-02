@@ -1,4 +1,5 @@
 using Habits.API;
+using Habits.API.Categories;
 using Habits.API.DailyRoutines;
 using Habits.API.Policies;
 using Habits.API.Routines;
@@ -46,6 +47,7 @@ if (app.Environment.IsDevelopment())
     {
         errorapp.Run(async context =>
         {
+
             var a = TypedResults.Problem("Hubo un problema en el servidor", title: "Problema en el servidor");
             await context.Response.WriteAsJsonAsync(a.ProblemDetails);
         });
@@ -58,12 +60,12 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-var baseApi = app.MapGroup("/api/");
+var baseApi = app.MapGroup("/api");
 
-baseApi.MapDailyRoutines();
-baseApi.MapUsers();
-baseApi.MapRoutines();
-
+baseApi.MapDailyRoutines()
+    .MapUsers()
+    .MapRoutines()
+    .MapCategories();
 
 app.Run();
 public partial class Program { }

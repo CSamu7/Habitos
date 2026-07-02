@@ -1,4 +1,5 @@
-﻿using Habits.Services.Tasks;
+﻿using Habits.Services.Categories;
+using Habits.Services.Tasks;
 using Habits.Services.Users;
 
 namespace Habits.Services
@@ -10,6 +11,7 @@ namespace Habits.Services
             services.AddScoped<DailyRoutineService>();
             services.AddScoped<RoutineService>();
             services.AddScoped<UserService>();
+            services.AddScoped<CategoryService>();
 
             return services;
         }

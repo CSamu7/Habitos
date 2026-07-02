@@ -57,9 +57,8 @@ namespace Habits.API.Routines
             if (result.Status.Equals(Status.Ok))
             {
                 List<GetRoutineResponse> tasks = result.Value
-                    .Select(task => new GetRoutineResponse(task.IdRoutine, task.Name, task.Minutes, task.IdRoutineCategory, task?.IdRoutineCategoryNavigation.Color))
+                    .Select(task => new GetRoutineResponse(task.IdRoutine, task.Name, task.Minutes, task.IdRoutineCategory, task?.IdRoutineCategoryNavigation?.Color ?? "#333"))
                     .ToList();
-                    
                     
                 return TypedResults.Ok(tasks);
             }
