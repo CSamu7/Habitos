@@ -11,8 +11,8 @@ export default function MenuNav() {
           </a>
         </li>
         <li>
-          <a href="" className={styles.menuLink}>
-            Tus tareas
+          <a href="/my-routines" className={styles.menuLink}>
+            Mis rutinas
           </a>
         </li>
         <li>

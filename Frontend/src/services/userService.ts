@@ -1,101 +1,90 @@
-import { LOGIN_URL, USER_URL } from "../features/auth/api";
-import type { Result } from "../types/common";
+import type { ErrorAPI, Result } from "../types/common";
 import type { LoginUserData } from "../types/LoginTypes";
 import type {
   UserConfigurationForm,
   UserRegisterRequest,
-} from "../types/RegisterTypes";
+} from "../features/register/types/RegisterTypes";
 import type { GetUserResponse } from "../types/UserTypes";
+//TODO: No me gusta usar object aqui. Debería buscar un tipo que especifique el estatus y mensaje de exito.
+export async function loginService(
+  body: LoginUserData,
+): Promise<Result<object>> {
+  const url = `${import.meta.env.VITE_LOGIN_URL}`;
 
-export async function loginService(body: LoginUserData): Promise<Result<void>> {
-  try {
-    const request = await fetch(LOGIN_URL, {
-      method: "POST",
-      body: JSON.stringify(body),
-      credentials: "include",
-      headers: {
-        "Content-type": "application/json",
-      },
-    });
+  const request = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify(body),
+    credentials: "include",
+    headers: {
+      "Content-type": "application/json",
+    },
+  });
 
-    if (request.status === 401) {
-      return {
-        error: {
-          detail: "Correo o contraseña incorrectos",
-          status: request.status,
-        },
-      };
-    }
+  if (!request.ok) {
+    const response: ErrorAPI = await request.json();
 
-    return { error: { status: 200, detail: "Ok" } };
-  } catch (_) {
-    return { error: { detail: "Ha habido un error", status: 500 } };
+    return { error: response };
   }
+
+  return { data: {} };
 }
 
 export async function registerService(
   body: UserRegisterRequest,
-): Promise<ProblemResponse> {
-  try {
-    const request = await fetch(`${USER_URL}/register`, {
-      method: "POST",
-      body: JSON.stringify(body),
-      headers: {
-        "Content-type": "application/json",
-      },
-    });
+): Promise<Result<object>> {
+  const url = `${import.meta.env.VITE_URL_REGISTER}`;
 
-    if (request.status >= 400) {
-      const response: ProblemResponse = await request.json();
+  const request = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify(body),
+    headers: {
+      "Content-type": "application/json",
+    },
+  });
 
-      return response;
-    }
+  if (!request.ok) {
+    const response: ErrorAPI = await request.json();
 
-    return { status: 201, detail: "Cuenta creada con exito" };
-  } catch (error) {
-    console.log(error);
-    return { status: 500, detail: "Ha habido un error" };
+    return { error: response };
   }
+
+  return { data: {} };
 }
 
 export async function getUserService(): Promise<Result<GetUserResponse>> {
-  try {
-    const request = await fetch(`${USER_URL}`, {
-      method: "GET",
-      credentials: "include",
-    });
+  const url = `${import.meta.env.VITE_URL_USER}`;
 
-    const response: Result<GetUserResponse> = await request.json();
+  const request = await fetch(url, {
+    method: "GET",
+    credentials: "include",
+  });
 
-    if (response.error) return response;
+  const response: Result<GetUserResponse> = await request.json();
 
-    return { data: response };
-  } catch (error) {
-    return { error: { status: 500, detail: "Ha habido un error" } };
-  }
+  if (response.error) return response;
+
+  return { data: response };
 }
 
 export async function modifyUserService(
   body: UserConfigurationForm,
-): Promise<ProblemResponse> {
-  try {
-    const request = await fetch(`${USER_URL}`, {
-      method: "PATCH",
-      credentials: "include",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
+): Promise<Result<object>> {
+  const url = `${import.meta.env.VITE_URL_USER}`;
 
-    const response: ProblemResponse = await request.json();
+  const request = await fetch(url, {
+    method: "PATCH",
+    credentials: "include",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
 
-    if (request.status > 300) {
-      return { status: response.status, detail: response.detail };
-    }
+  if (!request.ok) {
+    const response: ErrorAPI = await request.json();
 
-    return response;
-  } catch (error) {
-    return { status: 500, detail: "Ha habido un error" } as GetUserResponse;
+    return { error: response };
   }
+
+  return { data: {} };
 }

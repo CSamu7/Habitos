@@ -1,16 +1,14 @@
 import type { DailyTasksData } from "../types/DailyTasksTypes";
-import { DAILY_TASK_URL, USER_URL } from "../features/auth/api";
 import type { Result } from "../types/common";
 
 export const dailyTasksService = {
   async getAll(username: string): Promise<Result<DailyTasksData>> {
     try {
-      const request = await fetch(
-        `${USER_URL}/${username}/dailyRoutines/today`,
-        {
-          credentials: "include",
-        },
-      );
+      const url = `${import.meta.env.VITE_USER_URL}/${username}/dailyRoutines/today`;
+
+      const request = await fetch(url, {
+        credentials: "include",
+      });
 
       const response: DailyTasksData = await request.json();
 
@@ -31,6 +29,4 @@ export async function ModifyTodayTask({
   idDailyTask,
   minutes,
   date,
-}: ModifyTodayTaskBody) {
-  const request = await fetch(`${DAILY_TASK_URL}/${idDailyTask}`);
-}
+}: ModifyTodayTaskBody) {}

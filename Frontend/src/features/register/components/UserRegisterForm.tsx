@@ -1,8 +1,8 @@
-import PublicLayout from "../../components/PublicLayout";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import type { UserRegisterForm } from "../../types/RegisterTypes";
 import { useLocation } from "wouter";
-import useUser from "../../hooks/useUser";
+import type { UserRegisterForm } from "../types/RegisterTypes";
+import PublicLayout from "../../../components/PublicLayout";
+import useUser from "../../../hooks/useUser";
 
 export default function UserRegisterForm() {
   const {
@@ -18,10 +18,10 @@ export default function UserRegisterForm() {
   const submitRegister: SubmitHandler<UserRegisterForm> = async (data) => {
     const response = await registerUser(data);
 
-    if (response.status >= 400) {
+    if (response.error) {
       setError("root.serverError", {
         type: "manual",
-        message: response.detail,
+        message: response.error.detail,
       });
 
       return;

@@ -1,8 +1,8 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
-import type { UserConfigurationForm } from "../../types/RegisterTypes";
-import PublicLayout from "../../components/PublicLayout";
-import useUser from "../../hooks/useUser";
 import { useLocation } from "wouter";
+import type { UserConfigurationForm } from "../types/RegisterTypes";
+import useUser from "../../../hooks/useUser";
+import PublicLayout from "../../../components/PublicLayout";
 
 export default function UserConfigurationForm() {
   const {

@@ -3,7 +3,7 @@ import type {
   UserConfigurationForm,
   UserRegisterForm,
   UserRegisterRequest,
-} from "../types/RegisterTypes";
+} from "../features/register/types/RegisterTypes";
 import type { LoginUserData } from "../types/LoginTypes";
 import {
   getUserService,

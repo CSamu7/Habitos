@@ -2,8 +2,9 @@ import { Route, Switch } from "wouter";
 import "./App.css";
 import Login from "../features/auth/components/Login";
 import MainPage from "../features/routine/components/MainPage";
-import UserRegisterForm from "../features/register/UserRegisterForm";
-import UserConfigurationForm from "../features/register/UserConfigurationForm";
+import UserRegisterForm from "../features/register/components/UserRegisterForm";
+import UserConfigurationForm from "../features/register/components/UserConfigurationForm";
+import RoutinesPage from "../features/routine/components/RoutinesPage";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         path="/account-configuration"
         component={UserConfigurationForm}
       ></Route>
+      <Route path={"/my-routines"} component={RoutinesPage}></Route>
     </Switch>
   );
 }
