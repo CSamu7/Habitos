@@ -5,14 +5,16 @@ import useUser from "../../../hooks/useUser";
 
 import styles from "./RoutinesPage.module.css";
 import CreateRoutineModal from "./CreateRoutineModal";
+import AuthPageLayout from "../../../components/AuthPageLayout";
 
 export default function RoutinesPage() {
   const { user } = useUser();
   const { routines } = useRoutine(user?.username ?? "");
   const addNewHabitModalRef = useRef<HTMLDialogElement>(null);
 
-  const routinesJSX = routines.list.map((routine) => (
+  const routinesJSX = routines.list.map((routine, index) => (
     <li key={routine.id} className={styles.routineItem}>
+      <p>{index + 1}</p>
       <strong className={styles.routineName}>{routine.name}</strong>
       <p className={styles.routineTime}>{routine.minutes} min</p>
       <p className={styles.routineCategory}>
@@ -34,7 +36,7 @@ export default function RoutinesPage() {
   ));
 
   return (
-    <PublicLayout header="Mis rutinas">
+    <AuthPageLayout>
       <div className={styles.layout}>
         <div className={styles.header}>
           <h1 className={styles.title}>Tus tareas</h1>
@@ -47,6 +49,7 @@ export default function RoutinesPage() {
         </div>
 
         <div className={styles.tableHeader}>
+          <span className={styles.colLabel}>Pos</span>
           <span className={styles.colLabel}>Nombre</span>
           <span className={styles.colLabel}>Tiempo</span>
           <span className={styles.colLabel}>Categoría</span>
@@ -62,6 +65,6 @@ export default function RoutinesPage() {
 
         <ul className={styles.routineList}>{routinesJSX}</ul>
       </div>
-    </PublicLayout>
+    </AuthPageLayout>
   );
 }

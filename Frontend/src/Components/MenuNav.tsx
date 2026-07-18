@@ -6,7 +6,7 @@ export default function MenuNav() {
     <Header>
       <ul className={styles.menu}>
         <li>
-          <a href="" className={styles.menuLink}>
+          <a href="/dashboard" className={styles.menuLink}>
             Inicio
           </a>
         </li>
@@ -16,7 +16,7 @@ export default function MenuNav() {
           </a>
         </li>
         <li>
-          <a href="" className={styles.menuLink}>
+          <a href="/stats" className={styles.menuLink}>
             Historial
           </a>
         </li>

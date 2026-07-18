@@ -32,7 +32,7 @@ export async function loginService(
 export async function registerService(
   body: UserRegisterRequest,
 ): Promise<Result<object>> {
-  const url = `${import.meta.env.VITE_URL_REGISTER}`;
+  const url = `${import.meta.env.VITE_REGISTER_URL}`;
 
   const request = await fetch(url, {
     method: "POST",
@@ -52,7 +52,7 @@ export async function registerService(
 }
 
 export async function getUserService(): Promise<Result<GetUserResponse>> {
-  const url = `${import.meta.env.VITE_URL_USER}`;
+  const url = `${import.meta.env.VITE_USER_URL}`;
 
   const request = await fetch(url, {
     method: "GET",
@@ -69,7 +69,7 @@ export async function getUserService(): Promise<Result<GetUserResponse>> {
 export async function modifyUserService(
   body: UserConfigurationForm,
 ): Promise<Result<object>> {
-  const url = `${import.meta.env.VITE_URL_USER}`;
+  const url = `${import.meta.env.VITE_USER_URL}`;
 
   const request = await fetch(url, {
     method: "PATCH",

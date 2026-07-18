@@ -21,13 +21,19 @@ export const routineService = {
     }
   },
 
-  async post(form: CreateRoutineRequest): Promise<Result<null>> {
-    const url = `${import.meta.env.VITE_ROUTTINE_URL}`;
+  async post(
+    username: string,
+    form: CreateRoutineRequest,
+  ): Promise<Result<null>> {
+    const url = `${import.meta.env.VITE_USER_URL}/${username}/routines`;
 
     const request = await fetch(url, {
       method: "POST",
       credentials: "include",
       body: JSON.stringify(form),
+      headers: {
+        "Content-type": "application/json",
+      },
     });
 
     if (!request.ok) {

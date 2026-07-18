@@ -33,7 +33,7 @@ export default function useRoutine(username: string) {
       categories: form.categories,
     };
 
-    const response = await routineService.post(body);
+    const response = await routineService.post(username, body);
 
     if (response.error) {
       setErrorRoutines([response.error.detail]);
