@@ -53,6 +53,9 @@ namespace Habits.API.Users
                 return TypedResults.ValidationProblem(errors);
             }
 
+            Claim claim = new Claim("idUser", user.Id);
+            var claimResult = await manager.AddClaimAsync(user, claim);
+
             return Results.Created();
         }
         public async static Task<IResult> ModifyUser(
@@ -74,6 +77,9 @@ namespace Habits.API.Users
 
             if (!validationResult.IsValid)
                 return TypedResults.ValidationProblem(validationResult.ToDictionary());
+
+            if (bodyDeserialize.Timezone is not null && TimeZoneInfo.TryConvertIanaIdToWindowsId(bodyDeserialize.Timezone, out string? windowsTimeZone))
+                bodyDeserialize.Timezone = windowsTimeZone;
 
             var operationResult = await userService.ModifyUser(username, bodyDeserialize);
 

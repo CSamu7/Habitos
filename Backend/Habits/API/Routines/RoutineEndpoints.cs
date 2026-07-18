@@ -5,6 +5,7 @@ using Habits.Services.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch.Exceptions;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace Habits.API.Routines
@@ -27,19 +28,29 @@ namespace Habits.API.Routines
 
             return result.ToHttpResponse();
         }
-        public static async Task<IResult> PostRoutine(string username, PostRoutineRequest body, LinkGenerator generator, RoutineService service, UserManager<User> manager)
+        public static async Task<IResult> PostRoutine(string username, PostRoutineRequest body, LinkGenerator generator, RoutineService service, UserManager<User> manager, HttpContext ctx)
         {
-            var user = await manager.FindByNameAsync(username);
+            var user = ctx.User;
 
             if (user is null) return TypedResults.Unauthorized();
 
-            Result<Routine> result = await service.PostRoutine(user.Id, body);
+            //TODO: Checar que el nombre en el endpoint y del usuario sea el mismo.
+
+            var idUser = user.Claims.FirstOrDefault(x => x.Type == "idUser")?.Value;
+
+            if (idUser is null)
+            {
+                Console.WriteLine("¿SIN CLAIM?");
+                return TypedResults.NotFound();
+            }
+
+            Result<Routine> result = await service.PostRoutine(idUser, body);
 
             if (result.Status.Equals(Status.Ok))
             {
                 Routine routine = result.Value;
 
-                var response = new GetRoutineResponse(routine.IdRoutine, routine.Name, routine.Minutes, routine.IdRoutineCategory, routine.IdRoutineCategoryNavigation.Color.ToString());
+                var response = new GetRoutineResponse(routine.IdRoutine, routine.Name, routine.Minutes, routine.IdRoutineCategory, routine.IdRoutineCategoryNavigation?.Color.ToString() ?? "");
                 string? uri = generator.GetPathByName
                     ("getRoutine", new() { { "idRoutine", response.Id } });
 
@@ -51,6 +62,8 @@ namespace Habits.API.Routines
         public static async Task<IResult> GetAllRoutines(string username, RoutineService service, UserManager<User> manager)
         {
             //TODO: IsSameUser Authorization
+            //TODO: Usar HttpContext.User!!!
+
             var user = await manager.FindByNameAsync(username);
             Result<List<Routine>> result = await service.GetAllRoutines(user.Id);
 
