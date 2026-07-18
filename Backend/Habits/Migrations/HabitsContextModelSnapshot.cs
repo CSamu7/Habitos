@@ -48,7 +48,9 @@ namespace Habits.Migrations
                         .HasColumnName("id_routine");
 
                     b.Property<int>("MinutesCompleted")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasDefaultValue(0)
                         .HasColumnName("minutes_completed");
 
                     b.Property<int>("TotalMinutes")
