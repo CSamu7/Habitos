@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Habits.Common;
 
 namespace Habits.API.DailyRoutines.Validation
 {
@@ -7,11 +8,9 @@ namespace Habits.API.DailyRoutines.Validation
         public static IRuleBuilderOptions<T, int> MinutesAreValid<T>
             (this IRuleBuilder<T, int> ruleBuilder)
         {
-            int MAX_MINUTES = 480;
-
             return ruleBuilder
                 .GreaterThan(0).WithMessage("Minutes must be positive")
-                .LessThan(MAX_MINUTES).WithMessage("You can't add more than 8 hours");
+                .LessThan(Constants.MAX_FULL_ROUTINE_MINUTES).WithMessage("You can't add more than 8 hours");
         }
     }
 }

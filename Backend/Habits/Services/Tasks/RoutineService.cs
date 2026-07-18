@@ -1,4 +1,5 @@
 ﻿using Habits.API.Routines.DTO;
+using Habits.Common;
 using Habits.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
@@ -32,10 +33,10 @@ namespace Habits.Services.Tasks
 
             return Result<List<Routine>>.Success(tasks);
         }
-        public async Task<Result<Routine>> PostRoutine(string id, PostRoutineRequest body)
+        public async Task<Result<Routine>> PostRoutine(string idUser, PostRoutineRequest body)
         {
             Routine routine = body.ToTask();
-            routine.IdUser = id;
+            routine.IdUser = idUser;
 
             if (routine.IdRoutineCategory is not null)
             {
@@ -47,7 +48,12 @@ namespace Habits.Services.Tasks
                         (Status.InvalidData, $"La categoria #{routine.IdRoutineCategory} no existe");
             }
 
-            _db.Routines.Add(routine);
+            int totalMinutes = _db.Routines.Sum(routine => routine.Minutes);
+
+            if (totalMinutes > Constants.MAX_FULL_ROUTINE_MINUTES)
+                return Result<Routine>.Failure(Status.InvalidData, "No puedes superar el limite de 8 horas");
+
+            await _db.Routines.AddAsync(routine);
             await _db.SaveChangesAsync();
 
             return Result<Routine>.Success(routine);

@@ -44,7 +44,7 @@ public partial class HabitsContext : IdentityDbContext<User>
                 .HasDefaultValueSql("((sysdatetimeoffset() AT TIME ZONE 'UTC'))")
                 .HasColumnName("date");
             entity.Property(e => e.IdRoutine).HasColumnName("id_routine");
-            entity.Property(e => e.MinutesCompleted).HasColumnName("minutes_completed");
+            entity.Property(e => e.MinutesCompleted).HasColumnName("minutes_completed").HasDefaultValue(0);
             entity.Property(e => e.TotalMinutes).HasColumnName("total_minutes");
 
             entity.HasOne(d => d.IdRoutineNavigation).WithMany(p => p.DailyTasks)

@@ -16,5 +16,16 @@ namespace Testing.UnitTesting.API.Validations
 
             result.ShouldHaveValidationErrorFor(x => x.Name);
         }
+
+        [Fact]
+        public void Time_is_under_max_time()
+        {
+            PostRoutineRequestValidation sut = new PostRoutineRequestValidation();
+            PostRoutineRequest request = new("", 900, null);
+
+            var result = sut.TestValidate(request);
+
+            result.ShouldHaveValidationErrorFor(x => x.Minutes);
+        }
     }
 }

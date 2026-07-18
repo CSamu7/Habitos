@@ -10,7 +10,9 @@ namespace Habits.API.Routines.Validation
         {
             RuleFor(x => x.Name)
                 .NotEmpty()
-                .WithMessage("El nombre esta vacio");
+                .WithMessage("El nombre esta vacio")
+                .MaximumLength(40)
+                .WithMessage("El nombre es muy largo.");
 
             RuleFor(x => x.Minutes).MinutesAreValid();
         }
