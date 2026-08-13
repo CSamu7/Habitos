@@ -18,7 +18,7 @@ namespace Testing.UnitTesting.API.Validations
         }
 
         [Fact]
-        public void Timezone_is_valid()
+        public void Invalid_timezone_returns_error()
         {
             PatchUserRequestValidation sut = new();
             PatchUserRequest dto = new("UTC-134", 24, 12);

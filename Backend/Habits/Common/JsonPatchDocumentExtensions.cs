@@ -7,7 +7,7 @@ namespace Habits.Common
 {
     public static class JsonPatchDocumentExtensions
     {
-        public static JsonPatchDocument Sanitize(this JsonPatchDocument patchDoc, List<OperationType> operationsAllowed = null)
+        public static JsonPatchDocument Sanitize(this JsonPatchDocument patchDoc, List<OperationType>? operationsAllowed = null)
         {
             operationsAllowed = operationsAllowed ?? [OperationType.Replace];
 

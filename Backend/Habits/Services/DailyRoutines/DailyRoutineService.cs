@@ -1,5 +1,4 @@
 ﻿using Habits.API.DailyRoutines.DTO;
-using Habits.Common;
 using Habits.Features.DailyTasks.Models;
 using Habits.Models;
 using Habits.Services.DailyRoutines;
@@ -10,10 +9,12 @@ public class DailyRoutineService
 {
     private HabitsContext _db;
     private UserManager<User> _userManager;
-    public DailyRoutineService(HabitsContext db, UserManager<User> userManager)
+    private TimeProvider _timeProvider;
+    public DailyRoutineService(HabitsContext db, UserManager<User> userManager, TimeProvider timeProvider)
     {
         _userManager = userManager;
         _db = db;
+        _timeProvider = timeProvider;
     }
     public async Task<Result<DailyTask>> GetRoutine(int idDailyRoutine)
     {
@@ -37,19 +38,31 @@ public class DailyRoutineService
             .AsNoTracking()
             .ToList();
 
-        List<DailyTask> filtered = Filter(dailyTasks, queryParams);
+        AdjustDateRangeToCutoffTime(user.CutOffTime, queryParams);
+        List<DailyTask> tasksSelected = Filter(dailyTasks, queryParams);
 
-        return Result<List<DailyTask>>.Success(filtered);
+        return Result<List<DailyTask>>.Success(tasksSelected);
+    }
+
+    private void AdjustDateRangeToCutoffTime(int cutOffTime, GetDailyRoutineQueryParams queryParams)
+    {
+        queryParams.DateStart = queryParams.DateStart.AddHours(cutOffTime);
+        queryParams.DateEnd = queryParams.DateEnd.AddHours(cutOffTime);
+
+        int actualHour = _timeProvider.GetUtcNow().Hour;
+
+        if (actualHour > cutOffTime)
+        {
+            queryParams.DateStart = queryParams.DateStart.AddDays(1);
+            queryParams.DateEnd = queryParams.DateEnd.AddDays(1);
+        }
     }
     private List<DailyTask> Filter(List<DailyTask> dailyTasks, GetDailyRoutineQueryParams queryParams)
     {
-        DateTimeOffset startDate = queryParams.DateStart.ToDateTimeOffset();
-        DateTimeOffset dateEnd = queryParams.DateEnd.ToDateTimeOffset();
-
         List<DailyTask> byDate = dailyTasks
             .Where(d =>
-                DateTimeOffset.Compare(startDate, d.Date) <= 0 &&
-                DateTimeOffset.Compare(d.Date, dateEnd) < 0)
+                DateTimeOffset.Compare(queryParams.DateStart, d.Date) <= 0 &&
+                DateTimeOffset.Compare(d.Date, queryParams.DateEnd) < 0)
             .ToList();
 
         if (queryParams.Progress.Any())

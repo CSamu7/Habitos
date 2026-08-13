@@ -22,7 +22,7 @@ namespace Habits.API.Routines
 
                 var response = new GetRoutineResponse
                     (routine.IdRoutine, routine.Name, routine.Minutes, routine.IdRoutineCategory, 
-                    routine.IdRoutineCategoryNavigation.Color.ToString() ?? "FFF");
+                    routine.IdRoutineCategoryNavigation?.Color.ToString() ?? "FFF");
                 return TypedResults.Ok(response);
             }
 
@@ -59,12 +59,11 @@ namespace Habits.API.Routines
 
             return result.ToHttpResponse();
         }
-        public static async Task<IResult> GetAllRoutines(string username, RoutineService service, UserManager<User> manager)
+        public static async Task<IResult> GetAllRoutines(string username, RoutineService service, UserManager<User> userManager, HttpContext ctx)
         {
-            //TODO: IsSameUser Authorization
-            //TODO: Usar HttpContext.User!!!
+            var user = await userManager.GetUserAsync(ctx.User);
 
-            var user = await manager.FindByNameAsync(username);
+            if (user is null) return TypedResults.Unauthorized();
             Result<List<Routine>> result = await service.GetAllRoutines(user.Id);
 
             if (result.Status.Equals(Status.Ok))

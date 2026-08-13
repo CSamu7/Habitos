@@ -6,12 +6,12 @@ using Testing.IntegrationTesting.Helpers;
 namespace Testing.IntegrationTesting.RoutineEndpoints
 {
     [Collection("Database collection")]
-    public class RoutineIntegrationTests(CustomWebApplication testApp)
+    public class RoutineIntegrationTests(CustomWebApplication application)
     {
         [Fact]
         public async void Get_routine()
         {
-            var client = testApp.CreateAuthClient();
+            var client = application.CreateAuthClient();
             var response = await client.GetAsync("https://localhost:7074/api/routines/2");
             response.EnsureSuccessStatusCode();
 
@@ -26,7 +26,7 @@ namespace Testing.IntegrationTesting.RoutineEndpoints
         public async void Post_routine()
         {
             var body = new PostRoutineRequest("TestRoutine", 30, null);
-            var client = testApp.CreateAuthClient();
+            var client = application.CreateAuthClient();
             var response = await client.PostAsJsonAsync("https://localhost:7074/api/users/samu/routines/", body);
 
             response.EnsureSuccessStatusCode();
@@ -44,7 +44,7 @@ namespace Testing.IntegrationTesting.RoutineEndpoints
         [Fact]
         public async void Get_all_routines()
         {
-            var client = testApp.CreateAuthClient();
+            var client = application.CreateAuthClient();
             var response = await client.GetAsync("https://localhost:7074/api/users/samu/routines/");
             response.EnsureSuccessStatusCode();
 
@@ -57,7 +57,7 @@ namespace Testing.IntegrationTesting.RoutineEndpoints
         [Fact]
         public async void Delete_routine()
         {
-            var client = testApp.CreateAuthClient();
+            var client = application.CreateAuthClient();
             var response = await client.DeleteAsync("https://localhost:7074/api/routines/2");
             response.EnsureSuccessStatusCode();
 

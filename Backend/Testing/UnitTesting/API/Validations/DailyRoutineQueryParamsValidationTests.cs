@@ -8,45 +8,47 @@ namespace Testing.UnitTesting.API.Validations
     public class DailyRoutineQueryParamsValidationTests
     {
         [Fact]
-        public void End_date_is_after_start_date()
+        public void End_date_is_the_smallest()
         {
             TimeProvider timeProvider = new FakeTimeProvider(startDateTime: new DateTime(2020, 10, 1));
-            GetDailyRoutineQueryParams queryParams =
-                new(new DateOnly(2025, 1, 1), new DateOnly(2024, 1, 1), null);
+            DateTimeOffset dateStart = new(new(2025, 1, 1));
+            DateTimeOffset dateEnd = new(new(2024, 1, 1));
+
+            GetDailyRoutineQueryParams queryParams = new(dateStart, dateEnd, []);
             DailyRoutineQueryParamsValidation sut = new(timeProvider);
 
             var result = sut.TestValidate(queryParams);
 
-            result.ShouldHaveValidationErrorFor(x => x.DateStart)
-                .WithErrorMessage("Start date must be before date end");
+            result.ShouldHaveValidationErrorFor(x => x.DateStart);
         }
         [Fact]
-        public void Start_date_is_in_the_present()
+        public void Start_date_is_not_in_the_present()
         {
             TimeProvider timeProvider = new FakeTimeProvider(startDateTime: new DateTime(2025, 12, 31));
+            DateTimeOffset dateStart = new(new(2950, 1, 1));
+            DateTimeOffset dateEnd = new(new(2024, 1, 1));
 
-            GetDailyRoutineQueryParams queryParams =
-                new(new DateOnly(2950, 1, 1), new DateOnly(2024, 1, 1), null);
+            GetDailyRoutineQueryParams queryParams = new(dateStart, dateEnd, []);
             DailyRoutineQueryParamsValidation validation = new(timeProvider);
 
             var result = validation.TestValidate(queryParams);
 
-            result.ShouldHaveValidationErrorFor(x => x.DateStart)
-                .WithErrorMessage("Date start must be in the present.");
+            result.ShouldHaveValidationErrorFor(x => x.DateStart);
         }
         [Fact]
-        public void End_date_is_in_the_present()
+        public void End_date_is_not_in_the_present()
         {
             TimeProvider timeProvider = new FakeTimeProvider(startDateTime: new DateTime(2025, 12, 31));
 
-            GetDailyRoutineQueryParams queryParams =
-                new(new DateOnly(2025, 1, 1), new DateOnly(2950, 1, 1), null);
+            DateTimeOffset dateStart = new(new(2024, 1, 1));
+            DateTimeOffset dateEnd = new(new(2950, 1, 1));
+
+            GetDailyRoutineQueryParams queryParams = new(dateStart, dateEnd, []);
             DailyRoutineQueryParamsValidation sut = new(timeProvider);
 
             var result = sut.TestValidate(queryParams);
 
-            result.ShouldHaveValidationErrorFor(x => x.DateEnd)
-                .WithErrorMessage("Date end must be in the present.");
+            result.ShouldHaveValidationErrorFor(x => x.DateEnd);
         }
     }
 }

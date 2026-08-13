@@ -7,6 +7,7 @@ using Habits.API.Routines.DTO;
 using Habits.API.Routines.Validation;
 using Habits.API.Users.DTO;
 using Habits.API.Users.Validations;
+using Habits.Common;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.Json.Serialization;
 
@@ -30,8 +31,7 @@ namespace Habits.API
             services.AddProblemDetails();
             services.AddSingleton(TimeProvider.System);
 
-            var today = DateOnly.FromDateTime(DateTime.UtcNow);
-
+            var today = DateOnly.FromDateTime(DateTime.UtcNow).ToDateTimeOffset();
             services.AddScoped(filters => new GetDailyRoutineQueryParams(today.AddDays(-1), today, []));
 
             return services;

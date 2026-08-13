@@ -1,13 +1,14 @@
-﻿using Habits.Common.DailyRoutines;
+﻿using Habits.Common;
+using Habits.Common.DailyRoutines;
 
 namespace Habits.API.DailyRoutines.DTO
 {
     public class GetDailyRoutineQueryParams
     {
-        public DateOnly DateStart { get; set; }
-        public DateOnly DateEnd { get; set; }
+        public DateTimeOffset DateStart { get; set; }
+        public DateTimeOffset DateEnd { get; set; }
         public Progress[] Progress { get; set; }
-        public GetDailyRoutineQueryParams(DateOnly dateStart, DateOnly dateEnd, Progress[] progress)
+        public GetDailyRoutineQueryParams(DateTimeOffset dateStart, DateTimeOffset dateEnd, Progress[] progress)
         {
             DateStart = dateStart;
             DateEnd = dateEnd;
@@ -35,7 +36,7 @@ namespace Habits.API.DailyRoutines.DTO
             if (!DateOnly.TryParse(context.Request.Query[dateStartKey], out DateOnly dateStart))
                 dateStart = dateEnd.AddDays(-1);
 
-            var result = new GetDailyRoutineQueryParams(dateStart, dateEnd, finalProgress.ToArray());
+            var result = new GetDailyRoutineQueryParams(dateStart.ToDateTimeOffset(), dateEnd.ToDateTimeOffset(), finalProgress.ToArray());
 
             return await ValueTask.FromResult<GetDailyRoutineQueryParams?>(result);
         }

@@ -5,6 +5,7 @@ using Habits.API.Routines;
 using Habits.API.Routines.DTO;
 using Habits.API.Routines.Filters;
 using Habits.API.Users.Filters;
+using Habits.Common;
 using Habits.Common.DailyRoutines;
 
 namespace Habits.API.Users
@@ -22,18 +23,18 @@ namespace Habits.API.Users
                 DateOnly dateStart = dateEnd.AddDays(-1);
 
                 return await DailyRoutineEndpoints.GetDailyRoutines
-                (username, new(dateStart, dateEnd, [Progress.NotDone, Progress.InProgress, Progress.Done]), service);
+                (username, new(dateStart.ToDateTimeOffset(), dateEnd.ToDateTimeOffset(), [Progress.NotDone, Progress.InProgress, Progress.Done]), service);
             }).AddEndpointFilter<IsOwnerFilter>();
 
             userRoutes.MapGet("/{username}/dailyRoutines", DailyRoutineEndpoints.GetDailyRoutines)
                 .AddEndpointFilter<IsOwnerFilter>()
                 .AddEndpointFilter<GetAllDailyRoutinesEndpointFilter>()
                 .WithDescription("""
-                    NotDone: Task that is available and it haven't been started
+                    NotDone: Task that is available and it hasn't been started
                     InProgress: Task that is available and it has been started but not completed
                     Done: Task completed
                     Incomplete: Task that is not available and it wasn't completed.
-                    Overdone: Task that overpassed its time. 
+                    Overdone: Task where the used overpassed the time limit.
                 """);
 
             //Nested Routines

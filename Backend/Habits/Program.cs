@@ -5,7 +5,9 @@ using Habits.API.Policies;
 using Habits.API.Routines;
 using Habits.API.Users;
 using Habits.Infraestructure;
+using Habits.Models;
 using Habits.Services;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddNewtonsoftJson();
