@@ -5,6 +5,7 @@ import PublicLayout from "../../../components/PublicLayout";
 import useUser from "../../../hooks/useUser";
 import styles from "./UserRegisterForm.module.css";
 import FormInput from "../../../components/FormInput";
+import ErrorModal from "../../../components/ErrorModal";
 
 export default function UserRegisterForm() {
   const {
@@ -119,6 +120,12 @@ export default function UserRegisterForm() {
           />
         </form>
       </div>
+      {errors.root?.serverError && (
+        <ErrorModal
+          title="Error en servidor"
+          message={errors.root.serverError.message}
+        ></ErrorModal>
+      )}
     </PublicLayout>
   );
 }
