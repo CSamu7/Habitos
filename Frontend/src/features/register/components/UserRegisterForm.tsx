@@ -3,6 +3,8 @@ import { useLocation } from "wouter";
 import type { UserRegisterForm } from "../types/RegisterTypes";
 import PublicLayout from "../../../components/PublicLayout";
 import useUser from "../../../hooks/useUser";
+import styles from "./UserRegisterForm.module.css";
+import FormInput from "../../../components/FormInput";
 
 export default function UserRegisterForm() {
   const {
@@ -16,52 +18,56 @@ export default function UserRegisterForm() {
   const { registerUser, loginUser } = useUser();
   //Moverlo a un hook.
   const submitRegister: SubmitHandler<UserRegisterForm> = async (data) => {
-    const response = await registerUser(data);
+    try {
+      const response = await registerUser(data);
 
-    if (response.error) {
+      if (response.error) {
+        setError("root.serverError", {
+          type: "manual",
+          message: response.error.detail,
+        });
+
+        return;
+      }
+
+      await loginUser({ username: data.username, password: data.password });
+      setLocation("/account-configuration");
+    } catch (error: unknown) {
       setError("root.serverError", {
         type: "manual",
-        message: response.error.detail,
+        message: "Hubo un error con el servidor. Vuelva pronto",
       });
-
-      return;
     }
-
-    await loginUser({ username: data.username, password: data.password });
-    //TODO: check if there's a mistake.
-
-    //TODO: ey, wait so i can login user.
-    setLocation("/account-configuration");
   };
 
   return (
-    <PublicLayout header="Creación de cuenta">
-      <form onSubmit={handleSubmit(submitRegister)}>
-        <div>
-          <h2>Crea tu cuenta</h2>
-        </div>
-        <div>
-          <div>
-            <label htmlFor="">Correo</label>
-            <input
+    <PublicLayout>
+      <div className={styles.containerForm}>
+        <h2 className={styles.titleForm}>Crea tu cuenta</h2>
+        <form onSubmit={handleSubmit(submitRegister)} className={styles.form}>
+          <div className={styles.inputsContainerForm}>
+            <FormInput
+              type="email"
+              label="Correo"
+              error={errors.email?.message}
               {...register("email", {
                 required: {
                   value: true,
-                  message: "El campo correo esta vacio",
+                  message: "Ingresa un correo",
                 },
-                pattern: { value: /.@./g, message: "Ingresa un correo valido" },
+                pattern: {
+                  value: /.@./g,
+                  message: "Ingresa un correo valido",
+                },
               })}
-              type="email"
-            />
-          </div>
-          <div>
-            <label htmlFor="">Nombre de usuario</label>
-            <input
-              type="text"
+            ></FormInput>
+            <FormInput
+              label="Nombre de usuario"
+              error={errors.username?.message}
               {...register("username", {
                 required: {
                   value: true,
-                  message: "El campo nombre de usuario esta vacio",
+                  message: "Ingresa un nombre de usuario",
                 },
                 minLength: {
                   value: 4,
@@ -72,28 +78,26 @@ export default function UserRegisterForm() {
                   message: "Tu nombre no puede tener mas de 32 caracteres",
                 },
               })}
-            />
-          </div>
-          <div>
-            <label htmlFor="">Contraseña</label>
-            <input
+            ></FormInput>
+            <FormInput
+              label="Contraseña"
               type="password"
+              error={errors.password?.message}
               {...register("password", {
                 required: {
                   value: true,
-                  message: "Debes ingresar una contraseña",
+                  message: "Ingresa una contraseña",
                 },
                 minLength: {
                   value: 8,
                   message: "Tu contraseña debe tener minimo 8 caracteres",
                 },
               })}
-            />
-          </div>
-          <div>
-            <label htmlFor="">Repite tu contraseña</label>
-            <input
+            ></FormInput>
+            <FormInput
+              label="Repite tu contraseña"
               type="password"
+              error={errors.repeatedPassword?.message}
               {...register("repeatedPassword", {
                 required: {
                   value: true,
@@ -106,22 +110,15 @@ export default function UserRegisterForm() {
                   },
                 },
               })}
-            />
+            ></FormInput>
           </div>
-        </div>
-        <ul>
-          {errors?.root?.serverError && (
-            <li>{errors.root.serverError.message}</li>
-          )}
-          {errors.email && <li>{errors.email?.message}</li>}
-          {errors.username && <li>{errors.username?.message}</li>}
-          {errors.password && <li>{errors.password?.message}</li>}
-          {errors.repeatedPassword && (
-            <li>{errors.repeatedPassword?.message}</li>
-          )}
-        </ul>
-        <input type="submit" value="Registrarse" />
-      </form>
+          <input
+            type="submit"
+            value="Registrarse"
+            className={styles.btnSubmit}
+          />
+        </form>
+      </div>
     </PublicLayout>
   );
 }

@@ -6,7 +6,7 @@ export default function PublicLayout({
   header,
   children,
 }: {
-  header: string;
+  header?: ReactNode | ReactNode[] | null;
   children: ReactNode | ReactNode[];
 }) {
   return (

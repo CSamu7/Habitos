@@ -1,7 +1,14 @@
 :root {
-  --blue: #0a81d1;
-  --light-red: #e47977;
+  --strong-purple: #500aff;
+  --purple: #8a5cff;
+  --light-dark: #36382e;
+  --strong-red: #dd0000;
+  --bg-color: #f9f9f9;
+  --white: #ffffff;
+  --bone: #ebebeb;
+  --gray: #5d5d5d;
 
+  --font-size-subtitle: 1.5rem;
   font: 18px/145% var(--sans);
   letter-spacing: 0.18px;
   color-scheme: light dark;

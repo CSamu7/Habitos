@@ -3,7 +3,7 @@ import type { DailyTasksData } from "../types/DailyTasksTypes";
 import { dailyTasksService } from "../services/dailyTasksService";
 import type { Result } from "../types/common";
 
-export default function useDailyTasks({ username }: { username: string }) {
+export default function useDailyTasks(username: string) {
   const [dailyTasks, setDailyTasks] = useState<DailyTasksData>({
     list: [],
     count: 0,
@@ -27,9 +27,7 @@ export default function useDailyTasks({ username }: { username: string }) {
       }
     };
 
-    if (username) {
-      getDailyTasks();
-    }
+    if (username) getDailyTasks();
   }, [username]);
 
   return { dailyTasks };

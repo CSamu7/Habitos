@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import PublicLayout from "../../../components/PublicLayout";
 import useRoutine from "../../../hooks/useRoutine";
 import useUser from "../../../hooks/useUser";
 
@@ -20,14 +19,7 @@ export default function RoutinesPage() {
       <p className={styles.routineCategory}>
         {routine.category ?? "Sin categoría"}
       </p>
-      {/* <div className={styles.weekDots}>
-        {routine.lastSevenDays.map((status, i) => (
-          <span
-            key={i}
-            className={`${styles.dot} ${styles[`dot--${status}`]}`}
-          />
-        ))}
-      </div> */}
+
       <div className={styles.actions}>
         <button className={styles.actionBtn}>Editar</button>
         <button className={styles.actionBtn}>Eliminar</button>

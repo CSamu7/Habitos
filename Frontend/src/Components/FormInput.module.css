@@ -1,0 +1,17 @@
+.formInput {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.formInput > input {
+  background-color: var(--bone);
+  padding: 5px;
+  border: 1px solid var(--gray);
+  color: #000;
+}
+
+.formInput > p {
+  color: var(--strong-red);
+  margin: 0;
+}

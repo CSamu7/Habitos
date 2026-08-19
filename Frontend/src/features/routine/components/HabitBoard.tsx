@@ -5,12 +5,12 @@ import useDailyTasks from "../../../hooks/useDailyTasks";
 import type { DailyTaskInformation } from "../../../types/DailyTasksTypes";
 
 export default function HabitBoard({ username }: { username: string }) {
-  const { dailyTasks } = useDailyTasks({ username });
+  const { dailyTasks } = useDailyTasks(username);
 
   const pending: Array<DailyTaskInformation> =
     dailyTasks?.list.filter(
       (dailyTask) =>
-        dailyTask.status == "Pending" || dailyTask.status == "InProgress",
+        dailyTask.status == "NotDone" || dailyTask.status == "InProgress",
     ) ?? [];
 
   const incomplete: Array<DailyTaskInformation> =
@@ -28,7 +28,7 @@ export default function HabitBoard({ username }: { username: string }) {
         completedTasks={completed.length ?? 0}
       ></BoardSummary>
       <div className={styles.columns}>
-        <HabitColumn progress="Pending" routines={pending} />
+        <HabitColumn progress="NotDone" routines={pending} />
         <HabitColumn progress="Incomplete" routines={incomplete} />
         <HabitColumn progress="Completed" routines={completed} />
       </div>

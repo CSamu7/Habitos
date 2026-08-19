@@ -1,0 +1,44 @@
+main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.containerForm {
+  width: 650px;
+  padding: 1em;
+
+  display: flex;
+  flex-direction: column;
+
+  background-color: var(--white);
+  box-shadow: 1px 1px 3px black;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.titleForm {
+  color: var(--strong-purple);
+  font-size: var(--font-size-subtitle);
+}
+
+.inputsContainerForm {
+  display: grid;
+
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.btnSubmit {
+  background-color: var(--strong-purple);
+  color: var(--white);
+  border: 0;
+  padding: 15px 25px;
+  align-self: flex-end;
+  cursor: pointer;
+}
