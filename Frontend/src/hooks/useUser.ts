@@ -40,7 +40,7 @@ export default function useUser() {
 
   const registerUser = async (
     data: UserRegisterForm,
-  ): Promise<Result<void>> => {
+  ): Promise<Result<null>> => {
     const body: UserRegisterRequest = {
       email: data.email,
       username: data.username,

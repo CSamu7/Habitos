@@ -5,7 +5,7 @@
   align-items: center;
 }
 
-.menuLink {
+.menu > a {
   color: white;
   text-decoration: none;
 }

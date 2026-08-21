@@ -5,50 +5,31 @@ import type {
   UserRegisterRequest,
 } from "../features/register/types/RegisterTypes";
 import type { GetUserResponse } from "../types/UserTypes";
-//TODO: No me gusta usar object aqui. Debería buscar un tipo que especifique el estatus y mensaje de exito.
-export async function loginService(
-  body: LoginUserData,
-): Promise<Result<object>> {
+import { betterFetch } from "../utils/api";
+
+export async function loginService(body: LoginUserData): Promise<Result<null>> {
   const url = `${import.meta.env.VITE_LOGIN_URL}`;
 
-  const request = await fetch(url, {
+  const request = await betterFetch<null>(url, {
     method: "POST",
     body: JSON.stringify(body),
     credentials: "include",
-    headers: {
-      "Content-type": "application/json",
-    },
   });
 
-  if (!request.ok) {
-    const response: ErrorAPI = await request.json();
-
-    return { error: response };
-  }
-
-  return { data: {} };
+  return request;
 }
 
 export async function registerService(
   body: UserRegisterRequest,
-): Promise<Result<object>> {
+): Promise<Result<null>> {
   const url = `${import.meta.env.VITE_REGISTER_URL}`;
 
-  const request = await fetch(url, {
+  const response = betterFetch<null>(url, {
     method: "POST",
     body: JSON.stringify(body),
-    headers: {
-      "Content-type": "application/json",
-    },
   });
 
-  if (!request.ok) {
-    const response: ErrorAPI = await request.json();
-
-    return { error: response };
-  }
-
-  return { data: {} };
+  return response;
 }
 
 export async function getUserService(): Promise<Result<GetUserResponse>> {

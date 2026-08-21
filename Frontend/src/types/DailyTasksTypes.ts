@@ -1,5 +1,5 @@
 export type DailyTaskStatus =
-  | "Pending"
+  | "NotDone"
   | "Incomplete"
   | "Completed"
   | "InProgress";

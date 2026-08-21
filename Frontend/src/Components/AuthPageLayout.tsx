@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import MenuNav from "./MenuNav";
 import styles from "./AuthPageLayout.module.css";
+import DashboardNav from "./DashboardNav";
 
 export default function AuthPageLayout({
   children,
@@ -9,7 +9,7 @@ export default function AuthPageLayout({
 }) {
   return (
     <div className={styles.page}>
-      <MenuNav></MenuNav>
+      <DashboardNav></DashboardNav>
       <main className={styles.main}>{children}</main>
     </div>
   );

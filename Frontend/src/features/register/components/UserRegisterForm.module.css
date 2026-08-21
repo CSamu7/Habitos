@@ -1,24 +1,19 @@
-main {
+.main {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.containerForm {
+.form {
   width: 650px;
   padding: 1em;
 
   display: flex;
   flex-direction: column;
+  gap: 20px;
 
   background-color: var(--white);
   box-shadow: 1px 1px 3px black;
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
 }
 
 .titleForm {

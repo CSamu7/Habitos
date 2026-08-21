@@ -1,6 +1,7 @@
 .page {
   display: flex;
   flex-direction: column;
+  align-items: center;
 
   background-color: var(--bg-color);
   min-height: 100vh;

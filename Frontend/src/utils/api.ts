@@ -1,12 +1,10 @@
 import type { ErrorAPI, Result } from "../types/common";
 
-export async function betterFetch<TResult>(
+export async function betterFetch<TResponse>(
   url: string,
   requestInfo: RequestInit,
-): Promise<Result<TResult>> {
+): Promise<Result<TResponse>> {
   if (requestInfo.method == "POST" || requestInfo.method == "PATCH") {
-    const jsonBody = JSON.stringify(requestInfo.body);
-    requestInfo.body = jsonBody;
     requestInfo.headers = { "Content-type": "application/json" };
   }
 
@@ -19,7 +17,13 @@ export async function betterFetch<TResult>(
     return { error: errorBody };
   }
 
-  const response: TResult = await request.json();
+  const contentLength: string = request.headers.get("Content-Length") ?? "0";
 
-  return { data: response, error: null };
+  if (Number(contentLength) > 0) {
+    const response = (await request.json()) as TResponse;
+
+    return { data: response, error: null };
+  }
+
+  return { data: null as TResponse, error: null };
 }

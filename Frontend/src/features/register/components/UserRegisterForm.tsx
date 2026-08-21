@@ -17,7 +17,7 @@ export default function UserRegisterForm() {
 
   const [, setLocation] = useLocation();
   const { registerUser, loginUser } = useUser();
-  //Moverlo a un hook.
+
   const submitRegister: SubmitHandler<UserRegisterForm> = async (data) => {
     try {
       const response = await registerUser(data);
@@ -43,9 +43,10 @@ export default function UserRegisterForm() {
 
   return (
     <PublicLayout>
-      <div className={styles.containerForm}>
-        <h2 className={styles.titleForm}>Crea tu cuenta</h2>
+      <main className={styles.main}>
         <form onSubmit={handleSubmit(submitRegister)} className={styles.form}>
+          <h2 className={styles.titleForm}>Crea tu cuenta</h2>
+
           <div className={styles.inputsContainerForm}>
             <FormInput
               type="email"
@@ -119,7 +120,8 @@ export default function UserRegisterForm() {
             className={styles.btnSubmit}
           />
         </form>
-      </div>
+      </main>
+
       {errors.root?.serverError && (
         <ErrorModal
           title="Error en servidor"
