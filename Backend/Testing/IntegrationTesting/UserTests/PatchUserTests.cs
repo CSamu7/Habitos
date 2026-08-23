@@ -5,7 +5,6 @@ using Testing.IntegrationTesting.Helpers;
 
 namespace Testing.IntegrationTesting.UserTests
 {
-
     [Collection("Database collection")] 
     public class PatchUserTests(CustomWebApplication application)
     {
@@ -14,7 +13,6 @@ namespace Testing.IntegrationTesting.UserTests
         {
             var client = application.CreateAuthClient();
 
-            //¿Podriamos hacer una clase que solo le interese comprobar que el usuario tenga 
 
             var content = new PatchUserRequest(null, null, 77);
             var result = await client.PatchAsJsonAsync("api/users/", content);
@@ -22,12 +20,15 @@ namespace Testing.IntegrationTesting.UserTests
 
             content = new PatchUserRequest(null, null, 55);
             result = await client.PatchAsJsonAsync("api/users/", content);
+            var lastModification = await client.GetFromJsonAsync<GetUserResponse>("api/users/");
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+            Assert.NotNull(lastModification);
 
             content = new PatchUserRequest(null, null, 66);
             result = await client.PatchAsJsonAsync("api/users/", content);
 
             Assert.NotNull(result);
+            Assert.NotEqual(66, lastModification.MinGoal);
             Assert.Equal(HttpStatusCode.BadRequest,result.StatusCode);
         }
 
@@ -47,16 +48,5 @@ namespace Testing.IntegrationTesting.UserTests
             Assert.NotNull(user);
             Assert.Equal(time.ToUniversalTime().Hour, user.CutOffTime);
         }
-
-        [Theory]
-        [InlineData(new())]
-        public async void Modify_user_is_succesful(PatchUserRequest request)
-        {
-            //just send body
-        }
-
-
     }
-
-
 }

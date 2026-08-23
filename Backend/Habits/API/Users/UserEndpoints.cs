@@ -62,16 +62,19 @@ namespace Habits.API.Users
             [FromBody] JsonElement body, 
             UserService userService, 
             IValidator<PatchUserRequest> bodyValidation, 
+            UserManager<User> userManager,
             HttpContext ctx)
         {
+            var user = await userManager.FindByNameAsync(ctx.User?.Identity?.Name);
+
+            if (user is null) return TypedResults.Unauthorized();
+
             PatchUserRequest? bodyDeserialize = body.Deserialize<PatchUserRequest>(new JsonSerializerOptions()
             {
                 PropertyNameCaseInsensitive = true
             });
 
             if (bodyDeserialize is null) return TypedResults.BadRequest("Hubo un error en el formato del cuerpo");
-
-            string username = ctx.User.Identity?.Name ?? String.Empty;
 
             var validationResult = bodyValidation.Validate(bodyDeserialize);
 
@@ -81,7 +84,7 @@ namespace Habits.API.Users
             if (bodyDeserialize.Timezone is not null && TimeZoneInfo.TryConvertIanaIdToWindowsId(bodyDeserialize.Timezone, out string? windowsTimeZone))
                 bodyDeserialize.Timezone = windowsTimeZone;
 
-            var operationResult = await userService.ModifyUser(username, bodyDeserialize);
+            var operationResult = await userService.ModifyUser(user, bodyDeserialize);
 
             if (operationResult.Status != Status.Ok) return TypedResults.BadRequest(operationResult.ErrorMessage);
 
