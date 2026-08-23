@@ -8,17 +8,13 @@ export const routineService = {
   async getAll(username: string): Promise<Result<Array<RoutineData>>> {
     const url = `${import.meta.env.VITE_USER_URL}/${username}/routines`;
 
-    try {
-      const request = await fetch(url, {
-        credentials: "include",
-      });
+    const request = await fetch(url, {
+      credentials: "include",
+    });
 
-      const response: Result<Array<RoutineData>> = await request.json();
+    const response: Result<Array<RoutineData>> = await request.json();
 
-      return { data: response };
-    } catch (error) {
-      return { error: { detail: "Hubo un error en el servidor", status: 500 } };
-    }
+    return { data: response };
   },
 
   async post(
@@ -42,8 +38,6 @@ export const routineService = {
       return { error: response };
     }
 
-    const response: Result<null> = await request.json();
-
-    return response;
+    return { error: null, data: null };
   },
 };

@@ -55,18 +55,13 @@ export default function useUser() {
   const modifyUser = async (body: UserConfigurationForm) => {
     const response = await modifyUserService(body);
 
-    if (response.errors) {
+    if (response.error) {
       const serverErrors = formatErrors(response);
 
       for (const error of serverErrors) {
         setUserErrors([...userErrors, error]);
       }
 
-      return;
-    }
-
-    if (response.detail && response.status >= 400) {
-      setUserErrors([response.detail]);
       return;
     }
 

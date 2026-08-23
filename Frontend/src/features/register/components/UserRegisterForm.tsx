@@ -6,6 +6,7 @@ import useUser from "../../../hooks/useUser";
 import styles from "./UserRegisterForm.module.css";
 import FormInput from "../../../components/FormInput";
 import ErrorModal from "../../../components/ErrorModal";
+import SubmitButton from "../../../components/SubmitButton";
 
 export default function UserRegisterForm() {
   const {
@@ -114,11 +115,10 @@ export default function UserRegisterForm() {
               })}
             ></FormInput>
           </div>
-          <input
-            type="submit"
-            value="Registrarse"
+          <SubmitButton
+            text="Registrate"
             className={styles.btnSubmit}
-          />
+          ></SubmitButton>
         </form>
       </main>
 

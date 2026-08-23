@@ -16,9 +16,10 @@ export default function HabitColumn({ progress, routines }: HabitColumnProps) {
   const [activeIndex, setActiveIndex] = useState(-1);
 
   const mapping: Record<DailyTaskStatus, string> = {
-    Pending: "Pendiente",
+    NotDone: "Pendiente",
     Completed: "Completo",
     Incomplete: "Incompleto",
+    InProgress: "En Progreso",
   };
 
   const onActive = (key: number) => {

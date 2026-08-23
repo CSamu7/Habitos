@@ -52,20 +52,11 @@ export async function modifyUserService(
 ): Promise<Result<object>> {
   const url = `${import.meta.env.VITE_USER_URL}`;
 
-  const request = await fetch(url, {
+  const response = await betterFetch(url, {
     method: "PATCH",
     credentials: "include",
-    headers: {
-      "Content-type": "application/json",
-    },
     body: JSON.stringify(body),
   });
 
-  if (!request.ok) {
-    const response: ErrorAPI = await request.json();
-
-    return { error: response };
-  }
-
-  return { data: {} };
+  return { data: response };
 }

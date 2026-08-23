@@ -1,0 +1,46 @@
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form {
+  width: 650px;
+  padding: 1em;
+
+  display: flex;
+  flex-direction: column;
+
+  background-color: var(--white);
+  box-shadow: 1px 1px 3px black;
+}
+
+.titleForm {
+  color: var(--strong-purple);
+  font-size: var(--font-size-subtitle);
+}
+
+.inputsContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 15px;
+}
+
+.select {
+  padding: 10px;
+  background-color: var(--bone);
+  color: var(--black);
+  border: 1px solid var(--black);
+}
+
+.selectContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.inputSubmit {
+  align-self: flex-end;
+  width: 30%;
+}

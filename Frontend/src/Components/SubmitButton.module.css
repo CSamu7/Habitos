@@ -1,0 +1,7 @@
+.button {
+  color: var(--white);
+  border: 0;
+  padding: 15px 25px;
+  cursor: pointer;
+  background-color: var(--purple);
+}

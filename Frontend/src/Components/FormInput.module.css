@@ -12,6 +12,13 @@
 }
 
 .formInput > p {
-  color: var(--strong-red);
   margin: 0;
+}
+
+.error {
+  color: var(--strong-red);
+}
+
+.inputInfo {
+  color: var(--purple);
 }
