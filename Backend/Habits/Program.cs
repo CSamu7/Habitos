@@ -5,9 +5,7 @@ using Habits.API.Policies;
 using Habits.API.Routines;
 using Habits.API.Users;
 using Habits.Infraestructure;
-using Habits.Models;
 using Habits.Services;
-using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddNewtonsoftJson();
@@ -34,7 +32,8 @@ builder.Services
     .AddApiServices()
     .AddIdentity()
     .AddDatabase(builder.Configuration)
-    .AddDbServices();
+    .AddDbServices()
+    .AddHealthChecks();
 
 var app = builder.Build();
 
@@ -67,7 +66,8 @@ var baseApi = app.MapGroup("/api");
 baseApi.MapDailyRoutines()
     .MapUsers()
     .MapRoutines()
-    .MapCategories();
+    .MapCategories()
+    .MapHealthChecks("/healthz");
 
 app.Run();
 public partial class Program { }
