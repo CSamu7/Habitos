@@ -5,7 +5,7 @@
 }
 
 .formInput > input {
-  background-color: var(--bone);
+  background-color: var(--form-bg-color);
   padding: 5px;
   border: 1px solid var(--gray);
   color: #000;
@@ -20,5 +20,5 @@
 }
 
 .inputInfo {
-  color: var(--purple);
+  color: var(--primary-color);
 }

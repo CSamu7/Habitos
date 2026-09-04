@@ -19,7 +19,6 @@ export type CreateRoutineModalInputs = {
   name: string;
   hours: number;
   minutes: number;
-  categories: Array<number>;
 };
 
 export type CreateRoutineRequest = {

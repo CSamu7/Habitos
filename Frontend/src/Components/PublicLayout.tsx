@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import Header from "./Header";
 import styles from "./PublicLayout.module.css";
-import PublicNav from "./PublicNav";
+import NavMenu from "./NavMenu";
 
 export default function PublicLayout({
   children,
@@ -11,7 +11,11 @@ export default function PublicLayout({
   return (
     <div className={styles.page}>
       <Header>
-        <PublicNav></PublicNav>
+        <NavMenu>
+          <li>
+            <a href="/login">Inicio</a>
+          </li>
+        </NavMenu>
       </Header>
       {children}
     </div>

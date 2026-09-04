@@ -1,6 +1,6 @@
 .modal {
   padding: 0;
-  background-color: var(--bone);
+  background-color: var(--form-bg-color);
   border: 0;
 }
 

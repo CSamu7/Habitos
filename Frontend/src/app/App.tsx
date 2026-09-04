@@ -1,7 +1,7 @@
 import { Route, Switch } from "wouter";
 import "./App.css";
 import Login from "../features/auth/components/Login";
-import MainPage from "../features/routine/components/MainPage";
+import MainPage from "../features/routine/components/Dashboard";
 import UserRegisterForm from "../features/register/components/UserRegisterForm";
 import UserConfigurationForm from "../features/register/components/UserConfigurationForm";
 import RoutinesPage from "../features/routine/components/RoutinesPage";

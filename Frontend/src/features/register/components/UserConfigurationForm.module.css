@@ -29,7 +29,7 @@
 
 .select {
   padding: 10px;
-  background-color: var(--bone);
+  background-color: var(--form-bg-color);
   color: var(--black);
   border: 1px solid var(--black);
 }

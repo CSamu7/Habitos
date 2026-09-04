@@ -3,7 +3,7 @@ import Heatmap from "./Heatmap";
 import AuthPageLayout from "../../../components/AuthPageLayout";
 import useUser from "../../../hooks/useUser";
 
-export default function MainPage() {
+export default function Dashboard() {
   const { user } = useUser();
 
   console.log(user);

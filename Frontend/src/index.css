@@ -5,10 +5,15 @@
   --black: #000;
   --strong-red: #dd0000;
   --red: #ff1f1f;
-  --bg-color: #f9f9f9;
   --white: #ffffff;
   --bone: #ebebeb;
   --gray: #5d5d5d;
+
+  --primary-color: var(--purple);
+  --secondary-color: var(--strong-purple);
+  --main-bg-color: var(--bone);
+  --menu-bg-color: var(--light-dark);
+  --form-bg-color: var(--bone);
 
   --font-size-subtitle: 1.5rem;
   font: 18px/145% var(--sans);

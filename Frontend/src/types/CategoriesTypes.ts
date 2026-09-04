@@ -4,7 +4,7 @@ export type GetCategoriesResponse = {
 };
 
 export type CategoryData = {
-  id_routine_category: number;
+  idCategory: number;
   name: string;
   color: string;
 };

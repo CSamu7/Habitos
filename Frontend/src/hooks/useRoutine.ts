@@ -5,6 +5,7 @@ import {
   type CreateRoutineRequest,
   type GetAllRoutinesResponse,
 } from "../features/routine/types/routineTypes";
+import type { CategoryData } from "../types/CategoriesTypes";
 
 export default function useRoutine(username: string) {
   const [routines, setRoutines] = useState<GetAllRoutinesResponse>({
@@ -26,11 +27,14 @@ export default function useRoutine(username: string) {
     if (username) getRoutines();
   }, [username]);
 
-  const postRoutine = async (form: CreateRoutineModalInputs) => {
+  const postRoutine = async (
+    form: CreateRoutineModalInputs,
+    categoriesSelected: CategoryData[],
+  ) => {
     const body: CreateRoutineRequest = {
       name: form.name,
       minutes: Number(form.minutes) + Number(form.hours) * 60,
-      categories: form.categories,
+      categories: categoriesSelected.map((category) => category.idCategory),
     };
 
     const response = await routineService.post(username, body);

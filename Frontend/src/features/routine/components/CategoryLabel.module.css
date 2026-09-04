@@ -1,0 +1,15 @@
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px;
+}
+
+.dropdownItemColor {
+  width: 20px;
+  height: 20px;
+}
+
+.dropdownItemName {
+  margin: 0;
+}

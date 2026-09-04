@@ -1,0 +1,9 @@
+.formTimeSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.formTimeInputs {
+  display: flex;
+  gap: 10px;
+}
