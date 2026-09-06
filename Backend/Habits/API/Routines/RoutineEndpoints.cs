@@ -5,13 +5,13 @@ using Habits.Services.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch.Exceptions;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 using System.Text.Json;
 
 namespace Habits.API.Routines
 {
     public static class RoutineEndpoints
     {
+        //TODO: Configurar para que no se retorne el id de usuario en la coleccion de categorias.
         public static async Task<IResult> GetRoutine(int idRoutine, RoutineService service)
         {
             Result<Routine> result = await service.GetRoutine(idRoutine);
@@ -20,9 +20,8 @@ namespace Habits.API.Routines
             {
                 Routine routine = result.Value;
 
-                var response = new GetRoutineResponse
-                    (routine.IdRoutine, routine.Name, routine.Minutes, routine.IdRoutineCategory, 
-                    routine.IdRoutineCategoryNavigation?.Color.ToString() ?? "FFF");
+                var response = routine.ToGetRoutineResponse();
+
                 return TypedResults.Ok(response);
             }
 
@@ -34,15 +33,11 @@ namespace Habits.API.Routines
 
             if (user is null) return TypedResults.Unauthorized();
 
-            //TODO: Checar que el nombre en el endpoint y del usuario sea el mismo.
 
             var idUser = user.Claims.FirstOrDefault(x => x.Type == "idUser")?.Value;
 
             if (idUser is null)
-            {
-                Console.WriteLine("¿SIN CLAIM?");
                 return TypedResults.NotFound();
-            }
 
             Result<Routine> result = await service.PostRoutine(idUser, body);
 
@@ -50,7 +45,7 @@ namespace Habits.API.Routines
             {
                 Routine routine = result.Value;
 
-                var response = new GetRoutineResponse(routine.IdRoutine, routine.Name, routine.Minutes, routine.IdRoutineCategory, routine.IdRoutineCategoryNavigation?.Color.ToString() ?? "");
+                var response = routine.ToGetRoutineResponse();
                 string? uri = generator.GetPathByName
                     ("getRoutine", new() { { "idRoutine", response.Id } });
 
@@ -63,16 +58,16 @@ namespace Habits.API.Routines
         {
             var user = await userManager.GetUserAsync(ctx.User);
 
-            if (user is null) return TypedResults.Unauthorized();
+            if (user is null || user.UserName != username) return TypedResults.Unauthorized();
             Result<List<Routine>> result = await service.GetAllRoutines(user.Id);
 
             if (result.Status.Equals(Status.Ok))
             {
-                List<GetRoutineResponse> tasks = result.Value
-                    .Select(task => new GetRoutineResponse(task.IdRoutine, task.Name, task.Minutes, task.IdRoutineCategory, task?.IdRoutineCategoryNavigation?.Color ?? "#333"))
+                List<GetRoutineResponse> routines = result.Value
+                    .Select(routine => routine.ToGetRoutineResponse())
                     .ToList();
-                    
-                return TypedResults.Ok(tasks);
+
+                return TypedResults.Ok(routines);
             }
 
             return result.ToHttpResponse();

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Habits.Models;
+﻿namespace Habits.Models;
 
 public partial class Routine
 {
@@ -14,12 +11,7 @@ public partial class Routine
     public bool IsActive { get; set; }
 
     public string IdUser { get; set; } = null!;
-
-    public int? IdRoutineCategory { get; set; }
-
-    public virtual ICollection<DailyTask> DailyTasks { get; set; } = new List<DailyTask>();
-
-    public virtual RoutineCategory? IdRoutineCategoryNavigation { get; set; }
-
+    public virtual ICollection<DailyTask> DailyTasks { get; set; } = [];
+    public virtual ICollection<Category> Categories { get; set; } = [];
     public virtual User IdUserNavigation { get; set; } = null!;
 }

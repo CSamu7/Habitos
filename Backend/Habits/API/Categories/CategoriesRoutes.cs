@@ -14,6 +14,12 @@ namespace Habits.API.Categories
                 .Produces<GetCategoriesResponse>()
                 .ProducesProblem(404);
 
+            usernameGroup.MapPost("/categories", CategoriesEndpoints.Post)
+                .WithName("postCategory");
+
+            categoriesGroup.MapGet("/{idCategory}", CategoriesEndpoints.Get)
+                .WithName("getCategory");
+
             return builder;
         }
     }

@@ -1,4 +1,5 @@
-﻿using Habits.API.Routines.DTO;
+﻿using Habits.API.Policies;
+using Habits.API.Routines.DTO;
 using Habits.API.Routines.Filters;
 using Microsoft.AspNetCore.JsonPatch;
 
@@ -8,23 +9,33 @@ namespace Habits.API.Routines
     {
         public static IEndpointRouteBuilder MapRoutines(this IEndpointRouteBuilder builder)
         {
-            var tasksRoutes = builder.MapGroup("/routines");
+            var routineRoutes = builder.MapGroup("/routines");
+            var userRoutes = builder.MapGroup("users/{username}");
 
-            tasksRoutes.AddEndpointFilter<IsSameRoutineOwnerFilter>();
+            routineRoutes.AddEndpointFilter<IsSameRoutineOwnerFilter>();
 
-            tasksRoutes.MapGet("{idRoutine}/", RoutineEndpoints.GetRoutine)
+            userRoutes.MapGet("/routines", RoutineEndpoints.GetAllRoutines)
+                .AddEndpointFilter<IsOwnerFilter>()
+                .WithName("getAllRoutines")
+                .Produces<List<GetRoutineResponse>>(200);
+
+            routineRoutes.MapGet("{idRoutine}/", RoutineEndpoints.GetRoutine)
                 .WithName("getRoutine")
                 .Produces<GetRoutineResponse>()
                 .ProducesProblem(404);
 
-            tasksRoutes.MapPatch("{idRoutine}/", RoutineEndpoints.PatchRoutine)
+            userRoutes.MapPost("/routines", RoutineEndpoints.PostRoutine)
+                .AddEndpointFilter<IsOwnerFilter>()
+                .AddEndpointFilter<PostRoutineFilter>();
+
+            routineRoutes.MapPatch("{idRoutine}/", RoutineEndpoints.PatchRoutine)
                 .WithName("patchRoutine")
                 .Accepts<JsonPatchDocument<PostRoutineRequest>>("application/json-patch+json")
                 .Produces<GetRoutineResponse>()
                 .ProducesProblem(401)
                 .ProducesProblem(404);
 
-            tasksRoutes.MapDelete("{idRoutine}/", RoutineEndpoints.DeleteTask)
+            routineRoutes.MapDelete("{idRoutine}/", RoutineEndpoints.DeleteTask)
                 .WithName("deleteRoutine")
                 .Produces(204)
                 .ProducesProblem(404);

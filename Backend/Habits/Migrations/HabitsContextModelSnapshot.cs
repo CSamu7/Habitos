@@ -22,6 +22,60 @@ namespace Habits.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("CategoryRoutine", b =>
+                {
+                    b.Property<int>("CategoriesIdCategory")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoutinesIdRoutine")
+                        .HasColumnType("int");
+
+                    b.HasKey("CategoriesIdCategory", "RoutinesIdRoutine");
+
+                    b.HasIndex("RoutinesIdRoutine");
+
+                    b.ToTable("CategoryRoutine");
+                });
+
+            modelBuilder.Entity("Habits.Models.Category", b =>
+                {
+                    b.Property<int>("IdCategory")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id_routine_category");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCategory"));
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(6)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(6)")
+                        .HasDefaultValue("66ff33")
+                        .HasColumnName("color");
+
+                    b.Property<string>("IdUser")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("id_user");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("name");
+
+                    b.HasKey("IdCategory")
+                        .HasName("PK__RoutineC__ED7A3D1E3BB83357");
+
+                    b.HasIndex("IdUser");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("Habits.Models.DailyTask", b =>
                 {
                     b.Property<int>("IdDailyTask")
@@ -99,10 +153,6 @@ namespace Habits.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdRoutine"));
 
-                    b.Property<int?>("IdRoutineCategory")
-                        .HasColumnType("int")
-                        .HasColumnName("id_routine_category");
-
                     b.Property<string>("IdUser")
                         .IsRequired()
                         .HasMaxLength(450)
@@ -129,50 +179,9 @@ namespace Habits.Migrations
                     b.HasKey("IdRoutine")
                         .HasName("PK__Routines__855C1AF2E3DF1B41");
 
-                    b.HasIndex("IdRoutineCategory");
-
                     b.HasIndex("IdUser");
 
                     b.ToTable("Routines");
-                });
-
-            modelBuilder.Entity("Habits.Models.RoutineCategory", b =>
-                {
-                    b.Property<int>("IdRoutineCategory")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id_routine_category");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdRoutineCategory"));
-
-                    b.Property<string>("Color")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(6)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(6)")
-                        .HasDefaultValue("66ff33")
-                        .HasColumnName("color");
-
-                    b.Property<string>("IdUser")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("id_user");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(40)")
-                        .HasColumnName("name");
-
-                    b.HasKey("IdRoutineCategory")
-                        .HasName("PK__RoutineC__ED7A3D1E3BB83357");
-
-                    b.HasIndex("IdUser");
-
-                    b.ToTable("RoutineCategories");
                 });
 
             modelBuilder.Entity("Habits.Models.User", b =>
@@ -394,6 +403,32 @@ namespace Habits.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CategoryRoutine", b =>
+                {
+                    b.HasOne("Habits.Models.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesIdCategory")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Habits.Models.Routine", null)
+                        .WithMany()
+                        .HasForeignKey("RoutinesIdRoutine")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Habits.Models.Category", b =>
+                {
+                    b.HasOne("Habits.Models.User", "IdUserNavigation")
+                        .WithMany("RoutineCategories")
+                        .HasForeignKey("IdUser")
+                        .IsRequired()
+                        .HasConstraintName("FK_RoutineCategories_AspNetUsers");
+
+                    b.Navigation("IdUserNavigation");
+                });
+
             modelBuilder.Entity("Habits.Models.DailyTask", b =>
                 {
                     b.HasOne("Habits.Models.Routine", "IdRoutineNavigation")
@@ -418,29 +453,11 @@ namespace Habits.Migrations
 
             modelBuilder.Entity("Habits.Models.Routine", b =>
                 {
-                    b.HasOne("Habits.Models.RoutineCategory", "IdRoutineCategoryNavigation")
-                        .WithMany("Routines")
-                        .HasForeignKey("IdRoutineCategory")
-                        .HasConstraintName("FK_Routines_RoutineCategories");
-
                     b.HasOne("Habits.Models.User", "IdUserNavigation")
                         .WithMany("Routines")
                         .HasForeignKey("IdUser")
                         .IsRequired()
                         .HasConstraintName("FK_Routines_AspNetUsers");
-
-                    b.Navigation("IdRoutineCategoryNavigation");
-
-                    b.Navigation("IdUserNavigation");
-                });
-
-            modelBuilder.Entity("Habits.Models.RoutineCategory", b =>
-                {
-                    b.HasOne("Habits.Models.User", "IdUserNavigation")
-                        .WithMany("RoutineCategories")
-                        .HasForeignKey("IdUser")
-                        .IsRequired()
-                        .HasConstraintName("FK_RoutineCategories_AspNetUsers");
 
                     b.Navigation("IdUserNavigation");
                 });
@@ -499,11 +516,6 @@ namespace Habits.Migrations
             modelBuilder.Entity("Habits.Models.Routine", b =>
                 {
                     b.Navigation("DailyTasks");
-                });
-
-            modelBuilder.Entity("Habits.Models.RoutineCategory", b =>
-                {
-                    b.Navigation("Routines");
                 });
 
             modelBuilder.Entity("Habits.Models.User", b =>

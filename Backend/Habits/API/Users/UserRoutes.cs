@@ -1,12 +1,4 @@
-﻿using Habits.API.DailyRoutines;
-using Habits.API.DailyRoutines.Validation;
-using Habits.API.Policies;
-using Habits.API.Routines;
-using Habits.API.Routines.DTO;
-using Habits.API.Routines.Filters;
-using Habits.API.Users.Filters;
-using Habits.Common;
-using Habits.Common.DailyRoutines;
+﻿using Habits.API.Users.Filters;
 
 namespace Habits.API.Users
 {
@@ -16,38 +8,6 @@ namespace Habits.API.Users
         {
             var userRoutes = router.MapGroup("/users");
 
-            //Nested dailyRoutines
-            userRoutes.MapGet("/{username}/dailyRoutines/today", async (string username, DailyRoutineService service) =>
-            {
-                DateOnly dateEnd = DateOnly.FromDateTime(DateTime.UtcNow);
-                DateOnly dateStart = dateEnd.AddDays(-1);
-
-                return await DailyRoutineEndpoints.GetDailyRoutines
-                (username, new(dateStart.ToDateTimeOffset(), dateEnd.ToDateTimeOffset(), [Progress.NotDone, Progress.InProgress, Progress.Done]), service);
-            }).AddEndpointFilter<IsOwnerFilter>();
-
-            userRoutes.MapGet("/{username}/dailyRoutines", DailyRoutineEndpoints.GetDailyRoutines)
-                .AddEndpointFilter<IsOwnerFilter>()
-                .AddEndpointFilter<GetAllDailyRoutinesEndpointFilter>()
-                .WithDescription("""
-                    NotDone: Task that is available and it hasn't been started
-                    InProgress: Task that is available and it has been started but not completed
-                    Done: Task completed
-                    Incomplete: Task that is not available and it wasn't completed.
-                    Overdone: Task where the used overpassed the time limit.
-                """);
-
-            //Nested Routines
-            userRoutes.MapPost("/{username}/routines", RoutineEndpoints.PostRoutine)
-                .AddEndpointFilter<IsOwnerFilter>()
-                .AddEndpointFilter<PostRoutineFilter>();
-
-            userRoutes.MapGet("/{username}/routines", RoutineEndpoints.GetAllRoutines)
-                .AddEndpointFilter<IsOwnerFilter>()
-                .WithName("getAllRoutines")
-                .Produces<List<GetRoutineResponse>>(200);
-
-            //User Routes
             userRoutes.MapGet("", UserEndpoints.GetUser)
                 .WithName("getUser");
 
@@ -57,7 +17,6 @@ namespace Habits.API.Users
 
             userRoutes.MapPatch("", UserEndpoints.ModifyUser)
                 .WithName("modifyUser").Produces(200);
-
 
             userRoutes.MapPost("/login", UserEndpoints.Login)
                 .WithName("loginUser");

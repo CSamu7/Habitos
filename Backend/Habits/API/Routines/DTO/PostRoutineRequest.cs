@@ -1,29 +1,5 @@
-﻿using Routine = Habits.Models.Routine;
-
-namespace Habits.API.Routines.DTO
+﻿namespace Habits.API.Routines.DTO
 {
-    public record PostRoutineRequest(string Name, int Minutes, int? IdCategory);
-    public static class PostTaskRequestExtensions
-    {
-        public static Routine ToTask(this PostRoutineRequest postRoutineRequest)
-        {
-            return new Routine
-            {
-                Name = postRoutineRequest.Name,
-                Minutes = postRoutineRequest.Minutes,
-                IdRoutineCategory = postRoutineRequest.IdCategory,
-                IsActive = true
-            };
-        }
+    public record PostRoutineRequest(string Name, int Minutes, List<int> Categories);
 
-        public static PostRoutineRequest FromTask(this Routine task)
-        {
-            return new PostRoutineRequest
-            (
-                task.Name,
-                task.Minutes,
-                task.IdRoutineCategory
-            );
-        }
-    }
 }

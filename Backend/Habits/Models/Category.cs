@@ -1,8 +1,8 @@
 ﻿namespace Habits.Models;
 
-public partial class RoutineCategory
+public partial class Category
 {
-    public int IdRoutineCategory { get; set; }
+    public int IdCategory { get; set; }
 
     public string Name { get; set; } = null!;
 
@@ -11,6 +11,5 @@ public partial class RoutineCategory
     public string IdUser { get; set; } = null!;
 
     public virtual User IdUserNavigation { get; set; } = null!;
-
     public virtual ICollection<Routine> Routines { get; set; } = new List<Routine>();
 }

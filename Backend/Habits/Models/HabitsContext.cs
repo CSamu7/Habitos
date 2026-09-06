@@ -16,7 +16,7 @@ public partial class HabitsContext : IdentityDbContext<User>
 
     public virtual DbSet<DailyTask> DailyTasks { get; set; }
     public virtual DbSet<Routine> Routines { get; set; }
-    public virtual DbSet<RoutineCategory> RoutineCategories { get; set; }
+    public virtual DbSet<Category> Categories { get; set; }
     public virtual DbSet<MinGoalHistory> MinGoalHistory { get; set; } 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -59,7 +59,6 @@ public partial class HabitsContext : IdentityDbContext<User>
             entity.HasKey(e => e.IdRoutine).HasName("PK__Routines__855C1AF2E3DF1B41");
 
             entity.Property(e => e.IdRoutine).HasColumnName("id_routine");
-            entity.Property(e => e.IdRoutineCategory).HasColumnName("id_routine_category");
             entity.Property(e => e.IdUser)
                 .HasMaxLength(450)
                 .HasColumnName("id_user");
@@ -72,21 +71,17 @@ public partial class HabitsContext : IdentityDbContext<User>
                 .IsUnicode(false)
                 .HasColumnName("name");
 
-            entity.HasOne(d => d.IdRoutineCategoryNavigation).WithMany(p => p.Routines)
-                .HasForeignKey(d => d.IdRoutineCategory)
-                .HasConstraintName("FK_Routines_RoutineCategories");
-
             entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Routines)
                 .HasForeignKey(d => d.IdUser)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Routines_AspNetUsers");
         });
 
-        modelBuilder.Entity<RoutineCategory>(entity =>
+        modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.IdRoutineCategory).HasName("PK__RoutineC__ED7A3D1E3BB83357");
+            entity.HasKey(e => e.IdCategory).HasName("PK__RoutineC__ED7A3D1E3BB83357");
 
-            entity.Property(e => e.IdRoutineCategory).HasColumnName("id_routine_category");
+            entity.Property(e => e.IdCategory).HasColumnName("id_routine_category");
             entity.Property(e => e.Color)
                 .HasMaxLength(6)
                 .IsUnicode(false)

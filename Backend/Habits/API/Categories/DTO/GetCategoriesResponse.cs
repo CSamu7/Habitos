@@ -3,15 +3,17 @@ using Habits.Models;
 
 namespace Habits.API.Categories.DTO
 {
-    public record CategoryResponse(int Id, string Color, string Name);
-    public record GetCategoriesResponse(List<CategoryResponse> List, int Count) : IBaseListResponse<CategoryResponse> { }
+    public record MinimalCategory(int IdCategory, string Name, string Color = "FFF");
+    public record GetCategoriesResponse(List<MinimalCategory> List, int Count) : IBaseListResponse<MinimalCategory> { }
 
     public static class GetCategoriesResponseExtensions
     {
-        public static GetCategoriesResponse ToGetCategoriesResponse(this List<RoutineCategory> categories)
+        public static MinimalCategory ToGetCategoryResponse(this Category category) =>
+             new MinimalCategory(category.IdCategory, category.Name, category.Color);
+        public static GetCategoriesResponse ToGetCategoriesResponse(this List<Category> categories)
         {
             var list = categories
-                .Select(category => new CategoryResponse(category.IdRoutineCategory, category.Color, category.Name))
+                .Select(category => category.ToGetCategoryResponse())
                 .ToList();
 
             return new GetCategoriesResponse(list, list.Count);
