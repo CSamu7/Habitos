@@ -1,13 +1,14 @@
 .dropdownItem {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
   padding: 5px;
 }
 
 .dropdownItemColor {
   width: 20px;
   height: 20px;
+  border: 1px solid var(--black);
 }
 
 .dropdownItemName {

@@ -8,12 +8,18 @@
   --white: #ffffff;
   --bone: #ebebeb;
   --gray: #5d5d5d;
+  --green: #4caf50;
+  --light-silver: #e0e0e0;
+  --yellow: #ffc107;
 
   --primary-color: var(--purple);
   --secondary-color: var(--strong-purple);
+  --main-text-color: var(--light-dark);
   --main-bg-color: var(--bone);
   --menu-bg-color: var(--light-dark);
   --form-bg-color: var(--bone);
+  --dividing-line-color: var(--light-silver);
+  --add-routines-btn-bg: var(--green);
 
   --font-size-subtitle: 1.5rem;
   font: 18px/145% var(--sans);

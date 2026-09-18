@@ -1,3 +1,4 @@
+import type { CategoryData } from "../../../types/CategoriesTypes";
 import type { DailyTaskStatus } from "../../../types/DailyTasksTypes";
 
 export type GetAllRoutinesResponse = {
@@ -10,7 +11,7 @@ export type RoutineData = {
   id: number;
   name: string;
   minutes: number;
-  category: string;
+  categories: Array<CategoryData>;
   color: string;
   lastDays: Record<string, DailyTaskStatus>;
 };

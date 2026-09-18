@@ -1,0 +1,72 @@
+.routineItem {
+  border-bottom: 1px solid #f0f0f0;
+  color: var(--main-text-color);
+  font-size: 0.9rem;
+}
+
+.categoryLabel {
+  background-color: var(--bone);
+  padding: 10px;
+  width: min-content;
+}
+
+.weekDots {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  background-color: var(--light-silver);
+}
+
+.dot--green {
+  background-color: var(--green);
+}
+
+.dot--yellow {
+  background-color: var(--yellow);
+}
+
+.dot--red {
+  background-color: var(--red);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.routineTable td:first-child {
+  padding-left: 0;
+}
+
+.routineTable td:last-child {
+  padding-right: 0;
+}
+
+.actionBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: var(--light-dark);
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.15s ease;
+  font-size: 0.8rem;
+}
+
+.actionBtn:hover {
+  color: #1a1a1a;
+}
+
+.actionBtn:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+  border-radius: 4px;
+}

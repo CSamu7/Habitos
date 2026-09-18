@@ -3,7 +3,6 @@ import useCategories from "../../../hooks/useCategories";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import type {
   CreateRoutineModalInputs,
-  CreateRoutineRequest,
   GetAllRoutinesResponse,
 } from "../types/routineTypes";
 import useRoutine from "../../../hooks/useRoutine";
@@ -71,9 +70,20 @@ export default function CreateRoutineModal({
   };
 
   return (
-    <dialog id="create-routine-modal" closedby="any" ref={ref}>
-      <form action="" onSubmit={handleSubmit(onSubmit)}>
-        <h2>Nuevo habito</h2>
+    <dialog
+      id="create-routine-modal"
+      closedby="any"
+      ref={ref}
+      className={styles.createRoutineModal}
+    >
+      <div>
+        <h2 className={styles.modalTitle}>Crea tu nuevo habito</h2>
+      </div>
+      <form
+        action=""
+        onSubmit={handleSubmit(onSubmit)}
+        className={styles.createRoutineForm}
+      >
         <FormInput
           label="Nombre"
           type="text"
@@ -84,11 +94,15 @@ export default function CreateRoutineModal({
             },
           })}
         ></FormInput>
+
         <div className={styles.formTimeSection}>
           <label htmlFor="">Tiempo</label>
           <div className={styles.formTimeInputs}>
-            <input
-              type="number"
+            <FormInput
+              label=""
+              pattern="[0-9]*"
+              inputMode="numeric"
+              type="text"
               {...register("hours", {
                 required: {
                   value: true,
@@ -104,12 +118,13 @@ export default function CreateRoutineModal({
                 },
               })}
               defaultValue={0}
-            />
-            <p>hr</p>
-
-            <input
-              type="number"
-              defaultValue={0}
+            ></FormInput>
+            <p className={styles.timeDivision}>:</p>
+            <FormInput
+              label=""
+              pattern="[0-9]*"
+              inputMode="numeric"
+              type="text"
               {...register("minutes", {
                 required: {
                   value: true,
@@ -121,14 +136,14 @@ export default function CreateRoutineModal({
                 },
                 max: {
                   value: formHours === remainingHours ? remainingMinutes : 60,
-                  message: `Tus minutos deben estar entre 0 y ${formHours === remainingHours ? remainingMinutes : 60} minutos`,
+                  message: `Solo te quedan ${formHours === remainingHours ? remainingMinutes : 60} minutos. Elimina una tarea o reduce la cantidad de tiempo de tu tarea`,
                 },
               })}
-            />
-            <p>min</p>
+              defaultValue={0}
+            ></FormInput>
           </div>
         </div>
-        <div>
+        <div className={styles.categoriesSection}>
           <AddCategoriesInput
             categories={categories.list}
             selectedCategories={selectedCategories}
@@ -137,7 +152,7 @@ export default function CreateRoutineModal({
           ></AddCategoriesInput>
         </div>
 
-        <div>
+        <div className={styles.errorMessages}>
           {errors.name?.message && (
             <p style={{ color: "red" }}>{errors.name.message}</p>
           )}
@@ -148,7 +163,7 @@ export default function CreateRoutineModal({
             <p style={{ color: "red" }}>{errors.minutes.message}</p>
           )}
         </div>
-        <input type="submit" value="Añadir habito" />
+        <input className={styles.submitButton} type="submit" value="Crear" />
       </form>
     </dialog>
   );

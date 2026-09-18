@@ -32,7 +32,7 @@ export default function AddCategoriesInput({
             onDeleteCategory(category);
           }}
         >
-          ELIMINAME
+          X
         </button>
       </CategoryLabel>
     );
@@ -69,13 +69,12 @@ export default function AddCategoriesInput({
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           list="categories-options"
-          placeholder="Ingresa la categoria..."
+          placeholder="Busca la categoria..."
           className={styles.categoriesSearchBar}
         />
-        TODO: RESOLVER ESTO
         {isDropdownActive && (
           <div className={styles.dropdown}>
-            {selectedCategories.length == categories.length ? (
+            {categories.length == 0 ? (
               <p>No hay mas categorias disponibles!</p>
             ) : (
               <ul className={styles.dropdownList}>{dropdownCategories}</ul>

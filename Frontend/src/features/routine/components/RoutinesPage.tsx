@@ -5,6 +5,7 @@ import useUser from "../../../hooks/useUser";
 import styles from "./RoutinesPage.module.css";
 import CreateRoutineModal from "./CreateRoutineModal";
 import AuthPageLayout from "../../../components/AuthPageLayout";
+import RoutineRow from "./RoutineRow";
 
 export default function RoutinesPage() {
   const { user } = useUser();
@@ -12,19 +13,7 @@ export default function RoutinesPage() {
   const addNewHabitModalRef = useRef<HTMLDialogElement>(null);
 
   const routinesJSX = routines.list.map((routine, index) => (
-    <li key={routine.id} className={styles.routineItem}>
-      <p>{index + 1}</p>
-      <strong className={styles.routineName}>{routine.name}</strong>
-      <p className={styles.routineTime}>{routine.minutes} min</p>
-      <p className={styles.routineCategory}>
-        {routine.category ?? "Sin categoría"}
-      </p>
-
-      <div className={styles.actions}>
-        <button className={styles.actionBtn}>Editar</button>
-        <button className={styles.actionBtn}>Eliminar</button>
-      </div>
-    </li>
+    <RoutineRow routine={routine} index={index} key={routine.id}></RoutineRow>
   ));
 
   return (
@@ -40,22 +29,39 @@ export default function RoutinesPage() {
           </button>
         </div>
 
-        <div className={styles.tableHeader}>
-          <span className={styles.colLabel}>Pos</span>
-          <span className={styles.colLabel}>Nombre</span>
-          <span className={styles.colLabel}>Tiempo</span>
-          <span className={styles.colLabel}>Categoría</span>
-          <span className={styles.colLabel}>Últimos 7 días</span>
-          <span />
-        </div>
-
         <CreateRoutineModal
           username={user?.username ?? ""}
           ref={addNewHabitModalRef}
           routines={routines}
-        ></CreateRoutineModal>
+        />
 
-        <ul className={styles.routineList}>{routinesJSX}</ul>
+        <div className={styles.tableWrapper}>
+          <table className={styles.routineTable}>
+            <thead>
+              <tr className={styles.tableHeader}>
+                <th scope="col" className={styles.colLabel}>
+                  #
+                </th>
+                <th scope="col" className={styles.colLabel}>
+                  Nombre
+                </th>
+                <th scope="col" className={styles.colLabel}>
+                  Tiempo
+                </th>
+                <th scope="col" className={styles.colLabel}>
+                  Categoría
+                </th>
+                <th scope="col" className={styles.colLabel}>
+                  Últimos 7 días
+                </th>
+                <th scope="col" className={styles.colLabel}>
+                  <span className={styles.visuallyHidden}>Acciones</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>{routinesJSX}</tbody>
+          </table>
+        </div>
       </div>
     </AuthPageLayout>
   );
