@@ -22,6 +22,7 @@ namespace Testing.IntegrationTesting
             .Build();
 
         private SqlConnection _dbConnection = null!;
+        private SqlConnectionStringBuilder _dbCon = new();
         private Respawner _respawner = null!;
         public async Task InitializeAsync()
         {
@@ -33,7 +34,14 @@ namespace Testing.IntegrationTesting
             dbContext.Database.EnsureCreated();
 
             await _dbConnection.OpenAsync();
-            _respawner = await Respawner.CreateAsync(_dbConnection);
+            await _dbConnection.ChangeDatabaseAsync("Habits");
+
+            _respawner = await Respawner.CreateAsync(_dbConnection,new RespawnerOptions
+            {
+                SchemasToInclude = new[] {"dbo"}, 
+                TablesToIgnore = ["AspNetUsers"],
+                WithReseed = true
+            });
         }
 
         public async void ResetDB() {

@@ -1,7 +1,6 @@
 ﻿using Habits.API.Routines.DTO;
 using Habits.Common;
 using Habits.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,8 +8,8 @@ namespace Habits.Services.Tasks
 {
     public class RoutineService
     {
-        private HabitsContext _db;
-        public RoutineService(HabitsContext db, UserManager<User> authService)
+        private readonly HabitsContext _db;
+        public RoutineService(HabitsContext db)
         {
             _db = db;
         }
@@ -38,30 +37,31 @@ namespace Habits.Services.Tasks
         }
         public async Task<Result<Routine>> PostRoutine(string idUser, PostRoutineRequest body)
         {
-            int totalMinutes = _db.Routines.Where(r => r.IdUser == idUser).Sum(routine => routine.Minutes);
+            int totalMinutes = _db.Routines.Where(r => r.IdUser == idUser && r.IsActive).Sum(routine => routine.Minutes);
 
-            if (totalMinutes > Constants.MAX_FULL_ROUTINE_MINUTES)
+            if (totalMinutes + body.Minutes > Constants.MAX_FULL_ROUTINE_MINUTES)
                 return Result<Routine>.Failure(Status.InvalidData, "No puedes superar el limite de 8 horas");
 
             Routine routine = new Routine { IdUser = idUser, Name = body.Name, Minutes = body.Minutes, IsActive = true};
-            
-            //TODO: transform to linq
+            List<Category> categories = [];
+
             foreach (int idCategory in body.Categories)
             {
                 Category? categoryDb = await _db.Categories
                         .FirstOrDefaultAsync(c => c.IdCategory == idCategory);
 
                 if (categoryDb == null) continue;
-
-                routine.Categories.Add(new Category { Name = categoryDb.Name, Color = categoryDb.Color, IdUser = idUser});
+                
+                categories.Add(categoryDb);
             }
 
+            routine.Categories = categories;
             await _db.Routines.AddAsync(routine);
             await _db.SaveChangesAsync();
 
             return Result<Routine>.Success(routine);
         }
-        //TODO: Checar si tenemos pruebas de integracion para esto.
+
         public async Task<Result<Routine>> PatchTask(int idRoutine, JsonPatchDocument body)
         {
             var result = await GetRoutine(idRoutine);

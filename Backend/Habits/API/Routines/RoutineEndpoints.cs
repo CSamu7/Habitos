@@ -29,17 +29,11 @@ namespace Habits.API.Routines
         }
         public static async Task<IResult> PostRoutine(string username, PostRoutineRequest body, LinkGenerator generator, RoutineService service, UserManager<User> manager, HttpContext ctx)
         {
-            var user = ctx.User;
+            var user = await manager.GetUserAsync(ctx.User);
 
-            if (user is null) return TypedResults.Unauthorized();
+            if (user is null || user.UserName != username) return TypedResults.Unauthorized();
 
-
-            var idUser = user.Claims.FirstOrDefault(x => x.Type == "idUser")?.Value;
-
-            if (idUser is null)
-                return TypedResults.NotFound();
-
-            Result<Routine> result = await service.PostRoutine(idUser, body);
+            Result<Routine> result = await service.PostRoutine(user.Id, body);
 
             if (result.Status.Equals(Status.Ok))
             {

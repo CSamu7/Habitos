@@ -65,7 +65,7 @@ namespace Habits.API.Users
             UserManager<User> userManager,
             HttpContext ctx)
         {
-            var user = await userManager.FindByNameAsync(ctx.User?.Identity?.Name);
+            var user = await userManager.GetUserAsync(ctx.User);
 
             if (user is null) return TypedResults.Unauthorized();
 

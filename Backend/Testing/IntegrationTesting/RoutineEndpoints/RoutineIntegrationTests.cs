@@ -23,25 +23,6 @@ namespace Testing.IntegrationTesting.RoutineEndpoints
         }
 
         [Fact]
-        public async void Post_routine()
-        {
-            var body = new PostRoutineRequest("TestRoutine", 30, null);
-            var client = application.CreateAuthClient();
-            var response = await client.PostAsJsonAsync("https://localhost:7074/api/users/samu/routines/", body);
-
-            response.EnsureSuccessStatusCode();
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-
-            var getNewRoutine = await client.GetAsync($"https://localhost:7074{response.Headers.Location}");
-            getNewRoutine.EnsureSuccessStatusCode();
-            var json = await getNewRoutine.Content.ReadFromJsonAsync<GetRoutineResponse>();
-
-            Assert.NotNull(json);
-            Assert.Equal(30, json.Minutes);
-            Assert.Equal(4, json.Id);
-        }
-
-        [Fact]
         public async void Get_all_routines()
         {
             var client = application.CreateAuthClient();

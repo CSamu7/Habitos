@@ -13,7 +13,6 @@ namespace Testing.IntegrationTesting.UserTests
         {
             var client = application.CreateAuthClient();
 
-
             var content = new PatchUserRequest(null, null, 77);
             var result = await client.PatchAsJsonAsync("api/users/", content);
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);

@@ -15,7 +15,7 @@ namespace Testing.IntegrationTesting.Helpers
         }
         protected async override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            var claims = new[] { new Claim(ClaimTypes.Name, "samu") };
+            var claims = new[] { new Claim(ClaimTypes.Name, "samu"), new Claim(ClaimTypes.NameIdentifier, "11111111-1111-1111-1111-111111111111"), new Claim(ClaimTypes.Email, "demo1@ejemplo.com") };
             var identity = new ClaimsIdentity(claims, "test");
             var principal = new ClaimsPrincipal(identity);
             var ticket = new AuthenticationTicket(principal, "TestScheme");

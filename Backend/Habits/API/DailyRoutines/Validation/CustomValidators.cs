@@ -9,8 +9,8 @@ namespace Habits.API.DailyRoutines.Validation
             (this IRuleBuilder<T, int> ruleBuilder)
         {
             return ruleBuilder
-                .GreaterThan(0).WithMessage("Minutes must be positive")
-                .LessThan(Constants.MAX_FULL_ROUTINE_MINUTES).WithMessage("You can't add more than 8 hours");
+                .GreaterThan(0).WithMessage("Minutos deben ser positivos")
+                .LessThanOrEqualTo(Constants.MAX_FULL_ROUTINE_MINUTES).WithMessage("No puedes añadir mas de 8 horas en una tarea.");
         }
     }
 }
