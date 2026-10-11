@@ -2,7 +2,8 @@ import type {
   CreateRoutineRequest,
   RoutineData,
 } from "../features/routine/types/routineTypes";
-import type { ErrorAPI, Result } from "../types/common";
+import { getErrorObject, type Result } from "../types/common";
+import { betterFetch } from "../utils/api";
 
 export const routineService = {
   async getAll(username: string): Promise<Result<Array<RoutineData>>> {
@@ -33,11 +34,23 @@ export const routineService = {
     });
 
     if (!request.ok) {
-      const response: ErrorAPI = await request.json();
+      const response = await request.json();
+      const errorObject = getErrorObject(response, request.status);
 
-      return { error: response };
+      return { error: errorObject };
     }
 
     return { error: null, data: null };
+  },
+
+  async delete(username: string, idRoutine: number) {
+    const url = `${import.meta.env.VITE_ROUTINE_URL}/${idRoutine}`;
+
+    const response = await betterFetch<void>(url, {
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    return response;
   },
 };

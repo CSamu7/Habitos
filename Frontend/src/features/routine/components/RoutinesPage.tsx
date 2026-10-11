@@ -6,14 +6,23 @@ import styles from "./RoutinesPage.module.css";
 import CreateRoutineModal from "./CreateRoutineModal";
 import AuthPageLayout from "../../../components/AuthPageLayout";
 import RoutineRow from "./RoutineRow";
+import type { RoutineData } from "../types/routineTypes";
 
 export default function RoutinesPage() {
   const { user } = useUser();
   const { routines } = useRoutine(user?.username ?? "");
+
   const addNewHabitModalRef = useRef<HTMLDialogElement>(null);
 
+  const onDeleteRoutine = (routine: RoutineData) => {};
+
   const routinesJSX = routines.list.map((routine, index) => (
-    <RoutineRow routine={routine} index={index} key={routine.id}></RoutineRow>
+    <RoutineRow
+      username={user?.username ?? ""}
+      routine={routine}
+      index={index}
+      key={routine.id}
+    ></RoutineRow>
   ));
 
   return (

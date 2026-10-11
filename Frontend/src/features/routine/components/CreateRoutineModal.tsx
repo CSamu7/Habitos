@@ -10,6 +10,9 @@ import FormInput from "../../../components/FormInput";
 import styles from "./CreateRoutineModal.module.css";
 import AddCategoriesInput from "./AddCategoriesInput";
 import type { CategoryData } from "../../../types/CategoriesTypes";
+import ErrorMessage from "../../../components/ErrorMessage";
+import FormTimeInput from "./FormTimeInput";
+import { formatErrors } from "../../../types/common";
 
 export default function CreateRoutineModal({
   username,
@@ -27,9 +30,10 @@ export default function CreateRoutineModal({
     handleSubmit,
     watch,
     formState: { errors },
+    setError,
   } = useForm<CreateRoutineModalInputs>();
 
-  //TODO: Lo podríamos enviar a través del backend.
+  //enviar esta suma desde el backend...
   const totalMinutes = routines.list.reduce(
     (acc, cur) => (acc += cur.minutes),
     0,
@@ -38,13 +42,6 @@ export default function CreateRoutineModal({
   const [selectedCategories, setSelectedCategories] = useState<
     Array<CategoryData>
   >([]);
-
-  //TODO: Las horas maximas que permite la aplicación. Yo lo movería a otro archivo...
-  const MAX_HOURS = 480;
-  const remainingHours = Math.floor((MAX_HOURS - totalMinutes) / 60);
-
-  const formHours = Number(watch("hours"));
-  const remainingMinutes = Math.round((480 - totalMinutes) % 60);
 
   const onAddCategory = (category: CategoryData) => {
     setSelectedCategories([...selectedCategories, category]);
@@ -60,12 +57,21 @@ export default function CreateRoutineModal({
 
   const onSubmit: SubmitHandler<CreateRoutineModalInputs> = async (data) => {
     try {
-      const request = await postRoutine(data, selectedCategories);
+      const result = await postRoutine(data, selectedCategories);
 
-      //wao se creo tu habito
-      //cerrar model
-    } catch (error) {
-      console.log(error);
+      if (result.error) {
+        if (result.error.kind == "OneError") {
+          setError("root.server", { message: result.error.detail });
+        } else {
+          //formatErrors deberia que pasar en el service...
+          const errors = formatErrors(result);
+          setError("root.server", { message: errors[0] });
+        }
+      }
+    } catch (error: unknown) {
+      setError("root.server", {
+        message: "Hubo un error en el servidor. Vuelva mas tarde",
+      });
     }
   };
 
@@ -94,55 +100,11 @@ export default function CreateRoutineModal({
             },
           })}
         ></FormInput>
-
-        <div className={styles.formTimeSection}>
-          <label htmlFor="">Tiempo</label>
-          <div className={styles.formTimeInputs}>
-            <FormInput
-              label=""
-              pattern="[0-9]*"
-              inputMode="numeric"
-              type="text"
-              {...register("hours", {
-                required: {
-                  value: true,
-                  message: "Debes ingresar una hora",
-                },
-                min: {
-                  value: 0,
-                  message: `Tus horas deben estar entre 0 y ${remainingHours} horas`,
-                },
-                max: {
-                  value: remainingHours,
-                  message: `Tus horas deben estar entre 0 y ${remainingHours} horas`,
-                },
-              })}
-              defaultValue={0}
-            ></FormInput>
-            <p className={styles.timeDivision}>:</p>
-            <FormInput
-              label=""
-              pattern="[0-9]*"
-              inputMode="numeric"
-              type="text"
-              {...register("minutes", {
-                required: {
-                  value: true,
-                  message: "Debes ingresar los minutos",
-                },
-                min: {
-                  value: 0,
-                  message: `Tus minutos deben estar entre 0 y ${formHours === remainingHours ? remainingMinutes : 60} minutos`,
-                },
-                max: {
-                  value: formHours === remainingHours ? remainingMinutes : 60,
-                  message: `Solo te quedan ${formHours === remainingHours ? remainingMinutes : 60} minutos. Elimina una tarea o reduce la cantidad de tiempo de tu tarea`,
-                },
-              })}
-              defaultValue={0}
-            ></FormInput>
-          </div>
-        </div>
+        <FormTimeInput
+          totalMinutes={totalMinutes}
+          register={register}
+          watch={watch}
+        ></FormTimeInput>
         <div className={styles.categoriesSection}>
           <AddCategoriesInput
             categories={categories.list}
@@ -151,16 +113,14 @@ export default function CreateRoutineModal({
             onDeleteCategory={onDeleteCategory}
           ></AddCategoriesInput>
         </div>
-
         <div className={styles.errorMessages}>
-          {errors.name?.message && (
-            <p style={{ color: "red" }}>{errors.name.message}</p>
-          )}
-          {errors.hours?.message && (
-            <p style={{ color: "red" }}>{errors.hours.message}</p>
-          )}
+          {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
+          {errors.hours && <ErrorMessage>{errors.hours.message}</ErrorMessage>}
           {errors.minutes && (
-            <p style={{ color: "red" }}>{errors.minutes.message}</p>
+            <ErrorMessage>{errors.minutes.message}</ErrorMessage>
+          )}
+          {errors.root?.server && (
+            <ErrorMessage>{errors.root.server.message}</ErrorMessage>
           )}
         </div>
         <input className={styles.submitButton} type="submit" value="Crear" />

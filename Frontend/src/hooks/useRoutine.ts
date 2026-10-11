@@ -11,15 +11,12 @@ export default function useRoutine(username: string) {
   const [routines, setRoutines] = useState<GetAllRoutinesResponse>({
     list: [],
   });
-  const [errorRoutines, setErrorRoutines] = useState<Array<string>>([]);
 
   useEffect(() => {
     const getRoutines = async () => {
       const routines = await routineService.getAll(username);
 
-      if (routines.error) {
-        setErrorRoutines([routines.error.detail]);
-      } else {
+      if (!routines.error) {
         setRoutines({ list: routines.data });
       }
     };
@@ -39,10 +36,14 @@ export default function useRoutine(username: string) {
 
     const response = await routineService.post(username, body);
 
-    if (response.error) {
-      setErrorRoutines([response.error.detail]);
-    }
+    return response;
   };
 
-  return { routines, errorRoutines, postRoutine };
+  const deleteRoutine = async (idRoutine: number) => {
+    const response = await routineService.delete(username, idRoutine);
+
+    return response;
+  };
+
+  return { routines, postRoutine, deleteRoutine };
 }

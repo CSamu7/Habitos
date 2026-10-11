@@ -1,0 +1,20 @@
+.formTimeSection {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.formTimeInputs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 0 12px;
+  background-color: var(--bone);
+}
+
+.timeDivision {
+  margin: 0;
+  color: var(--black);
+  font-size: 1rem;
+}
