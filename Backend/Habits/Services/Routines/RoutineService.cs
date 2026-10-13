@@ -19,7 +19,7 @@ namespace Habits.Services.Tasks
                 .AsNoTracking()
                 .Include(x => x.IdUserNavigation)
                 .Include(x => x.Categories)
-                .SingleOrDefaultAsync(x => x.IdRoutine == idRoutine);
+                .SingleOrDefaultAsync(x => x.IdRoutine == idRoutine && x.IsActive);
 
             if (task is null) return Result<Routine>.Failure(Status.NotFound, "No se ha encontrado la rutina");
 
@@ -77,12 +77,17 @@ namespace Habits.Services.Tasks
         }
         public async Task<Result<Routine>> DeleteTask(int idRoutine)
         {
-            var result = await GetRoutine(idRoutine);
+            Routine? task = await _db.Routines
+                .Include(x => x.IdUserNavigation)
+                .Include(x => x.Categories)
+                .SingleOrDefaultAsync(x => x.IdRoutine == idRoutine && x.IsActive);
 
-            result.Value.IsActive = false;
+            if (task is null) return Result<Routine>.Failure(Status.NotFound, "No se ha encontrado la rutina");
+
+            task.IsActive = false;
             await _db.SaveChangesAsync();
 
-            return Result<Routine>.Success(result.Value);
+            return Result<Routine>.Success(task);
         }
     }
 }

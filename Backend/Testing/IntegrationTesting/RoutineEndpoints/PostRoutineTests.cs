@@ -12,7 +12,6 @@ namespace Testing.IntegrationTesting.RoutineEndpoints
         [Fact]
         public async void Routine_is_less_than_eight_hours()
         {
-            //first task is ok
             var body = new PostRoutineRequest("TestData", 8 * 60, []);
             var client = application.CreateAuthClient();
             var response = await client.PostAsJsonAsync("api/users/samu/routines/", body);
