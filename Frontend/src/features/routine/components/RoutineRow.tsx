@@ -2,7 +2,7 @@ import { useRef } from "react";
 import type { RoutineData } from "../types/routineTypes";
 import CategoryLabel from "./CategoryLabel";
 import styles from "./RoutineRow.module.css";
-import DeleteRoutineModal from "../DeleteRoutineModal";
+import DeleteRoutineModal from "./DeleteRoutineModal";
 
 export default function RoutineRow({
   username,
@@ -52,15 +52,14 @@ export default function RoutineRow({
             >
               Eliminar
             </button>
+            <DeleteRoutineModal
+              username={username}
+              routine={routine}
+              ref={deleteModalRef}
+            />
           </div>
         </td>
       </tr>
-
-      <DeleteRoutineModal
-        username={username}
-        routine={routine}
-        ref={deleteModalRef}
-      ></DeleteRoutineModal>
     </>
   );
 }

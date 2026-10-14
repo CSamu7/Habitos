@@ -1,0 +1,73 @@
+.deleteRoutineModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(400px, calc(100vw - 32px));
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: var(--bone);
+  color: var(--black);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+}
+
+.deleteRoutineModal::backdrop {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.header {
+  background-color: var(--red);
+  padding: 14px 20px;
+}
+
+.title {
+  margin: 0;
+  color: var(--white);
+  font-size: clamp(1.5rem, 2vw, 1.75rem);
+  font-weight: 400;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.content {
+  background-color: var(--bone);
+  padding: 10px 20px 18px;
+}
+
+.message {
+  margin: 0 0 16px;
+  color: var(--black);
+  font-size: clamp(1rem, 1.1vw, 1.2rem);
+  line-height: 1.4;
+  text-align: center;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.confirmButton {
+  min-width: 170px;
+  border: 0;
+  background-color: var(--red);
+  color: var(--white);
+  padding: 8px 20px;
+  cursor: pointer;
+  font: inherit;
+  font-size: clamp(1.2rem, 1vw, 1.2rem);
+  transition: background-color 0.2s ease;
+}
+
+.confirmButton:hover {
+  background-color: var(--strong-red);
+}
+
+.confirmButton:focus-visible,
+.cancelButton:focus-visible {
+  outline: 2px solid var(--black);
+  outline-offset: 2px;
+}
