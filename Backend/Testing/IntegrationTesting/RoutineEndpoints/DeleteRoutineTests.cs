@@ -9,7 +9,7 @@ namespace Testing.IntegrationTesting.RoutineEndpoints
     public class DeleteRoutineTests(CustomWebApplication application) : IAsyncLifetime
     {
         [Fact]
-        public async void Delete_routine_is_successful() 
+        public async Task Delete_routine_is_successful() 
         {
             var body = new PostRoutineRequest("TestData", 8 * 2, []);
             var client = application.CreateAuthClient();
@@ -21,8 +21,8 @@ namespace Testing.IntegrationTesting.RoutineEndpoints
             var response3 = await client.GetAsync(response.Headers.Location);
             Assert.Equal(HttpStatusCode.NotFound, response3.StatusCode);
         }
-        public Task InitializeAsync() => Task.CompletedTask;
-        public async Task DisposeAsync() => application.ResetDB();
+        public ValueTask InitializeAsync() => ValueTask.CompletedTask;
+        public async ValueTask DisposeAsync() => application.ResetDB();
 
     }
 }

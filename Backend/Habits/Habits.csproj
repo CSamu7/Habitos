@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>884face4-749e-4f57-a72f-b9a188165dc7</UserSecretsId>
@@ -10,15 +10,19 @@
 
   <ItemGroup>
     <Compile Remove="Features\Authentication\**" />
+    <Compile Remove="Features\DailyRoutines\Validations\**" />
     <Compile Remove="Testing\**" />
     <Compile Remove="UnitTesting\**" />
     <Content Remove="Features\Authentication\**" />
+    <Content Remove="Features\DailyRoutines\Validations\**" />
     <Content Remove="Testing\**" />
     <Content Remove="UnitTesting\**" />
     <EmbeddedResource Remove="Features\Authentication\**" />
+    <EmbeddedResource Remove="Features\DailyRoutines\Validations\**" />
     <EmbeddedResource Remove="Testing\**" />
     <EmbeddedResource Remove="UnitTesting\**" />
     <None Remove="Features\Authentication\**" />
+    <None Remove="Features\DailyRoutines\Validations\**" />
     <None Remove="Testing\**" />
     <None Remove="UnitTesting\**" />
   </ItemGroup>
@@ -40,15 +44,14 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
+    <PackageReference Include="Microsoft.OpenApi" Version="2.13.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.23" />
+    <PackageReference Include="NuGet.Packaging" Version="6.11.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="10.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="10.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Features\DailyRoutines\Validations\" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
   </ItemGroup>
 
 </Project>

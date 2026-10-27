@@ -24,14 +24,14 @@ namespace Testing.IntegrationTesting
         private SqlConnection _dbConnection = null!;
         private SqlConnectionStringBuilder _dbCon = new();
         private Respawner _respawner = null!;
-        public async Task InitializeAsync()
+        public async ValueTask InitializeAsync()
         {
             await _sqlContainer.StartAsync();
             _dbConnection = new(_sqlContainer.GetConnectionString());
 
             using var scope = Services.CreateScope();
             var dbContext = scope.ServiceProvider.GetService<HabitsContext>();
-            dbContext.Database.EnsureCreated();
+            dbContext?.Database.EnsureCreated();
 
             await _dbConnection.OpenAsync();
             await _dbConnection.ChangeDatabaseAsync("Habits");
@@ -44,10 +44,10 @@ namespace Testing.IntegrationTesting
             });
         }
 
-        public async void ResetDB() {
+        public async Task ResetDB() {
             await _respawner.ResetAsync(_dbConnection);
         }
-        public new async Task DisposeAsync()
+        public new async ValueTask DisposeAsync()
         {
             await _sqlContainer.DisposeAsync();
             await _dbConnection.DisposeAsync();
