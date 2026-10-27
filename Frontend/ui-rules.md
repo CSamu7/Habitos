@@ -1,3 +1,7 @@
+# Reglas para aplicar cambios
+
+- Antes de modificar los archivos, debes describir que modificacion hiciste en cada archivo.
+
 # Comentarios
 
 Solo comenta bloques de codigo relevantes.

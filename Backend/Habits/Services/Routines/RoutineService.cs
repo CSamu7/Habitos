@@ -55,7 +55,7 @@ namespace Habits.Services.Tasks
                 categories.Add(categoryDb);
             }
 
-            routine.Categories = categories;
+            Routine routine = Routine.Create(body.Name, body.Minutes, user.Id, categories);
             await _db.Routines.AddAsync(routine);
             await _db.SaveChangesAsync();
 

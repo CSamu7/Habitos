@@ -5,13 +5,16 @@ info:
 
 http:
   method: POST
-  url: https://localhost:7074/api/users/samu/routines/
+  url: https://localhost:7074/api/users/samu67/routines/
+  headers:
+    - name: Cookie
+      value: .AspNetCore.Identity.Application=CfDJ8KK9E16zWkNKp6JeaTTTmEQT8hu6TfZU34jIGgo-_SFjVxaKCpC6vE3kFZBG5mqZkB54-B7S8YBB7KWCWY2ZcAPa_NDsI7eQwwUWos_QAqKcqn_ZgCAyuhXMzzKFBbuuWmcjw8slmj5V-yQ2HMRv9yTfe3Qo8VVAuUOSSLlCFzqcORGM0UXBmzJa_vyLVc77i7QSlW7SeDptfMVhplO1EqF7-sO14GwP7RJKuBxs1co4pYogCOuBp0TW-miXbBeKlJIFCkTNE_skSB_x8LxrdCpi14tizroj-el3fEKTgMQo58Tn0YuqMMJSeJp-o1YCsMJuvCkdupBCVHtEBV8aTaoY8luhjRsJbHVJ0zSQjg0GexuN0OO92g7Ojp1m6QE4rwIWA_6FolTdw_hH0bqqQg3QlI_nm4gX1JfLbV6pyQGp16d8APcSPdnJ1380Vb51vvEeS0gD2u1UtFqvNw-HGpK5KEizwPuIY5n5htf4gNidwEQhUcQrOS9zPdRrwLO9T1kaGXmXEdpAlM1R374nRqAZ_pHcevVpUuTLEfM8BNNsREm1r9L5QNWfLcwyCW_Hlb1DVauypYMzNs6eFZuMsEi9adeIxjOpb9J8P3aJis10eASZ8z3CGiE2S4j5Ua4Nvhft7CNLPrNIbDutUIby4iOB7Bnqqs09tgLFC-DU9OWC8RaMO-OESji5H4aPTmtKe5Ni2nFr6wwK338yXeJ_e9HWZFmy8zMpxY3k3tzutyvgoyCyJiyOyBtTvNsKv9LQBykApv_L0SGTA1_yL7c4bQlYSKvuRHNQblAwC-Bx6HcV; path=/; secure; samesite=lax; httponly
   body:
     type: json
     data: |-
       {
         "name": "zzz",
-        "minutes": 30,
+        "minutes": 60,
         "idCategory": null
       }
   auth: inherit
@@ -21,3 +24,4 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+  forwardAuthorizationHeader: true

@@ -1,0 +1,21 @@
+info:
+  name: PatchUser
+  type: http
+  seq: 3
+
+http:
+  method: PATCH
+  url: https://localhost:7074/api/users/
+  headers:
+    - name: Cookie
+      value: .AspNetCore.Identity.Application=CfDJ8Nbz3_ItvPxMlkFJPh82Pi7fK-w-X7asmvmRT7CHk0cIb-J4dXjLZmYj5wfBrEyuAvW9JpsxmYpKCUPW39NlQLbHqsq-PrWLS7V_sHNQcRARK8Z3hiTplqo0MIIn-yzjfqI5Xjv-WRXLKzz9LOoZzWQuCwAw11YcVE5XfpSerd5g1Go6XznRaZ-IcyP7P8ziHdLxdubyVYybjz6BjL9pisagLEzgiXazbnXZjy7kky5EyntvgVh4KOUc--55VjCvkmYLKP9531We8vp6-N4FarVDUuQc3mJghpv6U4qSjY1YolG3Uvx-_J3v9kXtWzOdA6ITixa6E30RgIlGii3uQPwkwpf3Dt2CTaQcUl3NmmViRp8cvPSpNnvZwyIJkXQ-R4UTNDrlxZ6_pY6c7zkET_wX6hnXBD2znCMp85u2u9Vm0MjfOlybzHEtbo2OQbtmEOeRM4v6JANzZV15Nc4ckbeW5UR0KjGcgU89wXvvywfQ5QCCgMoz-K3pmD-fX7kEC4_XSjtVxW_iTfw4dxkPie_uiRkKi9yMfeWE1YBUv1RGgYvUovVkNjitKMD6QmdF31BFwH3wP2iXZea_UUAsBDJ9nTiX_8TKTK-hah4HH3Q1-iDdIpLniOc-v3UWU4YG8ZpnDZfIR91kO-wEGq3O9xQfq8T1B96iX0SyIc854zsnn6tXZk5dHQETDrArTuLF7VqMXvVPSaJ_xo1K0-eIeEc; path=/; secure; samesite=lax; httponly
+  body:
+    type: json
+    data: '{"minGoal":80,"cutOffTime":22,"timezone": "America/Mexico_City"}'
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

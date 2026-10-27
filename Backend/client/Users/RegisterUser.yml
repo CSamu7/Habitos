@@ -1,0 +1,26 @@
+info:
+  name: RegisterUser
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: https://localhost:7074/api/users/register
+  body:
+    type: json
+    data: |-
+      {
+        "Email": "test@hotmail.com",
+        "Password": "holacomoesta123",
+        "MinGoal": 90,
+        "Username": "sambu",
+        "CutOffTime": 12,
+        "Timezone": "America/sda"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
