@@ -11,5 +11,6 @@ public partial class Category
     public string IdUser { get; set; } = null!;
 
     public virtual User IdUserNavigation { get; set; } = null!;
-    public virtual ICollection<Routine> Routines { get; set; } = new List<Routine>();
+    public virtual ICollection<Routine> Routines { get; set; } = new List<Routine>(); 
+    public bool IsActive { get; set; }
 }

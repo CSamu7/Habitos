@@ -61,6 +61,9 @@ namespace Habits.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("id_user");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(40)
