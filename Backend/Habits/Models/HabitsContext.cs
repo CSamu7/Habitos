@@ -30,6 +30,7 @@ public partial class HabitsContext : IdentityDbContext<User>
                 .HasMaxLength(64)
                 .IsUnicode(false);
             entity.Property(e => e.UserName).HasMaxLength(256);
+            entity.HasQueryFilter(e => e.IsActive);
         });
 
         modelBuilder.Entity<DailyTask>(entity =>
@@ -52,6 +53,8 @@ public partial class HabitsContext : IdentityDbContext<User>
                 .HasForeignKey(d => d.IdRoutine)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_DailyTasks_Routines");
+
+            entity.HasQueryFilter(e => e.IdRoutineNavigation.IsActive);
         });
 
         modelBuilder.Entity<Routine>(entity =>
@@ -75,11 +78,14 @@ public partial class HabitsContext : IdentityDbContext<User>
                 .HasForeignKey(d => d.IdUser)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Routines_AspNetUsers");
+
+            entity.HasQueryFilter(r => r.IsActive);
         });
 
         modelBuilder.Entity<Category>(entity =>
         {
             entity.HasKey(e => e.IdCategory).HasName("PK__RoutineC__ED7A3D1E3BB83357");
+           
 
             entity.Property(e => e.IdCategory).HasColumnName("id_routine_category");
             entity.Property(e => e.Color)
@@ -94,6 +100,7 @@ public partial class HabitsContext : IdentityDbContext<User>
                 .HasMaxLength(40)
                 .IsUnicode(false)
                 .HasColumnName("name");
+            entity.HasQueryFilter(c => c.IsActive);
 
             entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.RoutineCategories)
                 .HasForeignKey(d => d.IdUser)
@@ -108,6 +115,8 @@ public partial class HabitsContext : IdentityDbContext<User>
                 .HasForeignKey(d => d.IdUser)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_MinGoalHistory_AspNetUsers");
+
+            entity.HasQueryFilter(e => e.IdUserNavigation.IsActive);
         });
 
         OnModelCreatingPartial(modelBuilder);
