@@ -8,7 +8,7 @@ namespace Habits.Services
     {
         public static IServiceCollection AddDbServices(this IServiceCollection services)
         {
-            services.AddScoped<DailyRoutineService>();
+            services.AddScoped<DailyTaskService>();
             services.AddScoped<RoutineService>();
             services.AddScoped<UserService>();
             services.AddScoped<CategoryService>();

@@ -13,7 +13,7 @@ namespace Habits.Services.Tasks
         {
             _db = db;
         }
-        public async Task<Result<Routine>> GetRoutine(int idRoutine)
+        public async Task<Result<Routine>> Get(int idRoutine)
         {
             Routine? task = await _db.Routines
                 .AsNoTracking()
@@ -25,7 +25,7 @@ namespace Habits.Services.Tasks
 
             return Result<Routine>.Success(task);
         }
-        public async Task<Result<List<Routine>>> GetAllRoutines(string idUser)
+        public async Task<Result<List<Routine>>> GetAll(string idUser)
         {
             List<Routine>? routines = await _db.Routines
                 .AsNoTracking()
@@ -35,13 +35,14 @@ namespace Habits.Services.Tasks
 
             return Result<List<Routine>>.Success(routines);
         }
-        public async Task<Result<Routine>> PostRoutine(string idUser, PostRoutineRequest body)
+        public async Task<Result<Routine>> Post(string idUser, PostRoutineRequest body)
         {
             var user = await _db.Users.Include(u => u.Routines).Include(u => u.RoutineCategories).FirstOrDefaultAsync(user => user.Id == idUser);
 
             if (user.GetTotalMinutes() + body.Minutes > Constants.MAX_FULL_ROUTINE_MINUTES)
                 return Result<Routine>.Failure(Status.InvalidData, "No puedes superar el limite de 8 horas");
 
+            //FIX: Tratar de hacerlo con Linq?
             List<Category> categories = [];
 
             foreach (int idCategory in body.Categories)
@@ -60,7 +61,7 @@ namespace Habits.Services.Tasks
             return Result<Routine>.Success(routine);
         }
 
-        public async Task<Result<Routine>> PatchTask(int idRoutine, JsonPatchDocument<PatchRoutineRequest> body)
+        public async Task<Result<Routine>> Patch(int idRoutine, JsonPatchDocument<PatchRoutineRequest> body)
         {
             var routine = await _db.Routines
                 .Include(x => x.IdUserNavigation)
@@ -85,7 +86,7 @@ namespace Habits.Services.Tasks
             await _db.SaveChangesAsync();
             return Result<Routine>.Success(routine);
         }
-        public async Task<Result<Routine>> DeleteTask(int idRoutine)
+        public async Task<Result<Routine>> Delete(int idRoutine)
         {
             Routine? task = await _db.Routines
                 .Include(x => x.IdUserNavigation)

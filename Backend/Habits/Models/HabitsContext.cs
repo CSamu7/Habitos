@@ -100,6 +100,10 @@ public partial class HabitsContext : IdentityDbContext<User>
                 .HasMaxLength(40)
                 .IsUnicode(false)
                 .HasColumnName("name");
+            entity.Property(e => e.IsActive)
+                .HasDefaultValue(true)
+                .HasColumnName("is_active");
+
             entity.HasQueryFilter(c => c.IsActive);
 
             entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.RoutineCategories)

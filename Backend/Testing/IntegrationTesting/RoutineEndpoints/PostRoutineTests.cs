@@ -29,16 +29,17 @@ namespace Testing.IntegrationTesting.RoutineEndpoints
         [Fact]
         public async Task Dont_create_non_existent_categories()
         {
+            CancellationToken token = CancellationToken.None;
             var body = new PostRoutineRequest("TestData", 30, [2, 3, 4, 5]);
             var client = application.CreateAuthClient();
-            var response = await client.PostAsJsonAsync("api/users/samu/routines/", body);
+            var response = await client.PostAsJsonAsync("api/users/samu/routines/", body, token);
 
             response.EnsureSuccessStatusCode();
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
-            var getNewRoutine = await client.GetAsync($"https://localhost:7074{response.Headers.Location}");
+            var getNewRoutine = await client.GetAsync($"https://localhost:7074{response.Headers.Location}", token);
             getNewRoutine.EnsureSuccessStatusCode();
-            var json = await getNewRoutine.Content.ReadFromJsonAsync<GetRoutineResponse>();
+            var json = await getNewRoutine.Content.ReadFromJsonAsync<GetRoutineResponse>(token);
 
             Assert.NotNull(json);
             Assert.Equal(body.Minutes, json.Minutes);
@@ -50,16 +51,17 @@ namespace Testing.IntegrationTesting.RoutineEndpoints
         [MemberData(nameof(SuccessfulPostRoutines))]
         public async Task Post_routine(string name, int minutes, List<int> categories)
         {
+            CancellationToken token = CancellationToken.None;
             var body = new PostRoutineRequest(name, minutes, categories);
             var client = application.CreateAuthClient();
-            var response = await client.PostAsJsonAsync("api/users/samu/routines/", body);
+            var response = await client.PostAsJsonAsync("api/users/samu/routines/", body, token);
 
             response.EnsureSuccessStatusCode();
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
-            var getNewRoutine = await client.GetAsync($"https://localhost:7074{response.Headers.Location}");
+            var getNewRoutine = await client.GetAsync($"https://localhost:7074{response.Headers.Location}", token);
             getNewRoutine.EnsureSuccessStatusCode();
-            var json = await getNewRoutine.Content.ReadFromJsonAsync<GetRoutineResponse>();
+            var json = await getNewRoutine.Content.ReadFromJsonAsync<GetRoutineResponse>(token);
 
             Assert.NotNull(json);
             Assert.Equal(minutes, json.Minutes);
@@ -67,7 +69,7 @@ namespace Testing.IntegrationTesting.RoutineEndpoints
         }
 
         public ValueTask InitializeAsync() => ValueTask.CompletedTask;
-        public async ValueTask DisposeAsync() => application.ResetDB();
+        public async ValueTask DisposeAsync() => await application.ResetDB();
         public static IEnumerable<object[]> SuccessfulPostRoutines =>
             new List<object[]>
             {

@@ -5,18 +5,18 @@ using Habits.Services.DailyRoutines;
 using Habits.Services.DailyTasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-public class DailyRoutineService
+public class DailyTaskService
 {
     private HabitsContext _db;
     private UserManager<User> _userManager;
     private TimeProvider _timeProvider;
-    public DailyRoutineService(HabitsContext db, UserManager<User> userManager, TimeProvider timeProvider)
+    public DailyTaskService(HabitsContext db, UserManager<User> userManager, TimeProvider timeProvider)
     {
         _userManager = userManager;
         _db = db;
         _timeProvider = timeProvider;
     }
-    public async Task<Result<DailyTask>> GetRoutine(int idDailyRoutine)
+    public async Task<Result<DailyTask>> Get(int idDailyRoutine)
     {
         var dailyTask = await _db.DailyTasks
             .Include(d => d.IdRoutineNavigation.IdUser)
@@ -26,36 +26,21 @@ public class DailyRoutineService
 
         return Result<DailyTask>.Success(dailyTask);
     }
-    public async Task<Result<List<DailyTask>>> GetRoutines(string username, GetDailyRoutineQueryParams queryParams)
+    public async Task<Result<List<DailyTask>>> GetAll(string username, GetDailyRoutineQueryParams queryParams)
     {
         User? user = await _userManager.FindByNameAsync(username);
 
         if (user is null) return Result<List<DailyTask>>.Failure(Status.NotOwner, "Problemas de credenciales");
 
-        var dailyTasks = _db.DailyTasks
+        var dailyTasks = await _db.DailyTasks
             .Include(d => d.IdRoutineNavigation)
             .Where(d => d.IdRoutineNavigation.IdUser == user.Id)
             .AsNoTracking()
-            .ToList();
+            .ToListAsync();
 
-        AdjustDateRangeToCutoffTime(user.CutOffTime, queryParams);
         List<DailyTask> tasksSelected = Filter(dailyTasks, queryParams);
 
         return Result<List<DailyTask>>.Success(tasksSelected);
-    }
-
-    private void AdjustDateRangeToCutoffTime(int cutOffTime, GetDailyRoutineQueryParams queryParams)
-    {
-        queryParams.DateStart = queryParams.DateStart.AddHours(cutOffTime);
-        queryParams.DateEnd = queryParams.DateEnd.AddHours(cutOffTime);
-
-        int actualHour = _timeProvider.GetUtcNow().Hour;
-
-        if (actualHour > cutOffTime)
-        {
-            queryParams.DateStart = queryParams.DateStart.AddDays(1);
-            queryParams.DateEnd = queryParams.DateEnd.AddDays(1);
-        }
     }
     private List<DailyTask> Filter(List<DailyTask> dailyTasks, GetDailyRoutineQueryParams queryParams)
     {
@@ -77,6 +62,7 @@ public class DailyRoutineService
         if (dailyTask is null)
             return Result<DailyTask>.Failure(Status.NotFound, "Daily dask doesn't exist");
 
+        //FIX: Esto que es chaval?
         PatchValidation validation = new PatchValidation();
         Result<DailyTask> result = validation.Validate(dailyTask);
         if (!result.Status.Equals(Status.Ok)) return result;

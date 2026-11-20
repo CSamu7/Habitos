@@ -11,18 +11,19 @@ namespace Testing.IntegrationTesting.RoutineEndpoints
         [Fact]
         public async Task Delete_routine_is_successful() 
         {
+            CancellationToken token = CancellationToken.None;
             var body = new PostRoutineRequest("TestData", 8 * 2, []);
             var client = application.CreateAuthClient();
-            var response = await client.PostAsJsonAsync("api/users/samu/routines/", body);
+            var response = await client.PostAsJsonAsync("api/users/samu/routines/", body, token);
 
-            var response2 = await client.DeleteAsync(response.Headers.Location);
+            var response2 = await client.DeleteAsync(response.Headers.Location, token);
             Assert.Equal(HttpStatusCode.NoContent, response2.StatusCode);
 
-            var response3 = await client.GetAsync(response.Headers.Location);
+            var response3 = await client.GetAsync(response.Headers.Location, token);
             Assert.Equal(HttpStatusCode.NotFound, response3.StatusCode);
         }
         public ValueTask InitializeAsync() => ValueTask.CompletedTask;
-        public async ValueTask DisposeAsync() => application.ResetDB();
+        public async ValueTask DisposeAsync() => await application.ResetDB();
 
     }
 }

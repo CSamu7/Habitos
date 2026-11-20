@@ -11,25 +11,26 @@ namespace Testing.IntegrationTesting.RoutineEndpoints
         [Fact]
         public async Task Patch_routine_is_successful()
         {
+            CancellationToken token = CancellationToken.None;
             //create routine
             var client = application.CreateAuthClient();
             PostRoutineRequest routine = new("TestData", 30, []);
-            var result = await client.PostAsJsonAsync("api/users/samu/routines/", routine);
+            var result = await client.PostAsJsonAsync("api/users/samu/routines/", routine, token);
 
             result.EnsureSuccessStatusCode();
             //edit routine
             var patchRoutine = "{'name': 'Cambio' }";
-            var patchResult = await client.PatchAsJsonAsync(result.Headers.Location, patchRoutine);
+            var patchResult = await client.PatchAsJsonAsync(result.Headers.Location, patchRoutine, token);
             
             patchResult.EnsureSuccessStatusCode();
 
             //
-            var getRoutine = await client.GetAsync(result.Headers.Location);
-            var json = await getRoutine.Content.ReadFromJsonAsync<GetRoutineResponse>();
+            var getRoutine = await client.GetAsync(result.Headers.Location, token);
+            var json = await getRoutine.Content.ReadFromJsonAsync<GetRoutineResponse>(token);
 
             Assert.Equal(routine.Name, json?.Name);
         }
         public ValueTask InitializeAsync() => ValueTask.CompletedTask;
-        public async ValueTask DisposeAsync() => application.ResetDB();
+        public async ValueTask DisposeAsync() => await application.ResetDB();
     }
 }

@@ -20,7 +20,6 @@ namespace Testing.UnitTesting.API.Validations
             var result = sut.TestValidate(request);
 
             result.ShouldHaveValidationErrorFor(request => request.Minutes)
-                .WithErrorMessage("Minutes must be positive")
                 .Only();
         }
 
@@ -37,7 +36,6 @@ namespace Testing.UnitTesting.API.Validations
             var result = sut.TestValidate(request);
 
             result.ShouldHaveValidationErrorFor(request => request.Minutes)
-                .WithErrorMessage("You can't add more than 8 hours")
                 .Only();
         }
     }

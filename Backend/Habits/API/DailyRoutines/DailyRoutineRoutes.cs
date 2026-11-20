@@ -17,8 +17,7 @@ namespace Habits.API.DailyRoutines
 
             var userRoutes = router.MapGroup("users/{username}");
 
-            //Nested dailyRoutines
-            userRoutes.MapGet("/dailyRoutines/today", async (string username, DailyRoutineService service) =>
+            userRoutes.MapGet("/dailyRoutines/today", async (string username, DailyTaskService service) =>
             {
                 DateOnly dateEnd = DateOnly.FromDateTime(DateTime.UtcNow);
                 DateOnly dateStart = dateEnd.AddDays(-1);

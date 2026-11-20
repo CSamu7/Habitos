@@ -18,7 +18,7 @@ namespace Habits.API.Routines.Filters
             var user = context.HttpContext.User;
             var idRoutine = context.GetArgument<int>(0);
 
-            var result = await _service.GetRoutine(idRoutine);
+            var result = await _service.Get(idRoutine);
 
             if (result.Status.Equals(Status.NotFound))
                 return TypedResults.NotFound();
@@ -27,7 +27,7 @@ namespace Habits.API.Routines.Filters
                 (user, result.Value, new RoutineOwnerRequirement());
 
             if (!authResult.Succeeded)
-                return TypedResults.Forbid();
+                return TypedResults.NotFound();
 
             return await next(context);
         }

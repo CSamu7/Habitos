@@ -1,11 +1,8 @@
 ﻿using Habits.API.Routines.DTO;
-using Habits.Common;
 using Habits.Models;
 using Habits.Services.Tasks;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.JsonPatch.Exceptions;
-using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Habits.API.Routines
 {
@@ -14,14 +11,13 @@ namespace Habits.API.Routines
         //TODO: Configurar para que no se retorne el id de usuario en la coleccion de categorias.
         public static async Task<IResult> GetRoutine(int idRoutine, RoutineService service)
         {
-            Result<Routine> result = await service.GetRoutine(idRoutine);
+            Result<Routine> result = await service.Get(idRoutine);
 
             if (result.Status.Equals(Status.Ok))
             {
                 Routine routine = result.Value;
 
                 var response = routine.ToGetRoutineResponse();
-
                 return TypedResults.Ok(response);
             }
 
@@ -33,7 +29,7 @@ namespace Habits.API.Routines
 
             if (user is null || user.UserName != username) return TypedResults.Unauthorized();
 
-            Result<Routine> result = await service.PostRoutine(user.Id, body);
+            Result<Routine> result = await service.Post(user.Id, body);
 
             if (result.Status.Equals(Status.Ok))
             {
@@ -53,7 +49,7 @@ namespace Habits.API.Routines
             var user = await userManager.GetUserAsync(ctx.User);
 
             if (user is null || user.UserName != username) return TypedResults.Unauthorized();
-            Result<List<Routine>> result = await service.GetAllRoutines(user.Id);
+            Result<List<Routine>> result = await service.GetAll(user.Id);
 
             if (result.Status.Equals(Status.Ok))
             {
@@ -68,26 +64,21 @@ namespace Habits.API.Routines
         }
         public static async Task<IResult> PatchRoutine(
             int idRoutine,
-            [FromBody] JsonElement jsonElement,
-            RoutineService service)
+            JsonPatchDocument<PatchRoutineRequest> body,
+            RoutineService service
+            )
         {
-            var doc = jsonElement.ToPatchDocument();
+            var result = await service.Patch(idRoutine, body);
 
-            if (doc is null) return Results.BadRequest();
+            if (result.Status.Equals(Status.Ok))
+                return Results.NoContent();
 
-            try
-            {
-                var result = await service.PatchTask(idRoutine, doc);
-                return Results.Ok();
-            } catch (JsonPatchException ex)
-            {
-                return Results.Problem(ex.Message, statusCode: 400);
-            }
+            return result.ToHttpResponse();
         }
 
         public static async Task<IResult> DeleteTask(int idRoutine, RoutineService service)
         {
-            Result<Routine> result = await service.DeleteTask(idRoutine);
+            Result<Routine> result = await service.Delete(idRoutine);
 
             return Results.NoContent();
         }

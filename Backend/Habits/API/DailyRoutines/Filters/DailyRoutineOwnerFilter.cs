@@ -5,8 +5,8 @@ namespace Habits.API.DailyRoutines.Filters
     public class DailyRoutineOwnerFilter : IEndpointFilter
     {
         private readonly IAuthorizationService _authService;
-        private readonly DailyRoutineService _service;
-        public DailyRoutineOwnerFilter(IAuthorizationService authService, DailyRoutineService service)
+        private readonly DailyTaskService _service;
+        public DailyRoutineOwnerFilter(IAuthorizationService authService, DailyTaskService service)
         {
             _authService = authService;
             _service = service;
@@ -16,7 +16,7 @@ namespace Habits.API.DailyRoutines.Filters
             var user = context.HttpContext.User;
             var idRoutine = context.GetArgument<int>(0);
 
-            var result = await _service.GetRoutine(idRoutine);
+            var result = await _service.Get(idRoutine);
 
             if (result.Status.Equals(Status.NotFound))
                 return TypedResults.NotFound();

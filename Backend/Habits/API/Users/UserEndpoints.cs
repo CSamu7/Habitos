@@ -84,7 +84,7 @@ namespace Habits.API.Users
             if (bodyDeserialize.Timezone is not null && TimeZoneInfo.TryConvertIanaIdToWindowsId(bodyDeserialize.Timezone, out string? windowsTimeZone))
                 bodyDeserialize.Timezone = windowsTimeZone;
 
-            var operationResult = await userService.ModifyUser(user, bodyDeserialize);
+            var operationResult = await userService.Patch(user, bodyDeserialize);
 
             if (operationResult.Status != Status.Ok) return TypedResults.BadRequest(operationResult.ErrorMessage);
 

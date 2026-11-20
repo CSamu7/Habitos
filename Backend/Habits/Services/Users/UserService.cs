@@ -11,7 +11,7 @@ namespace Habits.Services.Users
         {
             _db = db;
         }
-        public async Task<Result<PatchUserRequest>> ModifyUser(User user, PatchUserRequest body)
+        public async Task<Result<PatchUserRequest>> Patch(User user, PatchUserRequest body)
         {
             DateTime? cutOffTimeUTC = null;
             List<MinGoalHistory> minGoalChanges = await GetMinGoalChanges(user);
@@ -49,6 +49,7 @@ namespace Habits.Services.Users
         {
             //if the user wants to modify its min goal.
             DateTimeOffset lastWeek = DateTimeOffset.Now.AddDays(-7);
+
             List<MinGoalHistory> recentChanges = await _db.MinGoalHistory
                 .Where(table => table.IdUser == userDb.Id && table.ChangedAt >= lastWeek)
                 .OrderBy(table => table.ChangedAt)
